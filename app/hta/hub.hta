@@ -20,19 +20,22 @@
     />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/app/hta/hub.css">
+    <link rel="stylesheet" href="css/pico.min.css">
+
+    <!-- JS -->
+    <script src="js/bundle.js"></script>
 
     <!-- Remove favicon requirement -->
     <link rel="icon" href="data:,">
 </head>
 <body>
     <header>
-        <img src="/app/hta/res/icon.png" alt="Company Logo" class="logo">
+        <img src="res/icon.png" alt="Company Logo" class="logo">
         <h1 class="ms-font-xl">Welcome to LawHub</h1>
     </header>
     <main id="app-body">
        <!-- Loading overlay -->
-        <div id="loading-overlay">
+        <div id="loading-overlay" class="ms-overlay hidden">
             <div class="ms-Spinner ms-Spinner--large">
                 <div class="ms-Spinner-circle"></div>
             </div>
@@ -50,7 +53,7 @@
         <div id="page-container">
         <!-- Main menu page -->
         <div id="menu-page" class="page active">
-            <h1>What do you want to do?</h1>
+            <h1 style="text-align: center;">What do you want to do?</h1>
             <div>
                 <button type="button" id="schedule-menu-btn" class="menu-btn">Schedule Appointment</button>
                 <button type="button" id="conf-menu-btn" class="menu-btn">Send Confirmation</button>

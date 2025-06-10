@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "@babel/cli": "7.27.2",
+    "@babel/core": "7.27.4",
+    "@babel/preset-env": "7.27.2",
+    "esbuild": "0.25.5"
+  },
+  "dependencies": {
+    "core-js": "^3.43.0",
+    "regenerator-runtime": "^0.14.1"
+  }
+}

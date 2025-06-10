@@ -1,0 +1,1186 @@
+--- UI Snapshot: PCLawÂ® Enterprise 2025 - 16.95 - 0099503964 - Allen Madelin Inc (Serial:  96574) ---
+Timestamp: 20250501_110514
+----------------------------------------
+
+5 - 0099503964 - Allen Madelin Inc (Serial:  96574)Dialog', 'Dialog', 'PCLaw® Enterprise 2025 - 16.95 - 0099503964 - Allen Madelin Inc (Serial:  96574)', 'Dialog0', 'Dialog1']
+child_window(title="PCLaw® Enterprise 2025 - 16.95 - 0099503964 - Allen Madelin Inc (Serial:  96574)", control_type="Window")
+   | 
+   | Pane - 'Workspace'    (L0, T138, R1920, B992)
+   | ['Pane', 'Workspace', 'WorkspacePane', 'Pane0', 'Pane1']
+   | child_window(title="Workspace", auto_id="59648", control_type="Pane")
+   |    | 
+   |    | Dialog - 'New Matter'    (L3, T141, R1935, B1074)
+   |    | ['New Matter', 'Dialog2', 'New MatterDialog', 'New Matter0', 'New Matter1']
+   |    | child_window(title="New Matter", auto_id="65280", control_type="Window")
+   |    |    | 
+   |    |    | Pane - 'New'    (L528, T902, R621, B940)
+   |    |    | ['NewPane', 'New', 'Pane2', 'New0', 'New1']
+   |    |    | child_window(title="New", auto_id="10207", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Button - 'New'    (L528, T902, R621, B940)
+   |    |    |    | ['Button', 'New2', 'NewButton', 'Button0', 'Button1']
+   |    |    |    | child_window(title="New", auto_id="1", control_type="Button")
+   |    |    | 
+   |    |    | Pane - 'Next'    (L641, T902, R734, B940)
+   |    |    | ['Next', 'Pane3', 'NextPane', 'Next0', 'Next1']
+   |    |    | child_window(title="Next", auto_id="11770", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Button - 'Next'    (L641, T902, R734, B940)
+   |    |    |    | ['Button2', 'Next2', 'NextButton']
+   |    |    |    | child_window(title="Next", auto_id="1", control_type="Button")
+   |    |    | 
+   |    |    | Pane - 'OK'    (L753, T902, R846, B940)
+   |    |    | ['OKPane', 'Pane4', 'OK', 'OK0', 'OK1']
+   |    |    | child_window(title="OK", auto_id="1", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Button - 'OK'    (L753, T902, R846, B940)
+   |    |    |    | ['Button3', 'OKButton', 'OK2']
+   |    |    |    | child_window(title="OK", auto_id="1", control_type="Button")
+   |    |    | 
+   |    |    | Pane - 'Cancel'    (L866, T902, R959, B940)
+   |    |    | ['Pane5', 'CancelPane', 'Cancel', 'Cancel0', 'Cancel1']
+   |    |    | child_window(title="Cancel", auto_id="2", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Button - 'Cancel'    (L866, T902, R959, B940)
+   |    |    |    | ['Button4', 'CancelButton', 'Cancel2']
+   |    |    |    | child_window(title="Cancel", auto_id="1", control_type="Button")
+   |    |    | 
+   |    |    | Pane - 'Help'    (L978, T902, R1071, B940)
+   |    |    | ['Help', 'Pane6', 'HelpPane', 'Help0', 'Help1']
+   |    |    | child_window(title="Help", auto_id="57670", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Button - 'Help'    (L978, T902, R1071, B940)
+   |    |    |    | ['Button5', 'Help2', 'HelpButton']
+   |    |    |    | child_window(title="Help", auto_id="1", control_type="Button")
+   |    |    | 
+   |    |    | Pane - 'Conflict'    (L416, T902, R509, B940)
+   |    |    | ['Pane7', 'Conflict', 'ConflictPane', 'Conflict0', 'Conflict1']
+   |    |    | child_window(title="Conflict", auto_id="10009", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Button - 'Conflict'    (L416, T902, R509, B940)
+   |    |    |    | ['ConflictButton', 'Button6', 'Conflict2']
+   |    |    |    | child_window(title="Conflict", auto_id="1", control_type="Button")
+   |    |    | 
+   |    |    | Pane - 'New Matter Defaults'    (L195, T902, R398, B940)
+   |    |    | ['New Matter DefaultsPane', 'Pane8', 'New Matter Defaults', 'New Matter Defaults0', 'New Matter Defaults1']
+   |    |    | child_window(title="New Matter Defaults", auto_id="13488", control_type="Pane")
+   |    |    |    | 
+   |    |    |    | Button - 'New Matter Defaults'    (L195, T902, R398, B940)
+   |    |    |    | ['New Matter Defaults2', 'Button7', 'New Matter DefaultsButton']
+   |    |    |    | child_window(title="New Matter Defaults", auto_id="1", control_type="Button")
+   |    |    | 
+   |    |    | Pane - ''    (L27, T194, R1829, B223)
+   |    |    | ['Pane9']
+   |    |    | child_window(auto_id="14541", control_type="Pane")
+   |    |    | 
+   |    |    | Pane - ''    (L27, T225, R1278, B894)
+   |    |    | ['Pane10', '\xa0Last Matter\xa0Pane', '\xa0Last Matter\xa0Pane0', '\xa0Last Matter\xa0Pane1']
+   |    |    |    | 
+   |    |    |    | Pane - ''    (L27, T225, R1278, B894)
+   |    |    |    | ['Pane11', '\xa0Last Matter\xa0Pane2']
+   |    |    |    |    | 
+   |    |    |    |    | Pane - 'res://C:\PROGRAM FILES (X86)\LEXISNEXIS\PCLAW\PLRES32.DLL/14'    (L27, T225, R1278, B894)
+   |    |    |    |    | ['Pane12', 'res://C:\\PROGRAM FILES (X86)\\LEXISNEXIS\\PCLAW\\PLRES32.DLL/14Pane', 'res://C:\\PROGRAM FILES (X86)\\LEXISNEXIS\\PCLAW\\PLRES32.DLL/14']
+   |    |    |    |    | child_window(title="res://C:\PROGRAM FILES (X86)\LEXISNEXIS\PCLAW\PLRES32.DLL/14", control_type="Pane")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L719, T687, R1019, B713)
+   |    |    |    |    |    | ['Pane13', '\xa0E-mail 2\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315602472", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L719, T687, R1019, B713)
+   |    |    |    |    |    |    | ['\xa0E-mail 2\xa0Edit', 'Edit', 'Edit0', 'Edit1']
+   |    |    |    |    |    |    | child_window(auto_id="259316800", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L719, T662, R1019, B688)
+   |    |    |    |    |    | ['\xa0E-mail 1\xa0Pane', 'Pane14']
+   |    |    |    |    |    | child_window(auto_id="315602328", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L719, T662, R1019, B688)
+   |    |    |    |    |    |    | ['\xa0E-mail 1\xa0Edit', 'Edit2']
+   |    |    |    |    |    |    | child_window(auto_id="259314088", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L719, T636, R919, B662)
+   |    |    |    |    |    | ['Pane15', '\xa0Bus. Fax\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315599448", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L719, T636, R919, B662)
+   |    |    |    |    |    |    | ['\xa0Bus. Fax\xa0Edit', 'Edit3']
+   |    |    |    |    |    |    | child_window(auto_id="259305952", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L968, T611, R1168, B637)
+   |    |    |    |    |    | ['Pane16', '\xa0Other\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315602616", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L968, T611, R1168, B637)
+   |    |    |    |    |    |    | ['\xa0Other\xa0Edit', 'Edit4']
+   |    |    |    |    |    |    | child_window(auto_id="259312280", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L719, T611, R919, B637)
+   |    |    |    |    |    | ['Pane17', '\xa0Business\xa0Pane', '\xa0Business\xa0Pane0', '\xa0Business\xa0Pane1']
+   |    |    |    |    |    | child_window(auto_id="315600600", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L719, T611, R919, B637)
+   |    |    |    |    |    |    | ['\xa0Business\xa0Edit', 'Edit5', '\xa0Business\xa0Edit0', '\xa0Business\xa0Edit1']
+   |    |    |    |    |    |    | child_window(auto_id="259323128", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L968, T585, R1168, B611)
+   |    |    |    |    |    | ['Pane18', '\xa0Cell\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315600168", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L968, T585, R1168, B611)
+   |    |    |    |    |    |    | ['\xa0Cell\xa0Edit', 'Edit6']
+   |    |    |    |    |    |    | child_window(auto_id="259309568", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L719, T585, R919, B611)
+   |    |    |    |    |    | ['Pane19', '\xa0Business\xa0Pane2']
+   |    |    |    |    |    | child_window(auto_id="315602184", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L719, T585, R919, B611)
+   |    |    |    |    |    |    | ['\xa0Business\xa0Edit2', 'Edit7']
+   |    |    |    |    |    |    | child_window(auto_id="259329456", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L120, T722, R420, B748)
+   |    |    |    |    |    | ['Pane20', '\xa0Attention\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315601176", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L120, T722, R420, B748)
+   |    |    |    |    |    |    | ['\xa0Attention\xa0Edit', 'Edit8']
+   |    |    |    |    |    |    | child_window(auto_id="259327648", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L120, T695, R420, B721)
+   |    |    |    |    |    | ['\xa0Country\xa0Pane', 'Pane21']
+   |    |    |    |    |    | child_window(auto_id="315710296", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L120, T695, R420, B721)
+   |    |    |    |    |    |    | ['\xa0Country\xa0Edit', 'Edit9']
+   |    |    |    |    |    |    | child_window(auto_id="259308664", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L405, T668, R506, B694)
+   |    |    |    |    |    | ['\xa0Postal\xa0Pane', 'Pane22']
+   |    |    |    |    |    | child_window(auto_id="315711016", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L405, T668, R506, B694)
+   |    |    |    |    |    |    | ['\xa0Postal\xa0Edit', 'Edit10']
+   |    |    |    |    |    |    | child_window(auto_id="259328552", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L120, T668, R320, B694)
+   |    |    |    |    |    | ['Pane23', '\xa0Province\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315710584", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L120, T668, R320, B694)
+   |    |    |    |    |    |    | ['\xa0Province\xa0Edit', 'Edit11']
+   |    |    |    |    |    |    | child_window(auto_id="259322224", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L120, T641, R519, B667)
+   |    |    |    |    |    | ['Pane24', '\xa0City\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315709000", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L120, T641, R519, B667)
+   |    |    |    |    |    |    | ['\xa0City\xa0Edit', 'Edit12']
+   |    |    |    |    |    |    | child_window(auto_id="259317704", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L120, T614, R519, B640)
+   |    |    |    |    |    | ['Pane25', '\xa0Street\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315710152", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L120, T614, R519, B640)
+   |    |    |    |    |    |    | ['\xa0Street\xa0Edit', 'Edit13']
+   |    |    |    |    |    |    | child_window(auto_id="259310472", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L120, T587, R519, B613)
+   |    |    |    |    |    | ['Pane26', 'AddressPane']
+   |    |    |    |    |    | child_window(auto_id="315710008", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L120, T587, R519, B613)
+   |    |    |    |    |    |    | ['AddressEdit', 'Edit14']
+   |    |    |    |    |    |    | child_window(auto_id="259320416", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L128, T524, R805, B550)
+   |    |    |    |    |    | ['\xa0Firm Name\xa0Pane', 'Pane27']
+   |    |    |    |    |    | child_window(auto_id="315709720", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L128, T524, R805, B550)
+   |    |    |    |    |    |    | ['\xa0Firm Name\xa0Edit', 'Edit15']
+   |    |    |    |    |    |    | child_window(auto_id="259324032", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L744, T494, R806, B520)
+   |    |    |    |    |    | ['Pane28', '\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315710440", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L744, T494, R806, B520)
+   |    |    |    |    |    |    | ['\xa0Edit', 'Edit16']
+   |    |    |    |    |    |    | child_window(auto_id="259349344", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | Button - '?'    (L791, T497, R809, B523)
+   |    |    |    |    |    |    |    | ['?Button', 'Button8', '?', '?Button0', '?Button1', '?0', '?1']
+   |    |    |    |    |    |    |    | child_window(title="?", auto_id="1", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L128, T494, R586, B520)
+   |    |    |    |    |    | ['\xa0Alias\xa0Pane', 'Pane29']
+   |    |    |    |    |    | child_window(auto_id="315708424", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L128, T494, R586, B520)
+   |    |    |    |    |    |    | ['\xa0Alias\xa0Edit', 'Edit17']
+   |    |    |    |    |    |    | child_window(auto_id="259346632", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L986, T465, R1048, B491)
+   |    |    |    |    |    | ['Pane30', '\xa0Responsible Lawyer\xa0Pane', '\xa0Responsible Lawyer\xa0Pane0', '\xa0Responsible Lawyer\xa0Pane1']
+   |    |    |    |    |    | child_window(auto_id="315711160", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L986, T465, R1048, B491)
+   |    |    |    |    |    |    | ['\xa0Responsible Lawyer\xa0Edit', 'Edit18', '\xa0Responsible Lawyer\xa0Edit0', '\xa0Responsible Lawyer\xa0Edit1']
+   |    |    |    |    |    |    | child_window(auto_id="259345728", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L624, T465, R983, B491)
+   |    |    |    |    |    | ['\xa0Last\xa0Pane', 'Pane31']
+   |    |    |    |    |    | child_window(auto_id="315711592", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L624, T465, R983, B491)
+   |    |    |    |    |    |    | ['\xa0Last\xa0Edit', 'Edit19']
+   |    |    |    |    |    |    | child_window(auto_id="259337592", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L434, T465, R584, B491)
+   |    |    |    |    |    | ['Pane32', '\xa0Middle\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315708712", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L434, T465, R584, B491)
+   |    |    |    |    |    |    | ['\xa0Middle\xa0Edit', 'Edit20']
+   |    |    |    |    |    |    | child_window(auto_id="259358384", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L230, T465, R380, B491)
+   |    |    |    |    |    | ['Pane33', '\xa0First\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315711448", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L230, T465, R380, B491)
+   |    |    |    |    |    |    | ['\xa0First\xa0Edit', 'Edit21']
+   |    |    |    |    |    |    | child_window(auto_id="259336688", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L128, T465, R190, B491)
+   |    |    |    |    |    | ['\xa0Title\xa0Pane', 'Pane34']
+   |    |    |    |    |    | child_window(auto_id="315709144", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L128, T465, R190, B491)
+   |    |    |    |    |    |    | ['\xa0Title\xa0Edit', 'Edit22']
+   |    |    |    |    |    |    | child_window(auto_id="259335784", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | Button - '?'    (L174, T468, R192, B494)
+   |    |    |    |    |    |    |    | ['?Button2', 'Button9', '?2']
+   |    |    |    |    |    |    |    | child_window(title="?", auto_id="1", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L129, T333, R1178, B384)
+   |    |    |    |    |    | ['Pane35', '\xa0Description\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="315710728", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L129, T333, R1178, B384)
+   |    |    |    |    |    |    | ['\xa0Description\xa0Edit', 'Edit23']
+   |    |    |    |    |    |    | child_window(auto_id="259334880", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | Button - '?'    (L1163, T336, R1181, B387)
+   |    |    |    |    |    |    |    | ['?Button3', 'Button10', '?3']
+   |    |    |    |    |    |    |    | child_window(title="?", auto_id="1", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L971, T303, R1033, B329)
+   |    |    |    |    |    | ['Pane36', '\xa0Responsible Lawyer\xa0Pane2']
+   |    |    |    |    |    | child_window(auto_id="314208704", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L971, T303, R1033, B329)
+   |    |    |    |    |    |    | ['\xa0Responsible Lawyer\xa0Edit2', 'Edit24']
+   |    |    |    |    |    |    | child_window(auto_id="259344824", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | Button - '?'    (L1017, T306, R1035, B332)
+   |    |    |    |    |    |    |    | ['?Button4', 'Button11', '?4']
+   |    |    |    |    |    |    |    | child_window(title="?", auto_id="1", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L971, T275, R1102, B301)
+   |    |    |    |    |    | ['Pane37', '\xa0Opened\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="314208272", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L971, T275, R1102, B301)
+   |    |    |    |    |    |    | ['\xa0Opened\xa0Edit', 'Edit25']
+   |    |    |    |    |    |    | child_window(auto_id="259343920", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | Button - '?'    (L1086, T278, R1104, B304)
+   |    |    |    |    |    |    |    | ['?Button5', 'Button12', '?5']
+   |    |    |    |    |    |    |    | child_window(title="?", auto_id="1", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L135, T305, R276, B331)
+   |    |    |    |    |    | ['Pane38', '\xa0Default Rate\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="314207696", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L135, T305, R276, B331)
+   |    |    |    |    |    |    | ['\xa0Default Rate\xa0Edit', 'Edit26']
+   |    |    |    |    |    |    | child_window(auto_id="259333976", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | Button - '?'    (L261, T308, R279, B334)
+   |    |    |    |    |    |    |    | ['?Button6', 'Button13', '?6']
+   |    |    |    |    |    |    |    | child_window(title="?", auto_id="1", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L135, T278, R197, B304)
+   |    |    |    |    |    | ['Pane39', '\xa0Type of Law\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="314207552", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L135, T278, R197, B304)
+   |    |    |    |    |    |    | ['Edit27', '\xa0Type of Law\xa0Edit']
+   |    |    |    |    |    |    | child_window(auto_id="259357480", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | Button - '?'    (L182, T281, R200, B307)
+   |    |    |    |    |    |    |    | ['?Button7', 'Button14', '?7']
+   |    |    |    |    |    |    |    | child_window(title="?", auto_id="1", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L236, T249, R377, B275)
+   |    |    |    |    |    | ['Pane40', '\xa0Matter\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="314210144", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L236, T249, R377, B275)
+   |    |    |    |    |    |    | ['\xa0Matter\xa0Edit', 'Edit28']
+   |    |    |    |    |    |    | child_window(auto_id="259354768", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | Button - '?'    (L362, T252, R380, B278)
+   |    |    |    |    |    |    |    | ['?Button8', 'Button15', '?8']
+   |    |    |    |    |    |    |    | child_window(title="?", auto_id="1", control_type="Button")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L155, T249, R236, B275)
+   |    |    |    |    |    | ['Pane41', '\xa0Client\xa0Pane']
+   |    |    |    |    |    | child_window(auto_id="314209712", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L155, T249, R236, B275)
+   |    |    |    |    |    |    | ['\xa0Client\xa0Edit', 'Edit29']
+   |    |    |    |    |    |    | child_window(auto_id="259352960", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - ''    (L33, T249, R155, B275)
+   |    |    |    |    |    | ['Pane42', '\xa0Last Matter\xa0Pane3']
+   |    |    |    |    |    | child_window(auto_id="314207120", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Edit - ''    (L33, T249, R155, B275)
+   |    |    |    |    |    |    | ['\xa0Last Matter\xa0Edit', 'Edit30']
+   |    |    |    |    |    |    | child_window(auto_id="165576592", control_type="Edit")
+   |    |    |    |    |    | 
+   |    |    |    |    |    | Pane - 'Main'    (L27, T225, R1278, B894)
+   |    |    |    |    |    | ['MainPane', 'Pane43', 'Main']
+   |    |    |    |    |    | child_window(title="Main", auto_id="cmainpage", control_type="Pane")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Table - ''    (L33, T228, R1247, B387)
+   |    |    |    |    |    |    | ['Table', '\xa0Last Matter\xa0Table', 'Table0', 'Table1', '\xa0Last Matter\xa0Table0', '\xa0Last Matter\xa0Table1']
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | DataItem - ''    (L33, T228, R704, B330)
+   |    |    |    |    |    |    |    | ['\xa0Last Matter\xa0DataItem', 'DataItem', '\xa0Last Matter\xa0DataItem0', '\xa0Last Matter\xa0DataItem1', 'DataItem0', 'DataItem1']
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Table - ''    (L33, T228, R569, B275)
+   |    |    |    |    |    |    |    |    | ['Table2', '\xa0Last Matter\xa0Table2']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L33, T228, R155, B275)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Last Matter\xa0DataItem2', 'DataItem2']
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Table - ''    (L33, T228, R155, B275)
+   |    |    |    |    |    |    |    |    |    |    | ['Table3', '\xa0Last Matter\xa0Table3']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' Last Matter '    (L33, T228, R155, B249)
+   |    |    |    |    |    |    |    |    |    |    |    | ['DataItem3', ' Last Matter DataItem', ' Last Matter ']
+   |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Last Matter ", auto_id="1111_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Last Matter '    (L33, T228, R123, B249)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Last Matter\xa0', '\xa0Last Matter\xa0Static', 'Static', 'Static0', 'Static1']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Last Matter ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L33, T249, R155, B275)
+   |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Last Matter\xa0DataItem3', 'DataItem4']
+   |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="1111_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L155, T228, R236, B275)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Client\xa0DataItem', 'DataItem5', '\xa0Client\xa0DataItem0', '\xa0Client\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Table - ''    (L155, T228, R236, B275)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Client\xa0Table', 'Table4']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' Client '    (L155, T228, R236, B249)
+   |    |    |    |    |    |    |    |    |    |    |    | [' Client ', 'DataItem6', ' Client DataItem']
+   |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Client ", auto_id="2_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Client '    (L155, T228, R203, B249)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Client\xa0', '\xa0Client\xa0Static', 'Static2']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Client ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L155, T249, R236, B275)
+   |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Client\xa0DataItem2', 'DataItem7']
+   |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="2_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L236, T228, R377, B275)
+   |    |    |    |    |    |    |    |    |    | ['DataItem8', '\xa0Matter\xa0DataItem', '\xa0Matter\xa0DataItem0', '\xa0Matter\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Table - ''    (L236, T228, R377, B275)
+   |    |    |    |    |    |    |    |    |    |    | ['Table5', '\xa0Matter\xa0Table']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' Matter '    (L236, T228, R377, B249)
+   |    |    |    |    |    |    |    |    |    |    |    | [' Matter ', 'DataItem9', ' Matter DataItem']
+   |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Matter ", auto_id="1_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Matter '    (L236, T228, R290, B249)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['Static3', '\xa0Matter\xa0', '\xa0Matter\xa0Static']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Matter ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L236, T249, R377, B275)
+   |    |    |    |    |    |    |    |    |    |    |    | ['DataItem10', '\xa0Matter\xa0DataItem2']
+   |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="1_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L377, T228, R569, B275)
+   |    |    |    |    |    |    |    |    |    | ['\xa0DataItem', 'DataItem11', '\xa0DataItem0', '\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Table - ''    (L377, T234, R569, B270)
+   |    |    |    |    |    |    |    |    |    |    | ['Table6', '\xa0Table']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L377, T234, R569, B270)
+   |    |    |    |    |    |    |    |    |    |    |    | ['DataItem Open From...', '\xa0DataItem2', 'DataItem12']
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' '    (L377, T234, R382, B270)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0', 'Static4', '\xa0Static', '\xa00', '\xa01', '\xa0Static0', '\xa0Static1']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Button - ' Open From...'    (L389, T234, R569, B267)
+   |    |    |    |    |    |    |    |    |    |    |    |    | [' Open From...', 'Button16', ' Open From...Button']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Open From...", auto_id="268435456_ADDRESS_BTN_LBL", control_type="Button")
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Table - ''    (L33, T275, R404, B331)
+   |    |    |    |    |    |    |    |    | ['Table7', '\xa0Type of Law\xa0Table']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Type of Law '    (L33, T275, R135, B305)
+   |    |    |    |    |    |    |    |    |    | [' Type of Law ', ' Type of Law DataItem', 'DataItem13']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Type of Law ", auto_id="4_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Type of Law '    (L33, T279, R135, B300)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Type of Law\xa0Static', '\xa0Type of Law\xa0', 'Static5']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Type of Law ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L135, T275, R197, B305)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Type of Law\xa0DataItem', 'DataItem14']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="4_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' - '    (L197, T275, R212, B305)
+   |    |    |    |    |    |    |    |    |    | [' - DataItem', 'DataItem15', ' - ', ' - DataItem0', ' - DataItem1', ' - 0', ' - 1']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" - ", auto_id="4_TD_Dsh", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' - '    (L197, T279, R212, B300)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0-\xa0Static', '\xa0-\xa0', 'Static6', '\xa0-\xa0Static0', '\xa0-\xa0Static1', '\xa0-\xa00', '\xa0-\xa01']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" - ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L212, T275, R404, B305)
+   |    |    |    |    |    |    |    |    |    | ['DataItem16', '\xa0-\xa0DataItem', '\xa0-\xa0DataItem0', '\xa0-\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="4_TD_Ext", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Edit - ''    (L212, T276, R404, B303)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0-\xa0Edit', 'Edit31', '\xa0-\xa0Edit0', '\xa0-\xa0Edit1']
+   |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="4_Ext", control_type="Edit")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Default Rate '    (L33, T305, R135, B331)
+   |    |    |    |    |    |    |    |    |    | [' Default Rate DataItem', ' Default Rate ', 'DataItem17']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Default Rate ", auto_id="12864_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Default Rate '    (L33, T308, R131, B329)
+   |    |    |    |    |    |    |    |    |    |    | ['Static7', '\xa0Default Rate\xa0Static', '\xa0Default Rate\xa0']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Default Rate ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L135, T305, R404, B331)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Default Rate\xa0DataItem', 'DataItem18', '\xa0Default Rate\xa0DataItem0', '\xa0Default Rate\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="12864_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | DataItem - ''    (L704, T228, R1247, B330)
+   |    |    |    |    |    |    |    | ['\xa0Opened\xa0DataItem', 'DataItem19', '\xa0Opened\xa0DataItem0', '\xa0Opened\xa0DataItem1']
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Table - ''    (L812, T275, R1240, B331)
+   |    |    |    |    |    |    |    |    | ['Table8', '\xa0Opened\xa0Table']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Opened '    (L812, T275, R971, B301)
+   |    |    |    |    |    |    |    |    |    | [' Opened DataItem', ' Opened ', 'DataItem20']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Opened ", auto_id="3_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Opened '    (L812, T278, R878, B299)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Opened\xa0Static', '\xa0Opened\xa0', 'Static8']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Opened ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L971, T275, R1240, B301)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Opened\xa0DataItem2', 'DataItem21']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="3_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Responsible Lawyer '    (L812, T300, R971, B330)
+   |    |    |    |    |    |    |    |    |    | [' Responsible Lawyer ', 'DataItem22', ' Responsible Lawyer DataItem']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Responsible Lawyer ", auto_id="5_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Responsible Lawyer '    (L812, T305, R971, B326)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Responsible Lawyer\xa0', '\xa0Responsible Lawyer\xa0Static', 'Static9']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Responsible Lawyer ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L971, T300, R1033, B330)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Responsible Lawyer\xa0DataItem', 'DataItem23', '\xa0Responsible Lawyer\xa0DataItem0', '\xa0Responsible Lawyer\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="5_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' - '    (L1032, T300, R1047, B330)
+   |    |    |    |    |    |    |    |    |    | [' - DataItem2', 'DataItem24', ' - 2']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" - ", auto_id="5_TD_Dsh", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' - '    (L1032, T305, R1047, B326)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0-\xa0Static2', '\xa0-\xa02', 'Static10']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" - ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L1047, T300, R1239, B330)
+   |    |    |    |    |    |    |    |    |    | ['DataItem25', '\xa0-\xa0DataItem2']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="5_TD_Ext", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Edit - ''    (L1047, T302, R1239, B329)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0-\xa0Edit2', 'Edit32']
+   |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="5_Ext", control_type="Edit")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | DataItem - ''    (L33, T330, R1247, B387)
+   |    |    |    |    |    |    |    | ['\xa0Default Rate\xa0DataItem2', 'DataItem26']
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Table - ''    (L33, T333, R1247, B384)
+   |    |    |    |    |    |    |    |    | ['Table9', '\xa0Default Rate\xa0Table']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L0, T0, R0, B0)
+   |    |    |    |    |    |    |    |    |    | ['DataItem27']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Description '    (L33, T333, R129, B384)
+   |    |    |    |    |    |    |    |    |    | [' Description ', ' Description DataItem', 'DataItem28']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Description ", auto_id="6_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Description '    (L33, T333, R123, B354)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Description\xa0', 'Static11', '\xa0Description\xa0Static']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Description ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L129, T333, R1247, B384)
+   |    |    |    |    |    |    |    |    |    | ['DataItem29', '\xa0Description\xa0DataItem', '\xa0Description\xa0DataItem0', '\xa0Description\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="6_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Table - ''    (L27, T395, R455, B427)
+   |    |    |    |    |    |    | ['Table10', '\xa0Description\xa0Table']
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | DataItem - ''    (L27, T395, R455, B427)
+   |    |    |    |    |    |    |    | ['DataItem30', '\xa0Description\xa0DataItem2']
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Button - ' Client Address '    (L27, T395, R455, B427)
+   |    |    |    |    |    |    |    |    | ['Button17', '\xa0Client Address\xa0Button', '\xa0Client Address\xa0']
+   |    |    |    |    |    |    |    |    | child_window(title=" Client Address ", auto_id="ClientAddress", control_type="Button")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Static - 'Client'    (L47, T428, R86, B458)
+   |    |    |    |    |    |    | ['Client', 'Static12', 'ClientStatic']
+   |    |    |    |    |    |    | child_window(title="Client", control_type="Text")
+   |    |    |    |    |    |    | 
+   |    |    |    |    |    |    | Table - ''    (L33, T458, R1235, B764)
+   |    |    |    |    |    |    | ['Table11', 'ClientTable', 'ClientTable0', 'ClientTable1']
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | DataItem - ''    (L38, T462, R1231, B558)
+   |    |    |    |    |    |    |    | ['ClientDataItem', 'DataItem31', 'ClientDataItem0', 'ClientDataItem1']
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Table - ''    (L38, T462, R1214, B558)
+   |    |    |    |    |    |    |    |    | ['Table12', 'ClientTable2']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L38, T462, R1054, B558)
+   |    |    |    |    |    |    |    |    |    | ['ClientDataItem2', 'DataItem32']
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Table - ''    (L38, T462, R1054, B558)
+   |    |    |    |    |    |    |    |    |    |    | ['Table13', 'ClientTable3']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L38, T462, R1054, B558)
+   |    |    |    |    |    |    |    |    |    |    |    | ['ClientDataItem3', 'DataItem33']
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Table - ''    (L44, T465, R1048, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['Table14', 'ClientTable4']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' Title '    (L44, T465, R128, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | [' Title DataItem', ' Title ', 'DataItem34']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Title ", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Title '    (L44, T468, R82, B489)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Title\xa0', '\xa0Title\xa0Static', 'Static13']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Title ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T465, R1048, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Title\xa0DataItem', 'DataItem35', '\xa0Title\xa0DataItem0', '\xa0Title\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Table - ''    (L128, T465, R1048, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['Table15', '\xa0Title\xa0Table']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T465, R130, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Title\xa0DataItem2', 'DataItem36']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435456_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T465, R190, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Title\xa0DataItem3', 'DataItem37']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435456_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' First '    (L189, T465, R230, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | [' First DataItem', ' First ', 'DataItem38']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" First ", auto_id="268435457_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' First '    (L189, T468, R230, B489)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0First\xa0', '\xa0First\xa0Static', 'Static14']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" First ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L230, T465, R380, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['DataItem39', '\xa0First\xa0DataItem']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435457_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' Middle '    (L380, T465, R434, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | [' Middle ', ' Middle DataItem', 'DataItem40']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Middle ", auto_id="268435458_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Middle '    (L380, T468, R434, B489)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Middle\xa0', 'Static15', '\xa0Middle\xa0Static']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Middle ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L434, T465, R584, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['DataItem41', '\xa0Middle\xa0DataItem']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435458_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' Last '    (L584, T465, R625, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | [' Last DataItem', 'DataItem42', ' Last ']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Last ", auto_id="268435459_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Last '    (L584, T468, R625, B489)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['Static16', '\xa0Last\xa0Static', '\xa0Last\xa0']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Last ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L624, T465, R986, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Last\xa0DataItem', 'DataItem43']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435459_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L986, T465, R988, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Responsible Lawyer\xa0DataItem2', 'DataItem44']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435460_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L986, T465, R1048, B491)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Responsible Lawyer\xa0DataItem3', 'DataItem45']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435460_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' Alias '    (L44, T491, R128, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | [' Alias ', 'DataItem46', ' Alias DataItem']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Alias ", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Alias '    (L44, T495, R89, B516)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Alias\xa0Static', '\xa0Alias\xa0', 'Static17']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Alias ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T491, R1048, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Alias\xa0DataItem', 'DataItem47', '\xa0Alias\xa0DataItem0', '\xa0Alias\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Table - ''    (L128, T491, R1048, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['Table16', '\xa0Alias\xa0Table']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T491, R130, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Alias\xa0DataItem2', 'DataItem48']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435461_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T491, R644, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Alias\xa0DataItem3', 'DataItem49']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435461_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L644, T491, R745, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['DataItem\xa0', '\xa0DataItem3', 'DataItem50', 'DataItemCategory']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="10382_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' '    (L644, T492, R649, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa02', 'Static18', '\xa0Static2']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Button - 'Category'    (L648, T492, R728, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['CategoryButton', 'Button18', 'Category']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title="Category", auto_id="ClientTagButton", control_type="Button")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' '    (L728, T492, R733, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa03', 'Static19', '\xa0Static3']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L744, T491, R813, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0DataItem4', 'DataItem51']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="10382_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' - '    (L813, T491, R830, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | [' - DataItem3', 'DataItem52', ' - 3']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" - ", auto_id="10382_TD_Dsh", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' - '    (L813, T495, R828, B516)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0-\xa0Static3', '\xa0-\xa03', 'Static20']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" - ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L830, T491, R1048, B521)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['DataItem53', '\xa0-\xa0DataItem3']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="10382_TD_Ext", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Edit - ''    (L830, T492, R1022, B519)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0-\xa0Edit3', 'Edit33']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="10382_Ext", control_type="Edit")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ' Firm Name '    (L44, T521, R128, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | ['DataItem54', ' Firm Name DataItem', ' Firm Name ']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Firm Name ", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Firm Name '    (L44, T525, R128, B546)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Firm Name\xa0', '\xa0Firm Name\xa0Static', 'Static21']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Firm Name ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T521, R1048, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Firm Name\xa0DataItem', 'DataItem55', '\xa0Firm Name\xa0DataItem0', '\xa0Firm Name\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Table - ''    (L128, T521, R1048, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Firm Name\xa0Table', 'Table17']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T521, R130, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Firm Name\xa0DataItem2', 'DataItem56']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435462_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L128, T521, R805, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Firm Name\xa0DataItem3', 'DataItem57']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435462_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L804, T521, R1047, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['DataItem58', '\xa0-\xa0DataItem4']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ' Type Of Client '    (L812, T521, R923, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Type Of Client\xa0', 'Static22', '\xa0Type Of Client\xa0Static', '\xa0Type Of Client\xa0Static0', '\xa0Type Of Client\xa0Static1']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title=" Type Of Client ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ComboBox - ''    (L923, T521, R1048, B551)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['\xa0Type Of Client\xa0ComboBox', 'ComboBox']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435463", control_type="ComboBox")
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Static - ''    (L926, T524, R1019, B548)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['Static23', '\xa0Type Of Client\xa0Static2']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | Button - 'Open'    (L1020, T522, R1046, B549)
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | ['Button19', 'OpenButton', 'Open']
+   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title="Open", control_type="Button")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L1053, T462, R1214, B558)
+   |    |    |    |    |    |    |    |    |    | ['\xa0\xa0\xa0\xa0DataItem', 'DataItem59', '\xa0\xa0\xa0\xa0DataItem0', '\xa0\xa0\xa0\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Table - ''    (L1053, T462, R1140, B498)
+   |    |    |    |    |    |    |    |    |    |    | ['Table18', '\xa0\xa0\xa0\xa0Table', '\xa0\xa0\xa0\xa0Table0', '\xa0\xa0\xa0\xa0Table1']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L1053, T462, R1106, B465)
+   |    |    |    |    |    |    |    |    |    |    |    | ['DataItem60', '\xa0-\xa0DataItem5']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L1053, T465, R1106, B498)
+   |    |    |    |    |    |    |    |    |    |    |    | ['\xa0\xa0\xa0\xa0DataItem2', 'DataItem61']
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Static - '    '    (L1053, T465, R1071, B498)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['Static24', '\xa0\xa0\xa0\xa0', '\xa0\xa0\xa0\xa0Static', '\xa0\xa0\xa0\xa00', '\xa0\xa0\xa0\xa01', '\xa0\xa0\xa0\xa0Static0', '\xa0\xa0\xa0\xa0Static1']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title="    ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Button - ''    (L1071, T465, R1106, B498)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['Button20', '\xa0\xa0\xa0\xa0Button', '\xa0\xa0\xa0\xa0Button0', '\xa0\xa0\xa0\xa0Button1']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435456_13_COPYADDRESS_BTN_LBL", control_type="Button")
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L1106, T465, R1141, B498)
+   |    |    |    |    |    |    |    |    |    |    |    | ['\xa0\xa0\xa0\xa0DataItem3', 'DataItem62']
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Button - ''    (L1106, T465, R1141, B498)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['Button21', '\xa0\xa0\xa0\xa0Button2']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435456_13_COPYADDRESSFROMLIST_BTN_LBL", control_type="Button")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Table - ''    (L1053, T498, R1214, B534)
+   |    |    |    |    |    |    |    |    |    |    | ['Table19', '\xa0\xa0\xa0\xa0Table2']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L1053, T498, R1214, B504)
+   |    |    |    |    |    |    |    |    |    |    |    | ['\xa0\xa0\xa0\xa0DataItem4', 'DataItem63']
+   |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    | DataItem - ''    (L1053, T504, R1214, B534)
+   |    |    |    |    |    |    |    |    |    |    |    | ['\xa0\xa0\xa0\xa0DataItem5', 'DataItemAdd Name', 'DataItem64']
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Static - '    '    (L1053, T504, R1071, B534)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['Static25', '\xa0\xa0\xa0\xa02', '\xa0\xa0\xa0\xa0Static2']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title="    ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    |    |    | Button - 'Add Name'    (L1071, T504, R1214, B534)
+   |    |    |    |    |    |    |    |    |    |    |    |    | ['Button22', 'Add Name', 'Add NameButton']
+   |    |    |    |    |    |    |    |    |    |    |    |    | child_window(title="Add Name", auto_id="AddAdditionalName", control_type="Button")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | DataItem - ''    (L38, T563, R632, B760)
+   |    |    |    |    |    |    |    | ['\xa0Firm Name\xa0DataItem4', 'DataItem65']
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Static - 'Address'    (L57, T564, R120, B585)
+   |    |    |    |    |    |    |    |    | ['Address', 'AddressStatic', 'Static26']
+   |    |    |    |    |    |    |    |    | child_window(title="Address", control_type="Text")
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Table - ''    (L44, T585, R521, B749)
+   |    |    |    |    |    |    |    |    | ['AddressTable', 'Table20']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Street '    (L45, T587, R119, B613)
+   |    |    |    |    |    |    |    |    |    | [' Street ', ' Street DataItem', 'DataItem66']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Street ", auto_id="268435472_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Street '    (L45, T590, R98, B611)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Street\xa0', 'Static27', '\xa0Street\xa0Static']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Street ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L120, T587, R519, B613)
+   |    |    |    |    |    |    |    |    |    | ['AddressDataItem', 'DataItem67', '\xa0Street\xa0DataItem', '\xa0Street\xa0DataItem0', '\xa0Street\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435472_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L45, T614, R119, B640)
+   |    |    |    |    |    |    |    |    |    | ['DataItem68', '\xa0Street\xa0DataItem2']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435473_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L120, T614, R519, B640)
+   |    |    |    |    |    |    |    |    |    | ['DataItem69', '\xa0Street\xa0DataItem3']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435473_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' City '    (L45, T641, R119, B667)
+   |    |    |    |    |    |    |    |    |    | [' City ', ' City DataItem', 'DataItem70']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" City ", auto_id="268435474_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' City '    (L45, T644, R81, B665)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0City\xa0', '\xa0City\xa0Static', 'Static28']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" City ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L120, T641, R519, B667)
+   |    |    |    |    |    |    |    |    |    | ['DataItem71', '\xa0City\xa0DataItem']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435474_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Province '    (L45, T668, R119, B694)
+   |    |    |    |    |    |    |    |    |    | [' Province ', ' Province DataItem', 'DataItem72']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Province ", auto_id="268435475_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Province '    (L45, T671, R117, B692)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Province\xa0', '\xa0Province\xa0Static', 'Static29']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Province ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L120, T668, R344, B694)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Province\xa0DataItem', 'DataItem73']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435475_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Postal '    (L345, T668, R404, B694)
+   |    |    |    |    |    |    |    |    |    | [' Postal DataItem', ' Postal ', 'DataItem74']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Postal ", auto_id="268435476_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Postal '    (L345, T671, R398, B692)
+   |    |    |    |    |    |    |    |    |    |    | ['Static30', '\xa0Postal\xa0Static', '\xa0Postal\xa0']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Postal ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L405, T668, R519, B694)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Postal\xa0DataItem', 'DataItem75']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435476_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Country '    (L45, T695, R119, B721)
+   |    |    |    |    |    |    |    |    |    | [' Country ', 'DataItem76', ' Country DataItem']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Country ", auto_id="268435477_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Country '    (L45, T698, R111, B719)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Country\xa0', '\xa0Country\xa0Static', 'Static31']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Country ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L120, T695, R519, B721)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Country\xa0DataItem', 'DataItem77']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435477_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Attention '    (L45, T722, R119, B748)
+   |    |    |    |    |    |    |    |    |    | [' Attention ', ' Attention DataItem', 'DataItem78']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Attention ", auto_id="268435478_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Attention '    (L45, T725, R119, B746)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Attention\xa0Static', '\xa0Attention\xa0', 'Static32']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Attention ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L120, T722, R519, B748)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Attention\xa0DataItem', 'DataItem79']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435478_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | DataItem - ''    (L636, T563, R1230, B752)
+   |    |    |    |    |    |    |    | ['Phone & E-mailDataItem', 'DataItem80']
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Static - 'Phone & E-mail'    (L656, T564, R763, B585)
+   |    |    |    |    |    |    |    |    | ['Phone & E-mailStatic', 'Static33', 'Phone & E-mail']
+   |    |    |    |    |    |    |    |    | child_window(title="Phone & E-mail", control_type="Text")
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Table - ''    (L642, T585, R1167, B713)
+   |    |    |    |    |    |    |    |    | ['Table21', 'Phone & E-mailTable']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L0, T0, R0, B0)
+   |    |    |    |    |    |    |    |    |    | ['DataItem81']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Business '    (L642, T585, R719, B611)
+   |    |    |    |    |    |    |    |    |    | [' Business ', 'DataItem82', ' Business DataItem']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Business ", auto_id="268435479_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Business '    (L642, T588, R719, B609)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Business\xa0', 'Static34', '\xa0Business\xa0Static']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Business ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L719, T585, R919, B611)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Business\xa0DataItem', 'DataItem83', '\xa0Business\xa0DataItem0', '\xa0Business\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435479_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L0, T0, R0, B0)
+   |    |    |    |    |    |    |    |    |    | ['DataItem84']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Cell '    (L918, T585, R968, B611)
+   |    |    |    |    |    |    |    |    |    | [' Cell DataItem', ' Cell ', 'DataItem85']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Cell ", auto_id="268435480_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Cell '    (L918, T588, R953, B609)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Cell\xa0', '\xa0Cell\xa0Static', 'Static35']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Cell ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L968, T585, R1168, B611)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Cell\xa0DataItem', 'DataItem86']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435480_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L0, T0, R0, B0)
+   |    |    |    |    |    |    |    |    |    | ['DataItem87']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Home '    (L642, T611, R719, B637)
+   |    |    |    |    |    |    |    |    |    | [' Home ', ' Home DataItem', 'DataItem88']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Home ", auto_id="268435481_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Home '    (L642, T614, R692, B635)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Home\xa0Static', 'Static36', '\xa0Home\xa0']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Home ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L719, T611, R919, B637)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Business\xa0DataItem2', '\xa0Home\xa0DataItem', 'DataItem89']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435481_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L0, T0, R0, B0)
+   |    |    |    |    |    |    |    |    |    | ['DataItem90']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Other '    (L918, T611, R968, B637)
+   |    |    |    |    |    |    |    |    |    | [' Other ', 'DataItem91', ' Other DataItem']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Other ", auto_id="268435482_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Other '    (L918, T614, R968, B635)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Other\xa0', 'Static37', '\xa0Other\xa0Static']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Other ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L968, T611, R1168, B637)
+   |    |    |    |    |    |    |    |    |    | ['DataItem92', '\xa0Other\xa0DataItem']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435482_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L0, T0, R0, B0)
+   |    |    |    |    |    |    |    |    |    | ['DataItem93']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' Bus. Fax '    (L642, T636, R719, B662)
+   |    |    |    |    |    |    |    |    |    | [' Bus. Fax ', ' Bus. Fax DataItem', 'DataItem94']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" Bus. Fax ", auto_id="268435483_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' Bus. Fax '    (L642, T639, R716, B660)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0Bus. Fax\xa0Static', 'Static38', '\xa0Bus. Fax\xa0']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" Bus. Fax ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L719, T636, R919, B662)
+   |    |    |    |    |    |    |    |    |    | ['\xa0Bus. Fax\xa0DataItem', 'DataItem95']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435483_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L0, T0, R0, B0)
+   |    |    |    |    |    |    |    |    |    | ['DataItem96']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' E-mail 1 '    (L642, T662, R719, B688)
+   |    |    |    |    |    |    |    |    |    | [' E-mail 1 DataItem', ' E-mail 1 ', 'DataItem97']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" E-mail 1 ", auto_id="268435484_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' E-mail 1 '    (L642, T665, R707, B686)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0E-mail 1\xa0', 'Static39', '\xa0E-mail 1\xa0Static']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" E-mail 1 ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L719, T662, R1168, B688)
+   |    |    |    |    |    |    |    |    |    | ['\xa0E-mail 1\xa0DataItem', 'DataItem98']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435484_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L0, T0, R0, B0)
+   |    |    |    |    |    |    |    |    |    | ['DataItem99']
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ' E-mail 2 '    (L642, T687, R719, B713)
+   |    |    |    |    |    |    |    |    |    | [' E-mail 2 DataItem', 'DataItem100', ' E-mail 2 ']
+   |    |    |    |    |    |    |    |    |    | child_window(title=" E-mail 2 ", auto_id="268435485_TD_LBL", control_type="DataItem")
+   |    |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    |    | Static - ' E-mail 2 '    (L642, T690, R707, B711)
+   |    |    |    |    |    |    |    |    |    |    | ['\xa0E-mail 2\xa0', '\xa0E-mail 2\xa0Static', 'Static40']
+   |    |    |    |    |    |    |    |    |    |    | child_window(title=" E-mail 2 ", control_type="Text")
+   |    |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    |    | DataItem - ''    (L719, T687, R1168, B713)
+   |    |    |    |    |    |    |    |    |    | ['\xa0E-mail 2\xa0DataItem', 'DataItem101', '\xa0E-mail 2\xa0DataItem0', '\xa0E-mail 2\xa0DataItem1']
+   |    |    |    |    |    |    |    |    |    | child_window(auto_id="268435485_TD_Fld", control_type="DataItem")
+   |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    | DataItem - ''    (L636, T756, R1230, B759)
+   |    |    |    |    |    |    |    | ['\xa0E-mail 2\xa0DataItem2', 'DataItem102']
+   |    |    |    |    |    |    |    |    | 
+   |    |    |    |    |    |    |    |    | Table - ''    (L636, T758, R638, B760)
+   |    |    |    |    |    |    |    |    | ['\xa0Last\xa0Table', 'Table22']
+   |    |    | 
+   |    |    | TitleBar - ''    (L39, T153, R1923, B186)
+   |    |    | ['TitleBar', 'TitleBar0', 'TitleBar1']
+   |    |    |    | 
+   |    |    |    | Menu - 'System'    (L10, T102, R32, B124)
+   |    |    |    | ['SystemMenu', 'Menu', 'System', 'SystemMenu0', 'SystemMenu1', 'Menu0', 'Menu1', 'System0', 'System1']
+   |    |    |    | child_window(title="System", auto_id="MenuBar", control_type="MenuBar")
+   |    |    |    |    | 
+   |    |    |    |    | MenuItem - 'Document Window'    (L10, T102, R32, B124)
+   |    |    |    |    | ['MenuItem', 'Document Window', 'Document WindowMenuItem', 'MenuItem0', 'MenuItem1']
+   |    |    |    |    | child_window(title="Document Window", control_type="MenuItem")
+   |    |    |    | 
+   |    |    |    | Button - 'Minimise'    (L1770, T156, R1818, B183)
+   |    |    |    | ['Minimise', 'Button23', 'MinimiseButton', 'Minimise0', 'Minimise1', 'MinimiseButton0', 'MinimiseButton1']
+   |    |    |    | child_window(title="Minimise", control_type="Button")
+   |    |    |    | 
+   |    |    |    | Button - 'Maximise'    (L1821, T156, R1869, B183)
+   |    |    |    | ['Button24', 'MaximiseButton', 'Maximise']
+   |    |    |    | child_window(title="Maximise", control_type="Button")
+   |    |    |    | 
+   |    |    |    | Button - 'Close'    (L1872, T156, R1920, B183)
+   |    |    |    | ['CloseButton', 'Button25', 'Close', 'CloseButton0', 'CloseButton1', 'Close0', 'Close1']
+   |    |    |    | child_window(title="Close", control_type="Button")
+   | 
+   | Pane - 'Pop Up Help: Ctrl+F1 or Dbl Click Left Mouse; Field Help: Shift+F1; General Help: F1'    (L0, T992, R1920, B1021)
+   | ['Pane44', 'Pop Up Help: Ctrl+F1 or Dbl Click Left Mouse; Field Help: Shift+F1; General Help: F1', 'Pop Up Help: Ctrl+F1 or Dbl Click Left Mouse; Field Help: Shift+F1; General Help: F1Pane']
+   | child_window(title="Pop Up Help: Ctrl+F1 or Dbl Click Left Mouse; Field Help: Shift+F1; General Help: F1", auto_id="59393", control_type="Pane")
+   | 
+   | Pane - ''    (L0, T35, R1920, B139)
+   | ['Pane45']
+   | child_window(auto_id="59419", control_type="Pane")
+   |    | 
+   |    | Pane - 'PCLaw® Toolbar'    (L0, T69, R1485, B138)
+   |    | ['PCLaw® ToolbarPane', 'Pane46', 'PCLaw® Toolbar']
+   |    | child_window(title="PCLaw® Toolbar", auto_id="59392", control_type="Pane")
+   |    |    | 
+   |    |    | Button - 'New Matter'    (L15, T72, R81, B135)
+   |    |    | ['New Matter2', 'New MatterButton', 'Button26']
+   |    |    | child_window(title="New Matter", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Conflict Search'    (L81, T72, R147, B135)
+   |    |    | ['Conflict SearchButton', 'Button27', 'Conflict Search']
+   |    |    | child_window(title="Conflict Search", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Time Sheet'    (L159, T72, R225, B135)
+   |    |    | ['Time Sheet', 'Button28', 'Time SheetButton']
+   |    |    | child_window(title="Time Sheet", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Matter Manager'    (L237, T72, R303, B135)
+   |    |    | ['Matter Manager', 'Button29', 'Matter ManagerButton']
+   |    |    | child_window(title="Matter Manager", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Contact Manager'    (L303, T72, R369, B135)
+   |    |    | ['Contact ManagerButton', 'Button30', 'Contact Manager']
+   |    |    | child_window(title="Contact Manager", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Document Manager'    (L369, T72, R435, B135)
+   |    |    | ['Button31', 'Document ManagerButton', 'Document Manager']
+   |    |    | child_window(title="Document Manager", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Client Ledger'    (L447, T72, R513, B135)
+   |    |    | ['Button32', 'Client Ledger', 'Client LedgerButton']
+   |    |    | child_window(title="Client Ledger", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Client Accounting Ledger'    (L513, T72, R579, B135)
+   |    |    | ['Button33', 'Client Accounting Ledger', 'Client Accounting LedgerButton']
+   |    |    | child_window(title="Client Accounting Ledger", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Register'    (L591, T72, R657, B135)
+   |    |    | ['Button34', 'Register', 'RegisterButton']
+   |    |    | child_window(title="Register", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Quick Timer'    (L657, T72, R723, B135)
+   |    |    | ['Button35', 'Quick TimerButton', 'Quick Timer']
+   |    |    | child_window(title="Quick Timer", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Calculator'    (L723, T72, R789, B135)
+   |    |    | ['Button36', 'CalculatorButton', 'Calculator']
+   |    |    | child_window(title="Calculator", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Copy'    (L801, T72, R867, B135)
+   |    |    | ['CopyButton', 'Button37', 'Copy']
+   |    |    | child_window(title="Copy", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Cut'    (L867, T72, R933, B135)
+   |    |    | ['Button38', 'Cut', 'CutButton']
+   |    |    | child_window(title="Cut", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Paste'    (L933, T72, R999, B135)
+   |    |    | ['PasteButton', 'Button39', 'Paste']
+   |    |    | child_window(title="Paste", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'About'    (L1011, T72, R1077, B135)
+   |    |    | ['Button40', 'About', 'AboutButton']
+   |    |    | child_window(title="About", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Field Help'    (L1077, T72, R1143, B135)
+   |    |    | ['Field Help', 'Button41', 'Field HelpButton']
+   |    |    | child_window(title="Field Help", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Quick Step'    (L1155, T72, R1221, B135)
+   |    |    | ['Button42', 'Quick StepButton', 'Quick Step']
+   |    |    | child_window(title="Quick Step", control_type="Button")
+   |    |    | 
+   |    |    | MenuItem - 'Windows'    (L1221, T72, R1320, B135)
+   |    |    | ['MenuItem2', 'WindowsMenuItem', 'Windows']
+   |    |    | child_window(title="Windows", control_type="MenuItem")
+   |    |    | 
+   |    |    | Button - 'Tickler'    (L1320, T72, R1386, B135)
+   |    |    | ['Button43', 'Tickler', 'TicklerButton']
+   |    |    | child_window(title="Tickler", control_type="Button")
+   |    |    | 
+   |    |    | Button - 'Mobile'    (L1386, T72, R1452, B135)
+   |    |    | ['Button44', 'Mobile', 'MobileButton']
+   |    |    | child_window(title="Mobile", control_type="Button")
+   |    |    | 
+   |    |    | MenuItem - 'Toolbar Options'    (L1452, T72, R1481, B135)
+   |    |    | ['Toolbar OptionsMenuItem', 'MenuItem3', 'Toolbar Options']
+   |    |    | child_window(title="Toolbar Options", control_type="MenuItem")
+   |    | 
+   |    | Pane - 'Menu Bar'    (L0, T35, R1920, B70)
+   |    | ['Menu BarPane', 'Pane47', 'Menu Bar']
+   |    | child_window(title="Menu Bar", auto_id="59398", control_type="Pane")
+   |    |    | 
+   |    |    | MenuItem - 'File'    (L15, T38, R65, B67)
+   |    |    | ['MenuItem4', 'FileMenuItem', 'File']
+   |    |    | child_window(title="File", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Data Entry'    (L65, T38, R167, B67)
+   |    |    | ['MenuItem5', 'Data EntryMenuItem', 'Data Entry']
+   |    |    | child_window(title="Data Entry", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Reports'    (L167, T38, R250, B67)
+   |    |    | ['ReportsMenuItem', 'MenuItem6', 'Reports']
+   |    |    | child_window(title="Reports", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Charts'    (L249, T38, R321, B67)
+   |    |    | ['ChartsMenuItem', 'MenuItem7', 'Charts']
+   |    |    | child_window(title="Charts", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Billing'    (L321, T38, R392, B67)
+   |    |    | ['MenuItem8', 'Billing', 'BillingMenuItem']
+   |    |    | child_window(title="Billing", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Tools'    (L392, T38, R457, B67)
+   |    |    | ['ToolsMenuItem', 'MenuItem9', 'Tools']
+   |    |    | child_window(title="Tools", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Options'    (L456, T38, R542, B67)
+   |    |    | ['Options', 'MenuItem10', 'OptionsMenuItem']
+   |    |    | child_window(title="Options", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Window'    (L542, T38, R631, B67)
+   |    |    | ['WindowMenuItem', 'MenuItem11', 'Window']
+   |    |    | child_window(title="Window", control_type="MenuItem")
+   |    |    | 
+   |    |    | MenuItem - 'Help'    (L630, T38, R689, B67)
+   |    |    | ['MenuItem12', 'Help3', 'HelpMenuItem']
+   |    |    | child_window(title="Help", control_type="MenuItem")
+   | 
+   | TitleBar - ''    (L24, T-8, R1920, B35)
+   | ['TitleBar2']
+   |    | 
+   |    | Menu - 'System'    (L0, T0, R22, B22)
+   |    | ['SystemMenu2', 'Menu2', 'System2']
+   |    | child_window(title="System", auto_id="MenuBar", control_type="MenuBar")
+   |    |    | 
+   |    |    | MenuItem - 'System'    (L0, T0, R22, B22)
+   |    |    | ['SystemMenuItem', 'MenuItem13', 'System3']
+   |    |    | child_window(title="System", control_type="MenuItem")
+   |    | 
+   |    | Button - 'Minimise'    (L1707, T12, R1778, B35)
+   |    | ['Minimise2', 'Button45', 'MinimiseButton2']
+   |    | child_window(title="Minimise", control_type="Button")
+   |    | 
+   |    | Button - 'Restore'    (L1778, T12, R1849, B35)
+   |    | ['RestoreButton', 'Button46', 'Restore']
+   |    | child_window(title="Restore", control_type="Button")
+   |    | 
+   |    | Button - 'Close'    (L1848, T12, R1932, B35)
+   |    | ['CloseButton2', 'Button47', 'Close2']
+   |    | child_window(title="Close", control_type="Button")
