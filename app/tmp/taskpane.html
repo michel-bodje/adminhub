@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Automate for Allen Madelin</title>
+    
+    <!-- Office JavaScript API -->
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+    <!-- Fluent UI Core -->
+    <link rel="stylesheet" href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css"/>
+
+    <!-- Remove requirement for a favicon -->
+    <link rel="icon" href="data:,">
+</head>
+<body class="ms-Fabric">
+    <header>
+        <img src="/assets/images/AM-icon.png" alt="Company Logo" class="logo">
+        <h1 class="ms-font-xl">Allen Madelin</hjson>
+    </header>
+    <main id="app-body" class="ms-welcome__main">
+       <!-- Loading overlay -->
+        <div id="loading-overlay" class="ms-overlay hidden">
+            <div class="ms-Spinner ms-Spinner--large">
+                <div class="ms-Spinner-circle"></div>
+            </div>
+            <p class="ms-font-l">Finding available time...</p>
+        </div>
+
+        <!-- Error modal -->
+        <div id="error-modal" class="modal hidden">
+          <div class="modal-content">
+            <p id="error-message">An error occurred.</p>
+            <button type="button" id="error-ok-button">OK</button>
+          </div>
+        </div>
+        
+        <div id="page-container">
+        <!-- Main menu page -->
+        <div id="menu-page" class="page active">
+            <h1 style="text-align: center;">Make it easy!</h1>
+            <div>
+                <button type="button" id="schedule-menu-btn" class="menu-btn">Schedule Appointment</button>
+                <button type="button" id="conf-menu-btn" class="menu-btn">Send Confirmation</button>
+                <button type="button" id="contract-menu-btn" class="menu-btn">Send Contract</button>
+                <button type="button" id="reply-menu-btn" class="menu-btn">Send Reply</button>
+                <button type="button" id="word-contract-menu-btn" class="menu-btn">Create Contract</button>
+                <button type="button" id="word-receipt-menu-btn" class="menu-btn">Create Receipt</button>	
+                <br>
+                <button type="button" id="user-manual-btn" class="menu-btn">User Manual</button>
+            </div>
+        </div>
+
+        <!-- Scheduler page -->
+        <!--
+        Creates a meeting for a client.
+        The form is where client information is entered.
+        -->
+        <div id="schedule-page" class="page">
+            <h1>Appointment Scheduler</h1>
+            <form>
+                <label for="schedule-client-name">Client Name:</label>
+                <input type="text" id="schedule-client-name" required>
+
+                <label for="schedule-client-phone">Client Phone:</label>
+                <input type="tel" id="schedule-client-phone" required>
+            
+                <label for="schedule-client-email">Client Email:</label>
+                <input type="email" id="schedule-client-email" required>
+
+                <label for="schedule-client-language">Preferred Language:</label>
+                <select id="schedule-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+                
+                <label for="case-type">Type of Case:</label>
+                <select id="case-type" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="schedule-lawyer-id">Lawyer ID:</label>
+                <select id="schedule-lawyer-id" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+            
+                <label for="schedule-location">Preferred Location:</label>
+                <select id="schedule-location" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <div id="case-details" hidden>
+                    <!-- Divorce Case Details -->
+                    <div id="divorce-details" hidden>
+                        <label for="spouse-name">Spouse Name:</label>
+                        <input type="text" id="spouse-name" placeholder="Enter spouse's name"><br><br>
+
+                        <div class="checkbox-container">
+                            <label for="conflict-search-done-divorce">Conflict Search Done?</label>
+                            <input type="checkbox" id="conflict-search-done-divorce">
+                        </div>
+                    </div>
+
+                    <!-- Estate Case Details -->
+                    <div id="estate-details" hidden>
+                        <label for="deceased-name">Deceased Name:</label>
+                        <input type="text" id="deceased-name" placeholder="Enter deceased's name"><br><br>
+                        <label for="executor-name">Executor Name:</label>
+                        <input type="text" id="executor-name" placeholder="Enter executor's name"><br><br>
+
+                        <div class="checkbox-container">
+                            <label for="conflict-search-done-estate">Conflict Search Done?</label>
+                            <input type="checkbox" id="conflict-search-done-estate">
+                        </div>
+                    </div>
+
+                    <!-- Employment Case Details -->
+                    <div id="employment-details" hidden>
+                        <label for="employer-name">Employer Name:</label>
+                        <input type="text" id="employer-name" placeholder="Enter employer's name">
+                    </div>
+
+                    <!-- Contract Case Details -->
+                    <div id="contract-details" hidden>
+                        <label for="other-party-name">Other Party Name:</label>
+                        <input type="text" id="other-party-name" placeholder="Enter other party's name">
+                    </div>
+
+                    <!-- Persons and Mandates Case Details -->
+                    <div id="mandates-details" hidden>
+                        <label for="mandate-details">Mandate Details:</label>
+                        <textarea id="mandate-details" placeholder="Enter mandate details"></textarea>
+                    </div>
+
+                    <!-- Business Law Case Details -->
+                    <div id="business-details" hidden>
+                        <label for="business-name">Business Name:</label>
+                        <input type="text" id="business-name" placeholder="Enter business name">
+                    </div>
+
+                    <!-- Common Case Details -->
+                    <div id="common-details" hidden>
+                        <label for="common-field">Specify Case Details:</label>
+                        <input type="text" id="common-field" placeholder="Provide additional details"></input>
+                    </div>
+                </div>
+
+                <label for="schedule-mode">Scheduling Mode:</label>
+                <select id="schedule-mode" required>
+                    <option value="manual" selected>Manual</option>
+                    <option value="auto">Auto</option>
+                </select>
+                
+                <label for="manual-date">Appointment Date:</label>
+                <input type="date" id="manual-date" required>
+                
+                <label for="manual-time">Appointment Time:</label>
+                <input type="time" id="manual-time" required>
+
+                <!-- Checkboxes -->
+                <div class="checkbox-container">
+                    <label for="existing-client">Existing Client?</label>
+                    <input type="checkbox" id="existing-client" title="Is this an existing client?">
+                </div>
+                
+                <div class="checkbox-container">
+                    <label for="ref-barreau">Réf. Barreau?</label>
+                    <input type="checkbox" id="ref-barreau" title="Is this client a reference from the Barreau?">
+                </div>
+
+                <div class="checkbox-container">
+                    <label for="schedule-first-consultation">First Consultation?</label>
+                    <input type="checkbox" id="schedule-first-consultation" title="Is this their first consultation?">
+                </div>
+
+                <div class="checkbox-container">
+                    <label for="payment-made">Payment Made?</label>
+                    <input type="checkbox" id="payment-made" title="Has the payment been made?">
+                </div>
+
+                <div id="payment-options-container" hidden>
+                    <label for="payment-method">Payment Method:</label>
+                    <select id="payment-method" required>
+                        <!-- Options will be dynamically populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div id="notes-container">
+                    <label for="schedule-notes">Notes:</label>
+                    <textarea id="schedule-notes" placeholder="Enter any additional notes"></textarea>
+                </div>
+
+                <!-- End of page 1 -->
+                <button type="submit" id="schedule-appointment-btn" class="submit-btn">Schedule</button>
+                <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+    
+        <!-- Confirmation page -->
+        <!--
+        Creates a confirmation email for a client.
+        -->
+        <div id="confirmation-page" class="page">
+            <h1>Email Confirmation</h1>
+            <form>
+                <label for="conf-client-email">Client Email:</label>
+                <input type="email" id="conf-client-email" required>
+            
+                <label for="conf-client-language">Preferred Language:</label>
+                <select id="conf-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="conf-lawyer-id">Lawyer ID:</label>
+                <select id="conf-lawyer-id" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="conf-location">Preferred Location:</label>
+                <select id="conf-location" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="conf-date">Appointment Date:</label>
+                <input type="date" id="conf-date" required>
+
+                <label for="conf-time">Appointment Time:</label>
+                <input type="time" id="conf-time" required>
+
+                <div class="checkbox-container">
+                    <label for="conf-first-consultation">First Consultation?</label>
+                    <input type="checkbox" id="conf-first-consultation" title="Is this their first consultation?">
+                </div>
+
+                <!-- End of page 2 -->
+                <button type="submit" id="send-confirmation-btn" class="submit-btn">Create</button>
+                <button type="button" class="back-btn">Back</button>
+            </form> 
+        </div>
+    
+        <!-- Contract page -->
+        <!-- 
+        Creates a contract email.
+        -->
+        <div id="contract-page" class="page">
+            <h1>Email Contract</h1>
+            <form>
+                <label for="contract-client-email">Client Email:</label>
+                <input type="email" id="contract-client-email" required>
+
+                <label for="contract-client-language">Preferred Language:</label>
+                <select id="contract-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="contract-lawyer-id">Lawyer ID:</label>
+                <select id="contract-lawyer-id" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="email-contract-deposit">Deposit:</label>
+                <input type="number" id="email-contract-deposit" placeholder="Enter required deposit" required>
+
+                <!-- End of page 3 -->
+                <button type="submit" id="send-contract-btn" class="submit-btn">Create</button>
+                <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+
+        <!-- Reply page -->
+        <div id="reply-page" class="page">
+            <h1>Email Reply</h1>
+            <form>
+                <label for="reply-client-email">Client Email:</label>
+                <input type="email" id="reply-client-email" required>
+
+                <label for="reply-client-language">Preferred Language:</label>
+                <select id="reply-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="reply-lawyer-id">Lawyer ID:</label>
+                <select id="reply-lawyer-id" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+            <!-- End of page 4 -->
+            <button type="submit" id="send-reply-btn" class="submit-btn">Create</button>
+            <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+
+        <!-- Contract Creation Page -->
+        <!-- Should only show in MS Word, not Outlook. -->
+        <div id="word-contract-page" class="page hidden">
+            <h1>Create Contract</h1>
+            <form>
+                <label for="word-client-name">Client Name:</label>
+                <input type="text" id="word-client-name" required>
+            
+                <label for="word-client-email">Client Email:</label>
+                <input type="email" id="word-client-email" required>
+
+                <label for="word-contract-deposit">Deposit:</label>
+                <input type="number" id="word-contract-deposit" placeholder="Enter required deposit" required>
+
+                <label for="word-client-language">Preferred Language:</label>
+                <select id="word-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="word-contract-title">Contract Title:</label>
+                <select id="word-contract-title" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <!-- Input field for custom contract title -->
+                <input type="text" id="custom-contract-title" class="hidden" placeholder="Enter custom contract title">
+            
+                <button type="submit" id="generate-word-contract-btn" class="submit-btn">Generate Contract</button>
+                <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+
+        <!-- Receipt Creation Page -->
+        <!-- Should only show in MS Word, not Outlook. -->
+        <div id="word-receipt-page" class="page hidden">
+            <h1>Create Receipt</h1>
+            <form>
+                <label for="receipt-client-name">Client Name:</label>
+                <input type="text" id="receipt-client-name" required>
+                
+                <label for="word-receipt-deposit">Deposit:</label>
+                <input type="number" id="word-receipt-deposit" placeholder="Enter required deposit" required>
+
+                <div id="receipt-payment-options-container">
+                    <label for="receipt-payment-method">Payment Method:</label>
+                    <select id="receipt-payment-method" required>
+                        <!-- Options will be dynamically populated by JavaScript -->
+                    </select>
+                </div>
+
+                <label for="receipt-client-language">Preferred Language:</label>
+                <select id="receipt-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="receipt-lawyer-id">Lawyer ID:</label>
+                <select id="receipt-lawyer-id" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <button type="submit" id="generate-word-receipt-btn" class="submit-btn">Generate Receipt</button>
+                <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+        </div>
+    </main>
+</body>
+</html>
