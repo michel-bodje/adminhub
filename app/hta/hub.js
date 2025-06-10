@@ -1,6 +1,7 @@
 // Hub for the HTA application
 attachEventListeners();
 
+
 /** Attaches all event listeners for the application. */
 function attachEventListeners() {
   // Form input event listeners
