@@ -1,5 +1,3 @@
-import { default as lawyerData } from '../../../config/lawyers.json';
-
 /**
  * Class representing a lawyer.
  * Lawyers are defined in lawyerData.json
@@ -28,17 +26,23 @@ export class Lawyer {
 }
 
 // Create lawyer objects from the data
-export const lawyers = lawyerData.lawyers
-  .map((lawyer) => new Lawyer(
+export async function loadLawyers() {
+  const res = await fetch('js/lawyers.json');
+  if (!res.ok) throw new Error("Failed to load lawyers.json");
+  const data = await res.json();
+  return data.lawyers.map(lawyer => new Lawyer(
     lawyer.id,
     lawyer.name,
     lawyer.email,
     lawyer.workingHours,
     lawyer.breakMinutes,
     lawyer.maxDailyAppointments,
-    lawyer.specialties,
-  ))
-;
+    lawyer.specialties
+  ));
+}
+
+// lawyers is a Promise that resolves to an array of Lawyer objects
+export const lawyers = loadLawyers();
 
 /**
  * Returns an array of all lawyers.
