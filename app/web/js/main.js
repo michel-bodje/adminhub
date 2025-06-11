@@ -187,19 +187,7 @@ function attachEventListeners() {
   submitButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();
-      const { id } = event.target;
-      switch (id) {
-        case ELEMENT_IDS.scheduleSubmitBtn:
-        case ELEMENT_IDS.confirmSubmitBtn:
-        case ELEMENT_IDS.contractSubmitBtn:
-        case ELEMENT_IDS.replySubmitBtn:
-        case ELEMENT_IDS.wordContractSubmitBtn:
-        case ELEMENT_IDS.wordReceiptSubmitBtn:
-          submitForm();
-          break;
-        default:
-          break;
-      }
+      submitForm();
     });
   });
 }
