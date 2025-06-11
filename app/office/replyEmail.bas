@@ -36,7 +36,6 @@ Sub CreateReplyEmail()
 
     ' === Load default Outlook signature (optional) ===
     signaturePath = Environ("APPDATA") & "\Microsoft\Signatures\"
-    Set fso = CreateObject("Scripting.FileSystemObject")
     If fso.FileExists(signaturePath & "default.htm") Then
         signatureHTML = fso.OpenTextFile(signaturePath & "default.htm", 1).ReadAll
     Else
