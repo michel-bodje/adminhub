@@ -55,7 +55,7 @@ End Sub
 Function LoadTemplate(templateName As String) As String
     Dim templatePath As String
     Dim fso As Object, file As Object
-    templatePath = ThisOutlookSession.CurrentProjectPath & "\Shared\templates\" & templateName
+    templatePath = ThisOutlookSession.CurrentProjectPath & "\\AMNAS\amlex\Admin\Scripts\lawhub\templates\" & templateName
     Set fso = CreateObject("Scripting.FileSystemObject")
     Set file = fso.OpenTextFile(templatePath, 1)
     LoadTemplate = file.ReadAll
