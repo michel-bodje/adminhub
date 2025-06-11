@@ -43,32 +43,17 @@ export async function loadLawyers() {
   ));
 }
 
-// lawyers is a Promise that resolves to an array of Lawyer objects
-export const lawyers = loadLawyers();
+// lawyerStore.js
+let lawyerList = [];
 
-/**
- * Returns an array of all lawyers.
- * @returns {Array<Lawyer>} - An array of all lawyer objects.
- */
-export async function getAllLawyers() {
-  return await lawyers;
+export function setLawyers(list) {
+  lawyerList = list;
 }
 
-/**
- * Returns the lawyer object with the given ID.
- * @param {string} lawyerId - The unique ID of the lawyer.
- * @returns {Lawyer | null} - The lawyer object if found, null if not.
- */
-export async function getLawyer(lawyerId) {
-  try {
-    const allLawyers = await lawyers;
-    const lawyer = allLawyers.find((l) => l.id === lawyerId);
-    if (!lawyer) {
-      throw new Error(`Lawyer with ID ${lawyerId} not found.`);
-    }
-    return lawyer;
-  } catch (error) {
-    console.warn(error.message);
-    return null;
-  }
+export function getLawyers() {
+  return lawyerList;
+}
+
+export function getLawyerById(id) {
+  return lawyerList.find(l => l.id === id) || null;
 }

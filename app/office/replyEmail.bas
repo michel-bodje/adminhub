@@ -9,20 +9,26 @@ Sub CreateReplyEmail()
     Dim htmlBody As String
     Dim signaturePath As String
     Dim signatureHTML As String
+    Dim jsonPath As String
+    Dim jsonText As String
+    Dim json As Object
     Dim fso As Object
 
-    ' === Get values from UserForm ===
-    With frmMain ' Replace with your actual form name
-        clientEmail = .txtClientEmail.Value
-        clientLanguage = .cmbClientLanguage.Value
-        lawyerName = .cmbLawyerName.Value
-    End With
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    jsonPath = "\\AMNAS\amlex\Admin\Scripts\lawhub\app\data.json"
+    jsonText = fso.OpenTextFile(jsonPath, 1).ReadAll
+    Set json = JsonConverter.ParseJson(jsonText)
+
+    ' === Extract data from JSON ===
+    clientEmail = json("form")("clientEmail")
+    clientLanguage = json("form")("clientLanguage")
+    lawyerName = json("lawyer")("name")
 
     ' === Load the appropriate template ===
-    If clientLanguage = "Français" Then
-        htmlBody = LoadTemplate("fr/Reply.html")
-    Else
+    If clientLanguage = "English" Then
         htmlBody = LoadTemplate("en/Reply.html")
+    Else
+        htmlBody = LoadTemplate("fr/Reply.html")
     End If
 
     ' === Replace placeholder ===

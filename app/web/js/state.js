@@ -23,8 +23,8 @@ class FormState {
     this.isRefBarreau = false;
     this.isExistingClient = false;
     this.isPaymentMade = false;
-    this.paymentMethod = "";
     this.depositAmount = 0;
+    this.paymentMethod = "";
     this.contractTitle = "";
     this.notes = "";
   }

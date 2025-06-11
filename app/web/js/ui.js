@@ -1,7 +1,7 @@
 import {
   ELEMENT_IDS,
   formState,
-  getAllLawyers,
+  getLawyers,
   caseTypeHandlers,
   locationRules,
 } from "./index.js";
@@ -55,12 +55,12 @@ export function resetPage() {
   showPage(ELEMENT_IDS.mainPage);
 
   // Reset dropdowns
+  populateCaseTypeDropdown();
   populateLawyerDropdown();
+  populateLocationDropdown();
   populateLanguageDropdown();
   populatePaymentDropdown();
-  if (Office.context.host === Office.HostType.Word) {
-    populateContractTitles();
-  }
+  populateContractTitles();
 }
 
 /**
@@ -377,14 +377,8 @@ export function populatePaymentDropdown() {
 
 /** Dynamically loads the case type options. */
 export function populateCaseTypeDropdown() {
-  /** To add new case types,
-   * update the `caseTypeHandlers` object in `modules/util.js`,
-   * and add the new specialty to the `specialties` array in `lawyerData.json`
-   * for the corresponding lawyers.
-  */
-
-  // Get all lawyers
-  const lawyers = getAllLawyers();
+  const lawyers = getLawyers();
+  if (!lawyers.length) return;
 
   // Collect all unique case types from all lawyers
   let caseTypes = [...new Set(
@@ -408,6 +402,9 @@ export function populateCaseTypeDropdown() {
 
 /** Dynamically loads the lawyer options based on the selected case type. */
 export function populateLawyerDropdown() {
+  const lawyers = getLawyers();
+  if (!lawyers.length) return;
+
   // Get the selected case type (if any)
   const selectedCaseType = formState.caseType;
 
@@ -415,9 +412,6 @@ export function populateLawyerDropdown() {
   const elements = Object.keys(ELEMENT_IDS)
     .filter(key => key.endsWith("LawyerId"))
     .map(key => ELEMENT_IDS[key]);
-
-  // Get all lawyers
-  const lawyers = getAllLawyers();
 
   // Filter lawyers based on the selected case type (if applicable)
   const filteredLawyers = selectedCaseType

@@ -3,28 +3,33 @@ import {
   formState,
   showPage,
   resetPage,
-  populateLanguageDropdown,
-  populatePaymentDropdown,
+  loadLawyers,
+  setLawyers,
+  getLawyerById,
   populateLawyerDropdown,
   populateContractTitles,
   handleCaseDetails,
   handlePaymentOptions,
-  populateCaseTypeDropdown,
 } from "./index.js";
 
 /** Main entry point for the application. */
-function main() {
-  populateCaseTypeDropdown();
-  populateLawyerDropdown();
-
-  populateLocationDropdown();
-  populateLanguageDropdown();
-  
-  populatePaymentDropdown();
-  populateContractTitles();
-
+async function main() {
+  const lawyerList = await loadLawyers();
+  if (lawyerList.length === 0) {
+    console.error("No lawyers loaded");
+    return;
+  } else {
+    console.log("[LawHub] Lawyers loaded:", lawyerList);
+  }
+  setLawyers(lawyerList);
+  resetPage();
   attachEventListeners();
 }
+
+window.addEventListener('pywebviewready', () => {
+  console.log("[LawHub] pywebview is ready.");
+  main();
+});
 
 /** Attaches all event listeners for the application. */
 function attachEventListeners() {
@@ -204,10 +209,6 @@ function attachEventListeners() {
  * @return {Promise} - Resolves when the submission is complete.
  */
 async function submitForm() {
-  await window.pywebview.api.submit_form(formState);
+  const lawyer = getLawyerById(formState.lawyerId);
+  await window.pywebview.api.submit_form(formState, lawyer);
 }
-
-window.addEventListener('pywebviewready', () => {
-  console.log("[LawHub] pywebview is ready.");
-  main();
-});

@@ -1,0 +1,37 @@
+{
+  "form": {
+    "lawyerId": "MM",
+    "location": "",
+    "clientName": "",
+    "clientPhone": "",
+    "clientEmail": "test@test.ca",
+    "clientLanguage": "English",
+    "caseType": "",
+    "appointmentDate": null,
+    "appointmentTime": null,
+    "isFirstConsultation": false,
+    "isRefBarreau": false,
+    "isExistingClient": false,
+    "isPaymentMade": false,
+    "depositAmount": 0,
+    "paymentMethod": "",
+    "contractTitle": "",
+    "notes": ""
+  },
+  "lawyer": {
+    "id": "MM",
+    "name": "Marie Madelin",
+    "email": "marie.madelin@amlex.ca",
+    "workingHours": {
+      "start": "9:00",
+      "end": "16:00"
+    },
+    "breakMinutes": 0,
+    "maxDailyAppointments": 5,
+    "specialties": [
+      "estate",
+      "mandates",
+      "common"
+    ]
+  }
+}
