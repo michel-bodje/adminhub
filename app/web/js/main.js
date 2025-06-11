@@ -3,16 +3,26 @@ import {
   formState,
   showPage,
   resetPage,
+  populateLanguageDropdown,
+  populatePaymentDropdown,
   populateLawyerDropdown,
   populateContractTitles,
   handleCaseDetails,
   handlePaymentOptions,
+  populateCaseTypeDropdown,
 } from "./index.js";
 
-// Wait for DOM to be ready before attaching event listeners
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", attachEventListeners);
-} else {
+/** Main entry point for the application. */
+function main() {
+  populateCaseTypeDropdown();
+  populateLawyerDropdown();
+
+  populateLocationDropdown();
+  populateLanguageDropdown();
+  
+  populatePaymentDropdown();
+  populateContractTitles();
+
   attachEventListeners();
 }
 
@@ -57,9 +67,7 @@ function attachEventListeners() {
         } else if (matchingKey.endsWith("ClientLanguage")) {
           // client language dropdown change
           formState.update("clientLanguage", value);
-          if (Office.context.host === Office.HostType.Word) {
             populateContractTitles();
-          }
         } else if (matchingKey.endsWith("scheduleMode")) {
           // appointment mode dropdown change
           const manualDate = document.getElementById(ELEMENT_IDS.manualDate);
@@ -177,22 +185,12 @@ function attachEventListeners() {
       const { id } = event.target;
       switch (id) {
         case ELEMENT_IDS.scheduleSubmitBtn:
-          scheduleAppointment();
-          break;
         case ELEMENT_IDS.confirmSubmitBtn:
-          sendConfirmation();
-          break;
         case ELEMENT_IDS.contractSubmitBtn:
-          sendContract();
-          break;
         case ELEMENT_IDS.replySubmitBtn:
-          sendReply();
-          break;
         case ELEMENT_IDS.wordContractSubmitBtn:
-          createContract();
-          break;
         case ELEMENT_IDS.wordReceiptSubmitBtn:
-          createReceipt();
+          submitForm();
           break;
         default:
           break;
@@ -201,26 +199,15 @@ function attachEventListeners() {
   });
 }
 
-/** Prepares a reply email. */
-function sendReply() {
+/**
+ * Submits the current formState to the Python backend.
+ * @return {Promise} - Resolves when the submission is complete.
+ */
+async function submitForm() {
+  await window.pywebview.api.submit_form(formState);
 }
 
-/** Prepares a contract email. */
-function sendContract() {
-}
-
-/** Prepares a confirmation email. */
-function sendConfirmation() {
-}
-
-/** Schedules an appointment based on the form state. */
-function scheduleAppointment() {
-}
-
-/** Create a word contract based on the form state. */
-function createContract() {
-}
-
-/** Create a word receipt based on the form state. */
-function createReceipt() {
-}
+window.addEventListener('pywebviewready', () => {
+  console.log("[LawHub] pywebview is ready.");
+  main();
+});

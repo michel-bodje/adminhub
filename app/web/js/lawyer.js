@@ -27,10 +27,12 @@ export class Lawyer {
 
 // Create lawyer objects from the data
 export async function loadLawyers() {
-  const res = await fetch('js/lawyers.json');
-  if (!res.ok) throw new Error("Failed to load lawyers.json");
-  const data = await res.json();
-  return data.lawyers.map(lawyer => new Lawyer(
+  const data = await window.pywebview.api.get_lawyers();
+  if (data.error) {
+    console.error("Failed to load lawyers:", data.error);
+    return [];
+  }
+  return data.map(lawyer => new Lawyer(
     lawyer.id,
     lawyer.name,
     lawyer.email,
@@ -48,8 +50,8 @@ export const lawyers = loadLawyers();
  * Returns an array of all lawyers.
  * @returns {Array<Lawyer>} - An array of all lawyer objects.
  */
-export function getAllLawyers() {
-  return lawyers;
+export async function getAllLawyers() {
+  return await lawyers;
 }
 
 /**
@@ -57,9 +59,10 @@ export function getAllLawyers() {
  * @param {string} lawyerId - The unique ID of the lawyer.
  * @returns {Lawyer | null} - The lawyer object if found, null if not.
  */
-export function getLawyer(lawyerId) {
+export async function getLawyer(lawyerId) {
   try {
-    const lawyer = lawyers.find((l) => l.id === lawyerId);
+    const allLawyers = await lawyers;
+    const lawyer = allLawyers.find((l) => l.id === lawyerId);
     if (!lawyer) {
       throw new Error(`Lawyer with ID ${lawyerId} not found.`);
     }
