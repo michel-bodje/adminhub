@@ -24,6 +24,5 @@ class LawHubAPI:
 if __name__ == '__main__':
     html_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "hub.html"))
     api = LawHubAPI()
-    webview.create_window("LawHub", html_path, js_api=api, width=640, height=480)
-    webview.start(debug=True, gui='edgechromium')
-    print("PROJECT_ROOT:", os.path.abspath(os.path.join(__file__, "../../../")))
+    webview.create_window("LawHub", html_path, js_api=api, width=500, height=740)
+    webview.start(debug=False, gui='edgechromium')

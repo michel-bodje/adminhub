@@ -1,3 +1,6 @@
+Attribute VB_Name = "launchHub"
+Option Explicit
+
 Sub LaunchHub()
-    Shell "mshta.exe ""C:\path\to\install\hub.hta""", vbNormalFocus
+    Shell "python app/web/launch.py", "", vbNormalFocus
 End Sub

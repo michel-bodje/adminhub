@@ -148,15 +148,6 @@ function attachEventListeners() {
         case ELEMENT_IDS.replyMenuBtn:
           showPage(ELEMENT_IDS.replyPage);
           break;
-        case ELEMENT_IDS.userManualMenuBtn:
-          // Open user manual in new tab
-          openPopup({
-            title: "User Manual",
-            contentOrFile: "./user-manual.html",
-            isFile: true,
-            position: "bottom-right",
-          });
-          break;
         case ELEMENT_IDS.wordContractMenuBtn:
           showPage(ELEMENT_IDS.wordContractPage);
           break;
