@@ -29,7 +29,7 @@ if not exist "%CSC_PATH%" (
 
 REM === Compile ===
 echo Compiling %SOURCE% to %OUTPUT%...
-"%CSC_PATH%" /nologo /out:%OUTPUT% /reference:%DLL_NAME% "%SOURCE%"
+"%CSC_PATH%" /nologo /platform:x64 /r:%DLL_NAME% /out:%OUTPUT% "%SOURCE%"
 if errorlevel 1 (
     echo Compilation failed.
     exit /b 1
