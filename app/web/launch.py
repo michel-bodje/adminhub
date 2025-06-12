@@ -1,12 +1,14 @@
 import webview
 import json
 import os
+import subprocess
 
 class LawHubAPI:
+    root_dir = os.path.abspath(os.path.join(__file__, "../../../"))
+
     def submit_form(self, form, lwy):
-        root_dir = os.path.abspath(os.path.join(__file__, "../../../"))
-        json_path = os.path.join(root_dir, "app", "data.json")
         try:
+            json_path = os.path.join(self.root_dir, "app", "data.json")
             data = {
                 "form": form,
                 "lawyer": lwy
@@ -22,6 +24,10 @@ class LawHubAPI:
         except Exception as e:
             print("[LawHub] Error:", str(e))
             return { "message": "Failed to save form: " + str(e) }
+
+    def run_script(self, script_name):
+        script_path = os.path.join(self.root_dir, "app", "office", script_name + ".exe")
+        subprocess.run([script_path], check=True)
         
     def get_lawyers(self):
         base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -37,4 +43,4 @@ if __name__ == '__main__':
     html_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "hub.html"))
     api = LawHubAPI()
     webview.create_window("LawHub", html_path, js_api=api, width=500, height=600)
-    webview.start(debug=True, gui='edgechromium')
+    webview.start(debug=False, gui='edgechromium')

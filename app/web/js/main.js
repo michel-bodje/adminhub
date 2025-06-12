@@ -187,15 +187,100 @@ function attachEventListeners() {
   submitButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();
-      submitForm();
+      const { id } = event.target;
+      switch (id) {
+        case ELEMENT_IDS.scheduleSubmitBtn:
+          scheduleAppointment();
+          break;
+        case ELEMENT_IDS.confirmSubmitBtn:
+          sendConfirmation();
+          break;
+        case ELEMENT_IDS.contractSubmitBtn:
+          sendContract();
+          break;
+        case ELEMENT_IDS.replySubmitBtn:
+          sendReply();
+          break;
+        case ELEMENT_IDS.wordContractSubmitBtn:
+          createContract();
+          break;
+        case ELEMENT_IDS.wordReceiptSubmitBtn:
+          createReceipt();
+          break;
+        default:
+          break;
+      }
     });
   });
 }
 
-/**
- * Submits the current formState to the Python backend.
- * @return {Promise} - Resolves when the submission is complete.
- */
+/** Prepares a reply email. */
+function sendReply() {
+  submitForm().then(async () => {
+    console.log("[LawHub] Reply email prepared and submitted.");
+    await window.pywebview.api.run_script("replyEmail")
+  }).catch((error) => {
+    console.error("[LawHub] Error preparing reply email:", error);
+    alert("Failed to prepare reply email. Please try again.");
+  });
+}
+
+/** Prepares a contract email. */
+function sendContract() {
+  submitForm().then(async () => {
+    console.log("[LawHub] Contract email prepared and submitted.");
+    await window.pywebview.api.run_script("contractEmail");
+  }).catch((error) => {
+    console.error("[LawHub] Error preparing contract email:", error);
+    alert("Failed to prepare contract email. Please try again.");
+  });
+}
+
+/** Prepares a confirmation email. */
+function sendConfirmation() {
+  submitForm().then(async () => {
+    console.log("[LawHub] Confirmation email prepared and submitted.");
+    await window.pywebview.api.run_script("confirmationEmail");
+  }).catch((error) => {
+    console.error("[LawHub] Error preparing confirmation email:", error);
+    alert("Failed to prepare confirmation email. Please try again.");
+  });
+}
+
+/** Schedules an appointment based on the form state. */
+function scheduleAppointment() {
+  submitForm().then(async () => {
+    console.log("[LawHub] Appointment scheduled successfully.");
+    await window.pywebview.api.run_script("scheduleAppointment");
+  }).catch((error) => {
+    console.error("[LawHub] Error scheduling appointment:", error);
+    alert("Failed to schedule appointment. Please try again.");
+  });
+}
+
+/** Create a word contract based on the form state. */
+function createContract() {
+  submitForm().then(async () => {
+    console.log("[LawHub] Word contract created successfully.");
+    await window.pywebview.api.run_script("createWordContract");
+  }).catch((error) => {
+    console.error("[LawHub] Error creating word contract:", error);
+    alert("Failed to create word contract. Please try again.");
+  });
+}
+
+/** Create a word receipt based on the form state. */
+function createReceipt() {
+  submitForm().then(async () => {
+    console.log("[LawHub] Word receipt created successfully.");
+    await window.pywebview.api.run_script("createWordReceipt");
+  }).catch((error) => {
+    console.error("[LawHub] Error creating word receipt:", error);
+    alert("Failed to create word receipt. Please try again.");
+  });
+}
+
+/** Submits the current formState to the Python backend. */
 async function submitForm() {
   const lawyer = getLawyerById(formState.lawyerId);
   await window.pywebview.api.submit_form(formState, lawyer);

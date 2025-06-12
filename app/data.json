@@ -1,11 +1,11 @@
 {
   "form": {
-    "lawyerId": "MM",
+    "lawyerId": "DH",
     "location": "",
     "clientName": "",
     "clientPhone": "",
-    "clientEmail": "test@test.ca",
-    "clientLanguage": "English",
+    "clientEmail": "ana@lol.com",
+    "clientLanguage": "Fran\u00e7ais",
     "caseType": "",
     "appointmentDate": null,
     "appointmentTime": null,
@@ -19,18 +19,20 @@
     "notes": ""
   },
   "lawyer": {
-    "id": "MM",
-    "name": "Marie Madelin",
-    "email": "marie.madelin@amlex.ca",
+    "id": "DH",
+    "name": "Dorin Holban",
+    "email": "dorin.holban@amlex.ca",
     "workingHours": {
-      "start": "9:00",
-      "end": "16:00"
+      "start": "09:30",
+      "end": "15:30"
     },
-    "breakMinutes": 0,
+    "breakMinutes": 30,
     "maxDailyAppointments": 5,
     "specialties": [
-      "estate",
-      "mandates",
+      "divorce",
+      "defamations",
+      "employment",
+      "business",
       "common"
     ]
   }
