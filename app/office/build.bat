@@ -12,7 +12,7 @@ REM === Set vars ===
 set "SOURCE=%~1"
 set "BASENAME=%~n1"
 set "OUTPUT=bin\%BASENAME%.exe"
-set "DLL_NAME=Newtonsoft.Json.dll"
+set "DLL_NAME=bin\Newtonsoft.Json.dll"
 set "CSC_PATH=%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
 
 REM === Check if source file exists ===

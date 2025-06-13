@@ -1,10 +1,10 @@
 {
   "form": {
-    "lawyerId": "MM",
+    "lawyerId": "TG",
     "location": "",
     "clientName": "",
     "clientPhone": "",
-    "clientEmail": "t@t.com",
+    "clientEmail": "lord@lord.god",
     "clientLanguage": "English",
     "caseType": "",
     "appointmentDate": null,
@@ -13,24 +13,26 @@
     "isRefBarreau": false,
     "isExistingClient": false,
     "isPaymentMade": false,
-    "depositAmount": 0,
+    "depositAmount": "5000",
     "paymentMethod": "",
     "contractTitle": "",
     "notes": ""
   },
   "lawyer": {
-    "id": "MM",
-    "name": "Marie Madelin",
-    "email": "marie.madelin@amlex.ca",
+    "id": "TG",
+    "name": "Tim Gagin",
+    "email": "tim.gagin@amlex.ca",
     "workingHours": {
-      "start": "9:00",
-      "end": "16:00"
+      "start": "10:30",
+      "end": "15:30"
     },
-    "breakMinutes": 0,
+    "breakMinutes": 30,
     "maxDailyAppointments": 5,
     "specialties": [
       "estate",
-      "mandates",
+      "real_estate",
+      "defamations",
+      "contract",
       "common"
     ]
   }
