@@ -45,11 +45,12 @@ class ContractEmail
             mail.Subject = subject;
             mail.HTMLBody = htmlBody;
 
-            string pdfPathTextFile = Path.Combine(Path.GetTempPath(), "latest_contract_path.txt");
+            string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+            string pathTempFile = Path.Combine(projectPath, "app", "latest_contract_path.txt");
 
-            if (File.Exists(pdfPathTextFile))
+            if (File.Exists(pathTempFile))
             {
-                string pdfPath = File.ReadAllText(pdfPathTextFile).Trim();
+                string pdfPath = File.ReadAllText(pathTempFile).Trim();
 
                 if (File.Exists(pdfPath))
                 {
@@ -69,8 +70,8 @@ class ContractEmail
             mail.Display(); // Opens the draft
 
             // === Clean up ===
-            if (File.Exists(pdfPathTextFile))
-                File.Delete(pdfPathTextFile);
+            if (File.Exists(pathTempFile))
+                File.Delete(pathTempFile);
 
             Console.WriteLine("Draft contract email created successfully.");
         }

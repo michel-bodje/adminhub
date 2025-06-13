@@ -65,7 +65,8 @@ class Program
                     ? "Contrat de services_" + clientName + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf"
                     : "Contract of services_" + clientName + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf";
 
-                string pdfPathTextFile = Path.Combine(Path.GetTempPath(), "latest_contract_path.txt");
+                string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+                string pathTempFile = Path.Combine(projectPath, "app", "latest_contract_path.txt");
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -73,10 +74,10 @@ class Program
                     doc.ExportAsFixedFormat(pdfPath, 17); // 17 = wdExportFormatPDF
 
                     // Save the PDF path to temp file
-                    File.WriteAllText(pdfPathTextFile, pdfPath);
+                    File.WriteAllText(pathTempFile, pdfPath);
 
                     Console.WriteLine("PDF saved to: " + pdfPath);
-                    Console.WriteLine("PDF path saved to: " + pdfPathTextFile);
+                    Console.WriteLine("PDF path saved to: " + pathTempFile);
 
                     // === Cleanup ===
                     doc.Close(false);
@@ -116,8 +117,8 @@ class Program
                     }
                     
                     // Delete path record if user cancels
-                    if (File.Exists(pdfPathTextFile))
-                        File.Delete(pdfPathTextFile);
+                    if (File.Exists(pathTempFile))
+                        File.Delete(pathTempFile);
                 }
             }
         }
