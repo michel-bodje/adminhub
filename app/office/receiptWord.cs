@@ -47,8 +47,6 @@ class Program
             dynamic wordApp = Activator.CreateInstance(wordType);
             dynamic doc = wordApp.Documents.Open(tempDocPath);
 
-            wordApp.Visible = true;
-
             Util.ReplaceWordText(doc, "{user}", "Michel Assi-Bodje");
             Util.ReplaceWordText(doc, "{reason}", "{}");
             Util.ReplaceWordText(doc, "{clientName}", clientName);
@@ -56,6 +54,12 @@ class Program
             Util.ReplaceWordText(doc, "{depositAmount}", formattedAmount);
             Util.ReplaceWordText(doc, "{lawyerName}", lawyerName);
             Util.ReplaceWordText(doc, "{date}", formattedDate);
+
+            wordApp.Visible = true;
+
+            // Show the print dialog for the user to choose settings and print
+            wordApp.Dialogs[88].Show(); // 88 = File > Print dialog
+
 
             // === Ask user to export PDF ===
             string pdfPath = null;
