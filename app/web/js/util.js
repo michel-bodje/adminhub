@@ -174,7 +174,7 @@ export function isValidInputs() {
     }
 
     if (!isValidPhoneNumber(formState.clientPhone)) {
-      throw new Error("Please provide a valid phone number in the format 555-555-5555.");
+      throw new Error("Please provide a valid phone number.");
     }
 
     if (!isValidEmail(formState.clientEmail)) {
@@ -186,42 +186,4 @@ export function isValidInputs() {
     console.error(error.message);
     return false;
   }
-}
-
-/** Utility function to validate an email address.
- * @param {string} email - The email address to validate.
- * @returns {boolean} - True if valid, false otherwise.
- * */
-export function isValidEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email.toLowerCase());
-}
-
-/** Utility function to validate an international phone number in E.164 format.
- * @param {string} phone - The phone number to validate.
- * @returns {boolean} - True if valid, false otherwise.
- */
-export function isValidPhoneNumber(phone) {
-  // E.164 format 
-  const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-
-  // Remove spaces and dashes before testing
-  return phoneRegex.test(phone.replace(/[\s-]/g, ""));
-}
-
-/** Utility function to format a phone number for display.
- * @param {string} phone - The phone number to format.
- * @returns {string} - The formatted phone number.
- */
-export function formatPhoneNumber(phone) {
-  // Ensure the number starts with a "+"
-  if (!phone.startsWith("+")) {
-    phone = `+${phone}`;
-  }
-
-  // Remove all non-digit characters except "+"
-  phone = phone.replace(/[^\d+]/g, "");
-
-  // Add spaces or dashes for readability (e.g., +1 555-555-5555)
-  return phone.replace(/(\+\d{1,3})(\d{3})(\d{3})(\d+)/, "$1 $2-$3-$4");
 }

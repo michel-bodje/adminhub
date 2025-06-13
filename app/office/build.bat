@@ -9,8 +9,13 @@ if "%~1"=="" (
 )
 
 REM === Set vars ===
-set "DLL_NAME=bin\Newtonsoft.Json.dll"
 set "CSC_PATH=%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
+set "JSON_DLL=bin\Newtonsoft.Json.dll"
+set "OUTLOOK_DLL=bin\Microsoft.Office.Interop.Outlook.dll"
+set "WORD_DLL=bin\Microsoft.Office.Interop.Word.dll"
+set "EXCEL_DLL=bin\Microsoft.Office.Interop.Excel.dll"
+set "PHONE_DLL=bin\PhoneNumbers.dll"
+set "UTIL=util.cs"
 
 REM === Check if csc exists ===
 if not exist "%CSC_PATH%" (
@@ -49,9 +54,30 @@ if not exist "%SOURCE%" (
     exit /b 1
 )
 
+REM === Determine references based on script name ===
+set "REFS=/r:%JSON_DLL% /r:%PHONE_DLL%"
+if /i "%BASENAME%"=="emailConfirmation" (
+    set "REFS=%REFS% /r:%OUTLOOK_DLL%"
+)
+if /i "%BASENAME%"=="emailContract" (
+    set "REFS=%REFS% /r:%OUTLOOK_DLL%"
+)
+if /i "%BASENAME%"=="emailReply" (
+    set "REFS=%REFS% /r:%OUTLOOK_DLL%"
+)
+if /i "%BASENAME%"=="scheduler" (
+    set "REFS=%REFS% /r:%OUTLOOK_DLL% /r:%WORD_DLL%"
+)
+if /i "%BASENAME%"=="wordContract" (
+    set "REFS=%REFS% /r:%WORD_DLL%"
+)
+if /i "%BASENAME%"=="wordReceipt" (
+    set "REFS=%REFS% /r:%WORD_DLL%"
+)
+
 REM === Compile ===
 echo Compiling %SOURCE% to %OUTPUT%...
-"%CSC_PATH%" /nologo /platform:x64 /r:%DLL_NAME% /out:%OUTPUT% "%SOURCE%" util.cs
+"%CSC_PATH%" /nologo /platform:x64 %REFS% /out:%OUTPUT% "%SOURCE%" "%UTIL%"
 if errorlevel 1 (
     echo Compilation failed for %SOURCE%.
     exit /b 1

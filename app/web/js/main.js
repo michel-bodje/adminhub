@@ -225,9 +225,8 @@ function scheduleAppointment() {
   submitForm()
     .then(async () => {
       console.log("[LawHub] Appointment scheduled successfully.");
-      await window.pywebview.api.run_script("scheduleAppointment");
-      // Automatically prepare and submit the confirmation email
-      sendConfirmation();
+      await window.pywebview.api.run_script("scheduler");
+      sendConfirmation(); // Automatically prepare and submit the confirmation email
     })
     .catch((error) => {
       console.error("[LawHub] Error scheduling appointment:", error);
@@ -241,7 +240,7 @@ function sendConfirmation() {
   submitForm()
     .then(async () => {
       console.log("[LawHub] Confirmation email prepared and submitted.");
-      await window.pywebview.api.run_script("confirmationEmail");
+      await window.pywebview.api.run_script("emailConfirmation");
     })
     .catch((error) => {
       console.error("[LawHub] Error preparing confirmation email:", error);
@@ -255,7 +254,7 @@ function sendReply() {
   submitForm()
     .then(async () => {
       console.log("[LawHub] Reply email prepared and submitted.");
-      await window.pywebview.api.run_script("replyEmail");
+      await window.pywebview.api.run_script("emailReply");
     })
     .catch((error) => {
       console.error("[LawHub] Error preparing reply email:", error);
@@ -269,7 +268,7 @@ function sendContract() {
   submitForm()
     .then(async () => {
       console.log("[LawHub] Contract email prepared and submitted.");
-      await window.pywebview.api.run_script("contractEmail");
+      await window.pywebview.api.run_script("emailContract");
     })
     .catch((error) => {
       console.error("[LawHub] Error preparing contract email:", error);
@@ -283,9 +282,8 @@ function createContract() {
   submitForm()
     .then(async () => {
       console.log("[LawHub] Word contract created successfully.");
-      await window.pywebview.api.run_script("contractWord");
-      // Automatically prepare and submit the contract email
-      sendContract();
+      await window.pywebview.api.run_script("wordContract");
+      sendContract(); // Automatically prepare and submit the contract email
     })
     .catch((error) => {
       console.error("[LawHub] Error creating word contract:", error);
@@ -299,7 +297,7 @@ function createReceipt() {
   submitForm()
     .then(async () => {
       console.log("[LawHub] Word receipt created successfully.");
-      await window.pywebview.api.run_script("receiptWord");
+      await window.pywebview.api.run_script("wordReceipt");
     })
     .catch((error) => {
       console.error("[LawHub] Error creating word receipt:", error);

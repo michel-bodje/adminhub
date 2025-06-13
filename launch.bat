@@ -1,4 +1,4 @@
 @echo off
 pushd %~dp0
-python ./app/web/main.py
+start "" /b pythonw ./app/web/main.py
 popd

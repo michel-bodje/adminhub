@@ -47,12 +47,12 @@ class Program
             double totalAmount = Util.AddTaxes(depositAmount, true);
             string today = DateTime.Today.ToString("D", CultureInfo.CreateSpecificCulture(locale));
 
-            Util.ReplaceWordText(doc, "{clientName}", clientName);
-            Util.ReplaceWordText(doc, "{contractTitle}", contractTitle);
-            Util.ReplaceWordText(doc, "{depositAmount}", depositAmount.ToString("F0"));
-            Util.ReplaceWordText(doc, "{totalAmount}", totalAmount.ToString("F2"));
-            Util.ReplaceWordText(doc, "{date}", today);
-            Util.HyperlinkEmail(doc, clientEmail);
+            Util.WordReplaceText(doc, "{clientName}", clientName);
+            Util.WordReplaceText(doc, "{contractTitle}", contractTitle);
+            Util.WordReplaceText(doc, "{depositAmount}", depositAmount.ToString("F0"));
+            Util.WordReplaceText(doc, "{totalAmount}", totalAmount.ToString("F2"));
+            Util.WordReplaceText(doc, "{date}", today);
+            Util.WordHyperlinkEmail(doc, "{clientEmail}", clientEmail);
             
             wordApp.Visible = true;
 

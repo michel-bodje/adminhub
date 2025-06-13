@@ -1,3 +1,5 @@
+﻿namespace LawhubOffice.WordReceipt;
+
 using System;
 using System.Globalization;
 using System.IO;
@@ -47,13 +49,13 @@ class Program
             dynamic wordApp = Activator.CreateInstance(wordType);
             dynamic doc = wordApp.Documents.Open(tempDocPath);
 
-            Util.ReplaceWordText(doc, "{user}", "Michel Assi-Bodje");
-            Util.ReplaceWordText(doc, "{reason}", "{}");
-            Util.ReplaceWordText(doc, "{clientName}", clientName);
-            Util.ReplaceWordText(doc, "{paymentMethod}", paymentMethod);
-            Util.ReplaceWordText(doc, "{depositAmount}", formattedAmount);
-            Util.ReplaceWordText(doc, "{lawyerName}", lawyerName);
-            Util.ReplaceWordText(doc, "{date}", formattedDate);
+            Util.WordReplaceText(doc, "{user}", "Michel Assi-Bodje");
+            Util.WordReplaceText(doc, "{reason}", "{}");
+            Util.WordReplaceText(doc, "{clientName}", clientName);
+            Util.WordReplaceText(doc, "{paymentMethod}", paymentMethod);
+            Util.WordReplaceText(doc, "{depositAmount}", formattedAmount);
+            Util.WordReplaceText(doc, "{lawyerName}", lawyerName);
+            Util.WordReplaceText(doc, "{date}", formattedDate);
 
             wordApp.Visible = true;
 
