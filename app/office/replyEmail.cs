@@ -14,9 +14,9 @@ class Program
             string jsonText = File.ReadAllText(jsonPath);
             JObject json = JObject.Parse(jsonText);
 
-            string clientEmail = json["form"]["clientEmail"].ToString();
-            string clientLanguage = json["form"]["clientLanguage"].ToString();
-            string lawyerName = json["lawyer"]["name"].ToString();
+            string clientEmail = (string)json["form"]["clientEmail"];
+            string clientLanguage = (string)json["form"]["clientLanguage"];
+            string lawyerName = (string)json["lawyer"]["name"];
 
             // === Load the appropriate HTML template ===
             string templateFile = clientLanguage == "English" ? "en/Reply.html" : "fr/Reply.html";

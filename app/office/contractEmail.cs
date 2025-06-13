@@ -7,53 +7,76 @@ class ContractEmail
 {
     static void Main()
     {
-        string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
-        string jsonPath = Path.Combine(baseDir, "app", "data.json");
-        string templateFolder = Path.Combine(baseDir, "templates");
+        try
+        {
+            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+            string jsonPath = Path.Combine(baseDir, "app", "data.json");
+            string templateFolder = Path.Combine(baseDir, "templates");
 
-        // === Read JSON ===
-        JObject json = JObject.Parse(File.ReadAllText(jsonPath));
+            // === Read JSON ===
+            JObject json = JObject.Parse(File.ReadAllText(jsonPath));
 
-        string clientEmail = (string)json["form"]["clientEmail"];
-        string clientLanguage = (string)json["form"]["clientLanguage"];
-        double depositAmount = (double)json["form"]["depositAmount"];
-        string lawyerName = (string)json["lawyer"]["name"];
+            string clientEmail = json["form"]["clientEmail"].ToString();
+            string clientLanguage = json["form"]["clientLanguage"].ToString();
+            double depositAmount = json["form"]["depositAmount"].ToObject<double>();
+            string lawyerName = json["lawyer"]["name"].ToString();
 
-        string lang = clientLanguage == "Français" ? "fr" : "en";
-        string templatePath = Path.Combine(templateFolder, lang, "Contract.html");
+            string lang = clientLanguage == "Français" ? "fr" : "en";
+            string templatePath = Path.Combine(templateFolder, lang, "Contract.html");
 
-        string htmlBody = File.ReadAllText(templatePath);
+            string htmlBody = File.ReadAllText(templatePath);
 
-        // === Replace placeholders ===
-        double totalAmount = AddTaxes(depositAmount, true);
+            // === Replace placeholders ===
+            double totalAmount = Util.AddTaxes(depositAmount, true);
 
-        htmlBody = htmlBody
-            .Replace("{{depositAmount}}", depositAmount.ToString("F0"))
-            .Replace("{{totalAmount}}", totalAmount.ToString("F2"))
-            .Replace("{{lawyerName}}", lawyerName);
+            htmlBody = htmlBody
+                .Replace("{{depositAmount}}", depositAmount.ToString("F0"))
+                .Replace("{{totalAmount}}", totalAmount.ToString("F2"))
+                .Replace("{{lawyerName}}", lawyerName);
 
-        string subject = lang == "fr" ? "Contrat de services - Allen Madelin" : "Contract of services - Allen Madelin";
+            string subject = lang == "fr" ? "Contrat de services - Allen Madelin" : "Contract of services - Allen Madelin";
 
-        // === Create email using late binding (COM) ===
-        Type outlookType = Type.GetTypeFromProgID("Outlook.Application");
-        dynamic outlook = Activator.CreateInstance(outlookType);
-        dynamic mail = outlook.CreateItem(0); // 0 = olMailItem
+            // === Create email using late binding (COM) ===
+            Type outlookType = Type.GetTypeFromProgID("Outlook.Application");
+            dynamic outlook = Activator.CreateInstance(outlookType);
+            dynamic mail = outlook.CreateItem(0); // 0 = olMailItem
 
-        mail.To = clientEmail;
-        mail.Subject = subject;
-        mail.HTMLBody = htmlBody;
-        mail.Display(); // Opens the draft
-        
-        Console.WriteLine("Draft contract email created successfully.");
-    }
+            mail.To = clientEmail;
+            mail.Subject = subject;
+            mail.HTMLBody = htmlBody;
 
-    static double AddTaxes(double amount, bool addFOF = false) {
-        if (double.IsNaN(amount))
-            throw new ArgumentException("Amount is not a valid number.");
+            string pdfPathTextFile = Path.Combine(Path.GetTempPath(), "latest_contract_path.txt");
 
-        double total = amount * (1 + 0.05 + 0.09975);
-        if (addFOF) total += 100;
+            if (File.Exists(pdfPathTextFile))
+            {
+                string pdfPath = File.ReadAllText(pdfPathTextFile).Trim();
 
-        return total;
+                if (File.Exists(pdfPath))
+                {
+                    mail.Attachments.Add(pdfPath);
+                    Console.WriteLine("Attached PDF contract: " + pdfPath);
+                }
+                else
+                {
+                    Console.WriteLine("PDF path recorded, but file no longer exists: " + pdfPath);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No PDF was generated, skipping attachment.");
+            }
+
+            mail.Display(); // Opens the draft
+
+            // === Clean up ===
+            if (File.Exists(pdfPathTextFile))
+                File.Delete(pdfPathTextFile);
+
+            Console.WriteLine("Draft contract email created successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+        }
     }
 }

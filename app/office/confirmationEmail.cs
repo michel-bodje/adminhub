@@ -13,15 +13,16 @@ class Program
             string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
             string jsonPath = Path.Combine(baseDir, "app", "data.json");
             string jsonText = File.ReadAllText(jsonPath);
+
             JObject json = JObject.Parse(jsonText);
 
-            string clientEmail = json["form"]["clientEmail"]?.ToString();
-            string clientLanguage = json["form"]["clientLanguage"]?.ToString() ?? "English";
-            string location = json["form"]["location"]?.ToString() ?? "";
-            bool isFirstConsult = json["form"]["isFirstConsultation"]?.ToObject<bool>() ?? true;
-            string appointmentDate = json["form"]["appointmentDate"]?.ToString();
-            string appointmentTime = json["form"]["appointmentTime"]?.ToString();
-            string lawyerName = json["lawyer"]?["name"]?.ToString() ?? "";
+            string clientEmail = (string)json["form"]["clientEmail"];
+            string clientLanguage = (string)json["form"]["clientLanguage"];
+            string location = (string)json["form"]["location"];
+            bool isFirstConsult = (bool)json["form"]["isFirstConsultation"];
+            string appointmentDate = (string)json["form"]["appointmentDate"];
+            string appointmentTime = (string)json["form"]["appointmentTime"];
+            string lawyerName = (string)json["lawyer"]["name"];
 
             // === Validate required fields ===
             if (string.IsNullOrEmpty(clientEmail) || !clientEmail.Contains("@"))
@@ -48,11 +49,29 @@ class Program
                 );
 
                 string locale = (lang == "fr") ? "fr-CA" : "en-US";
-                string formattedDate = slot.ToString("D", CultureInfo.CreateSpecificCulture(locale));
-                string formattedTime = slot.ToString("t", CultureInfo.CreateSpecificCulture(locale));
+                // Format date with ordinal suffix for English
+                string formattedDate;
+                if (lang == "en")
+                {
+                    int day = slot.Day;
+                    string suffix = (day % 10 == 1 && day != 11) ? "st"
+                        : (day % 10 == 2 && day != 12) ? "nd"
+                        : (day % 10 == 3 && day != 13) ? "rd"
+                        : "th";
+                    formattedDate = string.Format("{0:dddd, MMMM} {1}{2}, {0:yyyy}", slot, day, suffix);
+                }
+                else
+                {
+                    formattedDate = slot.ToString("D", CultureInfo.CreateSpecificCulture(locale));
+                }
+                // Format time as 2:00 PM in English, 14:00 in French
+                string formattedTime = slot.ToString(
+                    (lang == "en") ? "h:mm tt" : "HH:mm",
+                    CultureInfo.CreateSpecificCulture(locale)
+                );
 
                 int baseRate = isFirstConsult ? 125 : 350;
-                double totalRate = AddTaxes(baseRate);
+                double totalRate = Util.AddTaxes(baseRate);
 
                 htmlBody = htmlBody
                     .Replace("{{date}}", formattedDate)
@@ -70,7 +89,7 @@ class Program
             mail.To = clientEmail;
             mail.Subject = (lang == "fr")
                 ? "Confirmation de rendez-vous - Allen Madelin"
-                : "Appointment Confirmation - Allen Madelin";
+                : "Confirmation of appointment - Allen Madelin";
             mail.HTMLBody = htmlBody;
             mail.Display(true);
         }
@@ -78,10 +97,5 @@ class Program
         {
             Console.WriteLine("Error: " + ex.Message);
         }
-    }
-
-    static double AddTaxes(double baseAmount)
-    {
-        return baseAmount * 1.14975; // GST + QST
     }
 }
