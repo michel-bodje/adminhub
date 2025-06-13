@@ -62,8 +62,8 @@ class Program
                 dialog.Filter = "PDF files (*.pdf)|*.pdf";
                 dialog.Title = "Save Contract as PDF";
                 dialog.FileName = lang == "fr"
-                    ? "Contrat de services_" + clientName + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf"
-                    : "Contract of services_" + clientName + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf";
+                    ? "Contrat de services_" + clientName.Replace(" ", "-") + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf"
+                    : "Contract of services_" + clientName.Replace(" ", "-") + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf";
 
                 string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
                 string pathTempFile = Path.Combine(projectPath, "app", "latest_contract_path.txt");
@@ -85,13 +85,6 @@ class Program
                     File.Delete(tempDocPath);
 
                     Console.WriteLine("Contract successfully generated.");
-
-                    // Optional: Open the PDF after saving
-                    // System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    // {
-                    //     FileName = pdfPath,
-                    //     UseShellExecute = true
-                    // });
                 }
                 else
                 {
