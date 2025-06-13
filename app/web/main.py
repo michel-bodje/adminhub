@@ -42,4 +42,4 @@ if __name__ == '__main__':
     html_path = os.path.join(root_dir, "app", "web", "index.html")
     api = LawHubAPI()
     webview.create_window("LawHub", html_path, js_api=api, width=500, height=600)
-    webview.start(debug=False, gui='edgechromium')
+    webview.start(debug=True, gui='edgechromium')

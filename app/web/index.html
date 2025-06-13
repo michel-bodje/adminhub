@@ -42,12 +42,12 @@
         <div id="menu-page" class="page active">
             <h1>What do you want to do?</h1>
             <div>
-                <button type="button" id="schedule-menu-btn" class="menu-btn">Schedule Appointment</button>
-                <button type="button" id="conf-menu-btn" class="menu-btn">Send Confirmation</button>
-                <button type="button" id="contract-menu-btn" class="menu-btn">Send Contract</button>
-                <button type="button" id="reply-menu-btn" class="menu-btn">Send Reply</button>
-                <button type="button" id="word-contract-menu-btn" class="menu-btn">Create Contract</button>
-                <button type="button" id="word-receipt-menu-btn" class="menu-btn">Create Receipt</button>
+                <button type="button" id="schedule-menu-btn" class="menu-btn">[OUTL] Create Appointment</button>
+                <button type="button" id="conf-menu-btn" class="menu-btn">[OUTL] Email Confirmation</button>
+                <button type="button" id="reply-menu-btn" class="menu-btn">[OUTL] Email Reply</button>
+                <button type="button" id="contract-menu-btn" class="menu-btn">[OUTL] Email Contract</button>
+                <button type="button" id="word-contract-menu-btn" class="menu-btn">[WORD] Create Contract</button>
+                <button type="button" id="word-receipt-menu-btn" class="menu-btn">[WORD] Create Receipt</button>
             </div>
         </div>
 
@@ -57,7 +57,7 @@
         The form is where client information is entered.
         -->
         <div id="schedule-page" class="page">
-            <h1>Appointment Scheduler</h1>
+            <h1>Create Appointment</h1>
             <form>
                 <label for="schedule-client-name">Client Name:</label>
                 <input type="text" id="schedule-client-name" required>
@@ -237,6 +237,29 @@
             </form> 
         </div>
     
+
+        <!-- Reply page -->
+        <div id="reply-page" class="page">
+            <h1>Email Reply</h1>
+            <form>
+                <label for="reply-client-email">Client Email:</label>
+                <input type="email" id="reply-client-email" required>
+
+                <label for="reply-client-language">Preferred Language:</label>
+                <select id="reply-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="reply-lawyer-id">Lawyer ID:</label>
+                <select id="reply-lawyer-id" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+            <!-- End of page 4 -->
+            <button type="submit" id="send-reply-btn" class="submit-btn">Create</button>
+            <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+
         <!-- Contract page -->
         <!-- 
         Creates a contract email.
@@ -266,44 +289,26 @@
             </form>
         </div>
 
-        <!-- Reply page -->
-        <div id="reply-page" class="page">
-            <h1>Email Reply</h1>
-            <form>
-                <label for="reply-client-email">Client Email:</label>
-                <input type="email" id="reply-client-email" required>
-
-                <label for="reply-client-language">Preferred Language:</label>
-                <select id="reply-client-language" required>
-                    <!-- Options will be dynamically populated by JavaScript -->
-                </select>
-
-                <label for="reply-lawyer-id">Lawyer ID:</label>
-                <select id="reply-lawyer-id" required>
-                    <!-- Options will be dynamically populated by JavaScript -->
-                </select>
-            <!-- End of page 4 -->
-            <button type="submit" id="send-reply-btn" class="submit-btn">Create</button>
-            <button type="button" class="back-btn">Back</button>
-            </form>
-        </div>
-
-        <!-- Contract Creation Page -->
-        <!-- Should only show in MS Word, not Outlook. -->
+        <!-- Contract Word -->
         <div id="word-contract-page" class="page hidden">
             <h1>Create Contract</h1>
             <form>
-                <label for="word-client-name">Client Name:</label>
-                <input type="text" id="word-client-name" required>
-            
-                <label for="word-client-email">Client Email:</label>
-                <input type="email" id="word-client-email" required>
+                <label for="word-contract-client-name">Client Name:</label>
+                <input type="text" id="word-contract-client-name" required>
+
+                <label for="word-contract-client-email">Client Email:</label>
+                <input type="email" id="word-contract-client-email" required>
+
+                <label for="word-contract-lawyer-id">Lawyer ID:</label>
+                <select id="word-contract-lawyer-id" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
 
                 <label for="word-contract-deposit">Deposit:</label>
                 <input type="number" id="word-contract-deposit" placeholder="Enter required deposit" required>
 
-                <label for="word-client-language">Preferred Language:</label>
-                <select id="word-client-language" required>
+                <label for="word-contract-client-language">Preferred Language:</label>
+                <select id="word-contract-client-language" required>
                     <!-- Options will be dynamically populated by JavaScript -->
                 </select>
 
@@ -320,14 +325,13 @@
             </form>
         </div>
 
-        <!-- Receipt Creation Page -->
-        <!-- Should only show in MS Word, not Outlook. -->
+        <!-- Receipt Word -->
         <div id="word-receipt-page" class="page hidden">
             <h1>Create Receipt</h1>
             <form>
-                <label for="receipt-client-name">Client Name:</label>
-                <input type="text" id="receipt-client-name" required>
-                
+                <label for="word-receipt-client-name">Client Name:</label>
+                <input type="text" id="word-receipt-client-name" required>
+
                 <label for="word-receipt-deposit">Deposit:</label>
                 <input type="number" id="word-receipt-deposit" placeholder="Enter required deposit" required>
 
@@ -338,13 +342,13 @@
                     </select>
                 </div>
 
-                <label for="receipt-client-language">Preferred Language:</label>
-                <select id="receipt-client-language" required>
+                <label for="word-receipt-client-language">Preferred Language:</label>
+                <select id="word-receipt-client-language" required>
                     <!-- Options will be dynamically populated by JavaScript -->
                 </select>
 
-                <label for="receipt-lawyer-id">Lawyer ID:</label>
-                <select id="receipt-lawyer-id" required>
+                <label for="word-receipt-lawyer-id">Lawyer ID:</label>
+                <select id="word-receipt-lawyer-id" required>
                     <!-- Options will be dynamically populated by JavaScript -->
                 </select>
 
