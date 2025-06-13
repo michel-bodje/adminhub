@@ -11,7 +11,7 @@ if "%~1"=="" (
 REM === Set vars ===
 set "SOURCE=%~1"
 set "BASENAME=%~n1"
-set "OUTPUT=%BASENAME%.exe"
+set "OUTPUT=bin\%BASENAME%.exe"
 set "DLL_NAME=Newtonsoft.Json.dll"
 set "CSC_PATH=%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
 

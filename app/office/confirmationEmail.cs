@@ -10,7 +10,8 @@ class Program
         try
         {
             // === Load JSON form state ===
-            string jsonPath = @"\\AMNAS\amlex\Admin\Scripts\lawhub\app\data.json";
+            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+            string jsonPath = Path.Combine(baseDir, "app", "data.json");
             string jsonText = File.ReadAllText(jsonPath);
             JObject json = JObject.Parse(jsonText);
 
@@ -30,7 +31,7 @@ class Program
 
             string lang = (clientLanguage == "Français") ? "fr" : "en";
             string templateName = char.ToUpper(location[0]) + location.Substring(1).ToLower() + ".html";
-            string templatePath = @"\\AMNAS\amlex\Admin\Scripts\lawhub\templates\{lang}\{templateName}";
+            string templatePath = Path.Combine(baseDir, "templates", lang, templateName);
 
             if (!File.Exists(templatePath))
                 throw new FileNotFoundException("Template not found.", templatePath);

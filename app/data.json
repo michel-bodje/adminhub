@@ -4,7 +4,7 @@
     "location": "",
     "clientName": "",
     "clientPhone": "",
-    "clientEmail": "t@t.ca",
+    "clientEmail": "t@t.com",
     "clientLanguage": "English",
     "caseType": "",
     "appointmentDate": null,
@@ -13,7 +13,7 @@
     "isRefBarreau": false,
     "isExistingClient": false,
     "isPaymentMade": false,
-    "depositAmount": "5000",
+    "depositAmount": 0,
     "paymentMethod": "",
     "contractTitle": "",
     "notes": ""

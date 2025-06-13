@@ -7,8 +7,9 @@ class ContractEmail
 {
     static void Main()
     {
-        string jsonPath = @"\\AMNAS\amlex\Admin\Scripts\lawhub\app\data.json";
-        string templateFolder = @"\\AMNAS\amlex\Admin\Scripts\lawhub\templates\";
+        string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+        string jsonPath = Path.Combine(baseDir, "app", "data.json");
+        string templateFolder = Path.Combine(baseDir, "templates");
 
         // === Read JSON ===
         JObject json = JObject.Parse(File.ReadAllText(jsonPath));

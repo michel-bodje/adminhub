@@ -1,4 +1,4 @@
 @echo off
 pushd %~dp0
-python ./app/web/launch.py
+python ./app/web/main.py
 popd
