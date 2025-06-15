@@ -19,6 +19,7 @@ class Program
             string clientEmail = (string)json["form"]["clientEmail"];
             string clientLanguage = (string)json["form"]["clientLanguage"];
             string location = (string)json["form"]["location"];
+            bool isRefBarreau = (bool)json["form"]["isRefBarreau"];
             bool isFirstConsult = (bool)json["form"]["isFirstConsultation"];
             string appointmentDate = (string)json["form"]["appointmentDate"];
             string appointmentTime = (string)json["form"]["appointmentTime"];
@@ -70,7 +71,7 @@ class Program
                     CultureInfo.CreateSpecificCulture(locale)
                 );
 
-                int baseRate = isFirstConsult ? 125 : 350;
+                int baseRate = isRefBarreau ? 60 : isFirstConsult ? 125 : 350;
                 double totalRate = Util.AddTaxes(baseRate);
 
                 htmlBody = htmlBody

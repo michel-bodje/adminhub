@@ -1,8 +1,4 @@
-namespace LawhubOffice.Util;
-
 using System;
-using System.Runtime;
-using PhoneNumbers;
 public static class Util
 {
     // ---- Client Utilities ----
@@ -23,49 +19,66 @@ public static class Util
     }
 
     /// <summary>
-    /// Utility function to validate an international phone number using libphonenumber.
+    /// Utility function to validate a phone number (with optional region).<para/>
+    /// 
+    /// Only supports Canadian/US numbers (1-10 digits) or international numbers (8-15 digits).
     /// </summary>
-    /// <param name="phone">The phone number to validate.</param>
+    /// <param name="number">The phone number to validate.</param>
+    /// <param name="region">The region to validate the number against (default: "CA").</param>
     /// <returns>True if valid, false otherwise.</returns>
-    public static bool IsValidPhoneNumber(string phone)
-    {
-        if (string.IsNullOrWhiteSpace(phone))
-            return false;
+public static bool IsValidPhoneNumber(string number, string region = "CA")
+{
+    if (string.IsNullOrWhiteSpace(number))
+        return false;
 
-        try
-        {
-            var phoneUtil = PhoneNumberUtil.GetInstance();
-            // null region means parse expects a leading + (E.164)
-            var number = phoneUtil.Parse(phone, null);
-            return phoneUtil.IsValidNumber(number);
-        }
-        catch
-        {
-            return false;
-        }
+    // Remove all non-digit characters
+    string digitsOnly = System.Text.RegularExpressions.Regex.Replace(number, @"\D", "");
+
+    // If the number starts with 1 and has 10+ digits, keep it
+    if (digitsOnly.Length == 10)
+    {
+        // Canadian/US numbers are usually 10 digits (without the country code)
+        digitsOnly = "1" + digitsOnly;
     }
 
-    /// <summary>
-    /// Utility function to format a phone number for display using libphonenumber.
-    /// </summary>
-    /// <param name="phone">The phone number to format.</param>
-    /// <returns>The formatted phone number, or the original input if invalid.</returns>
-    public static string FormatPhoneNumber(string phone)
-    {
-        if (string.IsNullOrWhiteSpace(phone))
-            return phone;
+    // Now validate: must start with non-zero and have 8–15 digits total
+    return System.Text.RegularExpressions.Regex.IsMatch(digitsOnly, @"^[1-9]\d{7,14}$");
+}
 
-        try
+    /// <summary>
+    /// Formats a phone number for display.<para/>
+    ///
+    /// Tries to format the number intelligently based on its length and region.
+    /// </summary>
+    /// <param name="number">The phone number to format.</param>
+    /// <param name="region">The region to format the number for (default: "CA").</param>
+    /// <returns>The formatted phone number.</returns>
+    public static string FormatPhoneNumber(string number, string region = "CA")
+    {
+        if (string.IsNullOrWhiteSpace(number))
+            return number;
+
+        // Remove all non-digit characters
+        string digitsOnly = System.Text.RegularExpressions.Regex.Replace(number, @"\D", "");
+
+        // Assume Canadian if only 10 digits
+        if (digitsOnly.Length == 10)
         {
-            var phoneUtil = PhoneNumberUtil.GetInstance();
-            var number = phoneUtil.Parse(phone, null);
-            // Format as INTERNATIONAL (e.g., +1 555-555-5555)
-            return phoneUtil.Format(number, PhoneNumberFormat.INTERNATIONAL);
+            return string.Format("{0}-{1}-{2}", digitsOnly.Substring(0, 3), digitsOnly.Substring(3, 3), digitsOnly.Substring(6, 4));
         }
-        catch
+        // If it starts with 1 and has 11 digits (Canadian with country code)
+        else if (digitsOnly.Length == 11 && digitsOnly.StartsWith("1"))
         {
-            return phone;
+            return "+1 " + digitsOnly.Substring(1, 3) + "-" + digitsOnly.Substring(4, 3) + "-" + digitsOnly.Substring(7, 4);
         }
+        // If it starts with another country code
+        else if (digitsOnly.Length >= 11)
+        {
+            return "+" + digitsOnly;
+        }
+
+        // If invalid, return as-is
+        return number;
     }
 
     // ---- Contract Utilities ----

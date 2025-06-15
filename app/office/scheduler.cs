@@ -32,9 +32,11 @@ class Scheduler
                 throw new Exception("Invalid client email.");
             if (string.IsNullOrEmpty(form.Location))
                 throw new Exception("Missing location type.");
+            if (!Util.IsValidPhoneNumber(form.ClientPhone))
+                throw new Exception("Invalid client phone number.");
 
             // 3. Determine scheduling mode
-            bool hasManual = !string.IsNullOrEmpty(form.AppointmentDate)
+                bool hasManual = !string.IsNullOrEmpty(form.AppointmentDate)
                              && !string.IsNullOrEmpty(form.AppointmentTime);
             List<Slot> validSlots = hasManual
                 ? FindManualSlot(form)

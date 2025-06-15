@@ -14,7 +14,6 @@ set "JSON_DLL=bin\Newtonsoft.Json.dll"
 set "OUTLOOK_DLL=bin\Microsoft.Office.Interop.Outlook.dll"
 set "WORD_DLL=bin\Microsoft.Office.Interop.Word.dll"
 set "EXCEL_DLL=bin\Microsoft.Office.Interop.Excel.dll"
-set "PHONE_DLL=bin\PhoneNumbers.dll"
 set "UTIL=util.cs"
 
 REM === Check if csc exists ===
@@ -55,7 +54,7 @@ if not exist "%SOURCE%" (
 )
 
 REM === Determine references based on script name ===
-set "REFS=/r:%JSON_DLL% /r:%PHONE_DLL%"
+set "REFS=/r:%JSON_DLL%"
 if /i "%BASENAME%"=="emailConfirmation" (
     set "REFS=%REFS% /r:%OUTLOOK_DLL%"
 )
