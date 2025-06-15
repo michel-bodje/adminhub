@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System.Windows.Forms;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Word = Microsoft.Office.Interop.Word;
+using LawhubOffice.Util;
 
 class Scheduler
 {
@@ -283,7 +284,7 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         string body = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
         body += "<p>" +
             "Client:&nbsp;&nbsp;&nbsp;" + form.ClientName + "<br>" +
-            "Phone:&nbsp;&nbsp;" + Util.FormatPhoneNumber(form.ClientPhone) + "<br>" +
+            "Phone:&nbsp;&nbsp;" + Utility.FormatPhoneNumber(form.ClientPhone) + "<br>" +
             "Email:&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"mailto:" + form.ClientEmail + "\">" + form.ClientEmail + "</a><br>" +
             "Lang:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + form.ClientLanguage + "</p>";
 
