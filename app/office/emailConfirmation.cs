@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using Outlook = Microsoft.Office.Interop.Outlook;
 
 class Program
 {
@@ -26,7 +27,7 @@ class Program
             string lawyerName = (string)json["lawyer"]["name"];
 
             // === Validate required fields ===
-            if (string.IsNullOrEmpty(clientEmail) || !clientEmail.Contains("@"))
+            if (string.IsNullOrEmpty(clientEmail) || !Util.IsValidEmail(clientEmail))
                 throw new Exception("Missing or invalid client email.");
             if (string.IsNullOrEmpty(location))
                 throw new Exception("Missing location (used for template).");
@@ -84,15 +85,17 @@ class Program
             htmlBody = htmlBody.Replace("{{lawyerName}}", lawyerName);
 
             // === Generate Outlook draft email ===
-            dynamic outlook = Activator.CreateInstance(Type.GetTypeFromProgID("Outlook.Application"));
-            dynamic mail = outlook.CreateItem(0); // 0 = olMailItem
+            Outlook.Application outlookApp = new Outlook.Application();
+            Outlook.MailItem mail = (Outlook.MailItem)outlookApp.CreateItem(Outlook.OlItemType.olMailItem);
 
             mail.To = clientEmail;
             mail.Subject = (lang == "fr")
                 ? "Confirmation de rendez-vous - Allen Madelin"
                 : "Confirmation of appointment - Allen Madelin";
             mail.HTMLBody = htmlBody;
-            mail.Display(true);
+            mail.Display();
+            WindowFocus.ShowWithFocus(mail.GetInspector); // Force focus
+            Console.WriteLine("Email draft created in Outlook.");
         }
         catch (Exception ex)
         {

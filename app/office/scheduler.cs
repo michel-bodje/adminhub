@@ -5,13 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
-using System.Windows.Forms;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Word = Microsoft.Office.Interop.Word;
 
 class Scheduler
 {
-    [STAThread] // Required for clipboard access
     static void Main(string[] args)
     {
         try
@@ -226,15 +224,15 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         // Set basic properties
         appt.Subject = form.ClientName;
         appt.Start = slot.Start;
-        appt.End = slot.End;
+        appt.Duration = 60;
         appt.Location = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(slot.Location);
+        appt.RequiredAttendees = form.LawyerEmail;
         appt.MeetingStatus = Outlook.OlMeetingStatus.olMeeting;
         appt.Body = " "; // Required placeholder for WordEditor
 
-        // Add recipient
+        // Force name resolution
         Outlook.Recipients recipients = appt.Recipients;
-        Outlook.Recipient r = recipients.Add(form.LawyerEmail);
-        r.Type = (int)Outlook.OlMeetingRecipientType.olRequired;
+        recipients.ResolveAll();
 
         // Set categories
         try { appt.Categories = form.LawyerName; } catch { }
@@ -245,8 +243,11 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         File.WriteAllText(tempFile, htmlBody);
 
         // Initialize Word Editor
-        appt.Display(false); // Must display before accessing WordEditor
+        appt.Display(); // Must display before accessing WordEditor
+
         Outlook.Inspector inspector = appt.GetInspector;
+        WindowFocus.ShowWithFocus(inspector); // Force focus
+
         Word.Document wordDoc = inspector.WordEditor as Word.Document;
 
         if (wordDoc != null)
@@ -395,7 +396,7 @@ static void CreateMeetingDraft(FormState form, Slot slot)
             if (cnt >= form.MaxDailyAppointments)
                 continue;
 
-            // Unavailability rules per lawyer: example, embed or extend if needed
+            // Unavailability that day
             if (IsLocationUnavailableOnDay(form, day))
                 continue;
 

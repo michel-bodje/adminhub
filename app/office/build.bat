@@ -54,7 +54,7 @@ if not exist "%SOURCE%" (
 )
 
 REM === Determine references based on script name ===
-set "REFS=/r:%JSON_DLL%"
+set "REFS=/r:%JSON_DLL% "
 if /i "%BASENAME%"=="emailConfirmation" (
     set "REFS=%REFS% /r:%OUTLOOK_DLL%"
 )
@@ -76,7 +76,7 @@ if /i "%BASENAME%"=="wordReceipt" (
 
 REM === Compile ===
 echo Compiling %SOURCE% to %OUTPUT%...
-"%CSC_PATH%" /nologo /platform:x64 %REFS% /out:%OUTPUT% "%SOURCE%" "%UTIL%"
+"%CSC_PATH%" /nologo /platform:x64 /target:winexe /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
 if errorlevel 1 (
     echo Compilation failed for %SOURCE%.
     exit /b 1

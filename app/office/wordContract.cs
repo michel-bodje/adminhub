@@ -55,6 +55,7 @@ class Program
             Util.WordHyperlinkEmail(doc, "{clientEmail}", clientEmail);
             
             wordApp.Visible = true;
+            WindowFocus.ShowWithFocus(doc.ActiveWindow);
 
             // === Prompt user for PDF path ===
             using (var dialog = new SaveFileDialog())
@@ -66,7 +67,7 @@ class Program
                     : "Contract of services_" + clientName.Replace(" ", "-") + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf";
 
                 string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
-                string pathTempFile = Path.Combine(projectPath, "app", "latest_contract_path.txt");
+                string tempFilePath = Path.Combine(projectPath, "app", "latest_contract_path.txt");
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -74,10 +75,10 @@ class Program
                     doc.ExportAsFixedFormat(pdfPath, 17); // 17 = wdExportFormatPDF
 
                     // Save the PDF path to temp file
-                    File.WriteAllText(pathTempFile, pdfPath);
+                    File.WriteAllText(tempFilePath, pdfPath);
 
                     Console.WriteLine("PDF saved to: " + pdfPath);
-                    Console.WriteLine("PDF path saved to: " + pathTempFile);
+                    Console.WriteLine("PDF path saved to: " + tempFilePath);
 
                     // === Cleanup ===
                     doc.Close(false);
@@ -88,30 +89,7 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine("User skipped PDF export. Scheduling temp cleanup...");
-                    Console.WriteLine("Word document remains open for editing.");
-                    // If user cancels, delete the temp file later
-                    // Schedule cleanup using a separate executable
-
-                    string cleanerExe = Path.Combine(baseDir, "cleanTempDoc.exe");
-                    if (File.Exists(cleanerExe))
-                    {
-                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                        {
-                            FileName = cleanerExe,
-                            Arguments = "\"" + tempDocPath + "\"",
-                            UseShellExecute = false,
-                            CreateNoWindow = true
-                        });
-                    }
-                    else
-                    {
-                        Console.WriteLine("Cleanup exe not found.");
-                    }
-                    
-                    // Delete path record if user cancels
-                    if (File.Exists(pathTempFile))
-                        File.Delete(pathTempFile);
+                    Util.CallWordCleaner(tempDocPath, tempFilePath);
                 }
             }
         }

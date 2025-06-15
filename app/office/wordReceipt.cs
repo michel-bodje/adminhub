@@ -36,7 +36,7 @@ class Program
 
             // === Create temp copy of template ===
             string tempDocPath = Path.Combine(Path.GetTempPath(), "Receipt_" + Guid.NewGuid() + ".docx");
-            File.Copy(templatePath, tempDocPath, overwrite: true);
+            File.Copy(templatePath, tempDocPath, true);
 
             // === Prepare replacement values ===
             string formattedDate = DateTime.Today.ToString("D", CultureInfo.CreateSpecificCulture(locale));
@@ -56,32 +56,46 @@ class Program
             Util.WordReplaceText(doc, "{date}", formattedDate);
 
             wordApp.Visible = true;
+            WindowFocus.ShowWithFocus(doc.ActiveWindow);
 
             // Show the print dialog for the user to choose settings and print
             wordApp.Dialogs[88].Show(); // 88 = File > Print dialog
 
 
             // === Ask user to export PDF ===
-            string pdfPath = null;
-            var saveDialog = new SaveFileDialog
+            using (var dialog = new SaveFileDialog())
             {
-                Filter = "PDF files (*.pdf)|*.pdf",
-                Title = "Export Receipt as PDF",
-                FileName = DateTime.Now.ToString("yyyy-MM-dd") + "_" + clientName.Replace(" ", "-") + "_" + ".pdf"
-            };
+                dialog.Filter = "PDF files (*.pdf)|*.pdf";
+                dialog.Title = "Save Receipt as PDF";
+                dialog.FileName = DateTime.Now.ToString("yyyy-MM-dd") + "_" + clientName.Replace(" ", "-") + "_" + ".pdf";
 
-            if (saveDialog.ShowDialog() == DialogResult.OK)
-            {
-                pdfPath = saveDialog.FileName;
-                doc.ExportAsFixedFormat(pdfPath, 17); // 17 = wdExportFormatPDF
+                string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+
+                string tempFilePath = Path.Combine(projectPath, "app", "latest_receipt_path.txt");
+    
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string pdfPath = dialog.FileName;
+                    doc.ExportAsFixedFormat(pdfPath, 17); // 17 = wdExportFormatPDF
+
+                    // Save the PDF path to temp file
+                    File.WriteAllText(tempFilePath, pdfPath);
+
+                    Console.WriteLine("PDF saved to: " + pdfPath);
+                    Console.WriteLine("PDF path saved to: " + tempFilePath);
+                    
+                    // === Cleanup ===
+                    doc.Close(false);
+                    wordApp.Quit();
+                    File.Delete(tempDocPath);
+    
+                    Console.WriteLine("Receipt successfully generated.");
+                }
+                else
+                {
+                    Util.CallWordCleaner(tempDocPath, tempFilePath);
+                }
             }
-
-            // === Cleanup ===
-            doc.Close(false);
-            wordApp.Quit();
-            File.Delete(tempDocPath);
-
-            Console.WriteLine("Receipt saved to: " + pdfPath);
         }
         catch (Exception ex)
         {

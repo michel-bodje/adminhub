@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using System.Runtime.InteropServices;
+
 public static class Util
 {
     // ---- Client Utilities ----
@@ -26,24 +29,24 @@ public static class Util
     /// <param name="number">The phone number to validate.</param>
     /// <param name="region">The region to validate the number against (default: "CA").</param>
     /// <returns>True if valid, false otherwise.</returns>
-public static bool IsValidPhoneNumber(string number, string region = "CA")
-{
-    if (string.IsNullOrWhiteSpace(number))
-        return false;
-
-    // Remove all non-digit characters
-    string digitsOnly = System.Text.RegularExpressions.Regex.Replace(number, @"\D", "");
-
-    // If the number starts with 1 and has 10+ digits, keep it
-    if (digitsOnly.Length == 10)
+    public static bool IsValidPhoneNumber(string number, string region = "CA")
     {
-        // Canadian/US numbers are usually 10 digits (without the country code)
-        digitsOnly = "1" + digitsOnly;
-    }
+        if (string.IsNullOrWhiteSpace(number))
+            return false;
 
-    // Now validate: must start with non-zero and have 8–15 digits total
-    return System.Text.RegularExpressions.Regex.IsMatch(digitsOnly, @"^[1-9]\d{7,14}$");
-}
+        // Remove all non-digit characters
+        string digitsOnly = System.Text.RegularExpressions.Regex.Replace(number, @"\D", "");
+
+        // If the number starts with 1 and has 10+ digits, keep it
+        if (digitsOnly.Length == 10)
+        {
+            // Canadian/US numbers are usually 10 digits (without the country code)
+            digitsOnly = "1" + digitsOnly;
+        }
+
+        // Now validate: must start with non-zero and have 8–15 digits total
+        return System.Text.RegularExpressions.Regex.IsMatch(digitsOnly, @"^[1-9]\d{7,14}$");
+    }
 
     /// <summary>
     /// Formats a phone number for display.<para/>
@@ -101,7 +104,7 @@ public static bool IsValidPhoneNumber(string number, string region = "CA")
     }
 
     // ---- Word Document Utilities ----
-    
+
     /// <summary>
     /// Replaces all occurrences of a placeholder string with a replacement string
     /// in the specified Word document.
@@ -125,8 +128,8 @@ public static bool IsValidPhoneNumber(string number, string region = "CA")
         find.MatchAllWordForms = false;
         find.Execute(Replace: 2); // wdReplaceAll
     }
-    
-        
+
+
     /// <summary>
     /// Replaces all occurrences of a placeholder string in the specified Word document
     /// with a hyperlink to the specified email address.
@@ -134,7 +137,7 @@ public static bool IsValidPhoneNumber(string number, string region = "CA")
     /// <param name="doc">The Word document to modify.</param>
     /// <param name="placeholder">The placeholder string to replace.</param>
     /// <param name="clientEmail">The client email address to hyperlink to.</param>
-    public static void WordHyperlinkEmail(dynamic doc, string placeholder , string clientEmail)
+    public static void WordHyperlinkEmail(dynamic doc, string placeholder, string clientEmail)
     {
         dynamic range = doc.Content;
         dynamic found = range.Find;
@@ -142,6 +145,75 @@ public static bool IsValidPhoneNumber(string number, string region = "CA")
         if (found.Execute())
         {
             range.Hyperlinks.Add(range, "mailto:" + clientEmail, Type.Missing, Type.Missing, clientEmail);
+        }
+    }
+
+    public static void CallWordCleaner(string tempDocPath, string tempFilePath = "")
+    {
+        string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+        Console.WriteLine("User skipped PDF export. Scheduling temp cleanup...");
+        Console.WriteLine("Word document remains open for editing.");
+        // If user cancels, delete the temp file later
+        // Schedule cleanup using a separate executable
+        string cleanerExe = Path.Combine(baseDir, "app", "office", "bin", "cleanTempDoc.exe");
+        if (File.Exists(cleanerExe))
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = cleanerExe,
+                Arguments = "\"" + tempDocPath + "\"",
+                UseShellExecute = false,
+                CreateNoWindow = true
+            });
+        }
+        else
+        {
+            Console.WriteLine("Cleanup exe not found.");
+        }
+
+        // Delete path record if user cancels
+        if (File.Exists(tempFilePath))
+            File.Delete(tempFilePath);
+    }
+}
+
+public static class WindowFocus
+{
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    private const int SW_RESTORE = 9;
+
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid("00000114-0000-0000-C000-000000000046")]
+    private interface IOleWindow
+    {
+        void GetWindow(out IntPtr hwnd);
+        void ContextSensitiveHelp(bool fEnterMode);
+    }
+
+    public static void ShowWithFocus(object comWindow)
+    {
+        if (comWindow == null) return;
+
+        try
+        {
+            var oleWindow = (IOleWindow)comWindow;
+            IntPtr hwnd;
+            oleWindow.GetWindow(out hwnd);
+            if (hwnd != IntPtr.Zero)
+            {
+                ShowWindow(hwnd, SW_RESTORE);
+                SetForegroundWindow(hwnd);
+            }
+        }
+        catch
+        {
+            // fallback or ignore
         }
     }
 }

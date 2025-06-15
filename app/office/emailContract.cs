@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Globalization;
 using Newtonsoft.Json.Linq;
+using Outlook = Microsoft.Office.Interop.Outlook;
 
 class ContractEmail
 {
@@ -36,10 +37,9 @@ class ContractEmail
 
             string subject = lang == "fr" ? "Contrat de services - Allen Madelin" : "Contract of services - Allen Madelin";
 
-            // === Create email using late binding (COM) ===
-            Type outlookType = Type.GetTypeFromProgID("Outlook.Application");
-            dynamic outlook = Activator.CreateInstance(outlookType);
-            dynamic mail = outlook.CreateItem(0); // 0 = olMailItem
+            // === Create email using Outlook Interop ===
+            var outlookApp = new Microsoft.Office.Interop.Outlook.Application();
+            var mail = (Microsoft.Office.Interop.Outlook.MailItem)outlookApp.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem);
 
             mail.To = clientEmail;
             mail.Subject = subject;
@@ -68,7 +68,8 @@ class ContractEmail
             }
 
             mail.Display(); // Opens the draft
-
+            WindowFocus.ShowWithFocus(mail.GetInspector); // Force focus
+            
             // === Clean up ===
             if (File.Exists(pathTempFile))
                 File.Delete(pathTempFile);
