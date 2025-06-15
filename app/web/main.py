@@ -1,7 +1,7 @@
-import webview
-import json
 import os
+import json
 import subprocess
+import webview
 
 root_dir = os.path.abspath(os.path.join(__file__, "../../../"))
 
