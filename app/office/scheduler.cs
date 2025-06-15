@@ -28,7 +28,7 @@ class Scheduler
             // 2. Validate minimal inputs
             if (string.IsNullOrEmpty(form.ClientName) || string.IsNullOrEmpty(form.LawyerName))
                 throw new Exception("Missing client or lawyer info.");
-            if (string.IsNullOrEmpty(form.ClientEmail) || !form.ClientEmail.Contains("@"))
+            if (string.IsNullOrEmpty(form.ClientEmail) || !Util.IsValidEmail(form.ClientEmail))
                 throw new Exception("Invalid client email.");
             if (string.IsNullOrEmpty(form.Location))
                 throw new Exception("Missing location type.");
@@ -296,15 +296,26 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         else
         {
             string priceDetails;
+            string priceStyle = "";
             if (form.IsRefBarreau)
+            {
                 priceDetails = "Ref. Barreau ($60+tax)";
+                priceStyle = "text-decoration: underline;";
+            }
             else if (form.IsFirstConsultation)
+            {
                 priceDetails = "First Consultation ($125+tax)";
+                priceStyle = "background-color: yellow;";
+            }
             else
+            {
                 priceDetails = "Follow-up ($350+tax)";
+                priceStyle = "background-color: #d3d3d3;";
+            }
 
             string caseDetails = GetCaseDetails(form);
-            body += "<p><span style=\"background-color: " + (form.IsFirstConsultation ? "yellow" : "#d3d3d3") + "\">" +
+
+            body += "<p><span style=\"" + priceStyle + "\">" +
                     priceDetails + "</span>: " + caseDetails + "</p>";
             body += "<p><strong>Payment</strong>  " + (form.IsPaymentMade ? "✔️" : "❌") + "<br>";
             if (form.IsPaymentMade)
