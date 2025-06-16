@@ -34,8 +34,8 @@ class Scheduler
                 throw new Exception("Invalid client phone number.");
 
             // 3. Determine scheduling mode
-                bool hasManual = !string.IsNullOrEmpty(form.AppointmentDate)
-                             && !string.IsNullOrEmpty(form.AppointmentTime);
+            bool hasManual = !string.IsNullOrEmpty(form.AppointmentDate)
+                         && !string.IsNullOrEmpty(form.AppointmentTime);
             List<Slot> validSlots = hasManual
                 ? FindManualSlot(form)
                 : FindAutoSlots(form);
@@ -54,6 +54,7 @@ class Scheduler
         catch (Exception ex)
         {
             Console.WriteLine("Error scheduling appointment: " + ex.Message);
+            Console.WriteLine("StackTrace: " + ex.StackTrace);
         }
     }
 
@@ -444,7 +445,7 @@ static void CreateMeetingDraft(FormState form, Slot slot)
     static bool IsValidSlot(Slot slot, List<Outlook.AppointmentItem> events, FormState form)
     {
         // 1. Overlap check + breakMinutes buffer
-        foreach (var ev in events.Where(ev => ev.RequiredAttendees.Contains(form.LawyerEmail)))
+        foreach (var ev in events.Where(ev => ev.Categories.Contains(form.LawyerName)))
         {
             DateTime s, e;
             try { s = ev.Start; e = ev.End; }
