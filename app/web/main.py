@@ -6,12 +6,13 @@ import subprocess
 root_dir = os.path.abspath(os.path.join(__file__, "../../../"))
 
 class LawHubAPI:
-    def submit_form(self, form, lwy):
+    def submit_form(self, form, lwy, dets):
         try:
             data_path = os.path.join(root_dir, "app", "data.json")
             data = {
                 "form": form,
-                "lawyer": lwy
+                "lawyer": lwy,
+                "caseDetails": dets
             }
 
             with open(data_path, "w", encoding="utf-8") as f:

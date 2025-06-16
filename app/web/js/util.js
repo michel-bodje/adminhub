@@ -161,6 +161,46 @@ export function getCaseDetails() {
   }
 }
 
+/** Collects extra case details fields based on the selected case type. */
+export function collectCaseDetails() {
+  const caseType = formState.caseType;
+  const details = {};
+
+  switch (caseType) {
+    case "divorce":
+      details.spouseName = document.getElementById(ELEMENT_IDS.spouseName)?.value || "";
+      details.conflictSearchDone = document.getElementById(ELEMENT_IDS.conflictSearchDoneDivorce)?.checked || false;
+      break;
+    case "estate":
+      details.deceasedName = document.getElementById(ELEMENT_IDS.deceasedName)?.value || "";
+      details.executorName = document.getElementById(ELEMENT_IDS.executorName)?.value || "";
+      details.conflictSearchDone = document.getElementById(ELEMENT_IDS.conflictSearchDoneEstate)?.checked || false;
+      break;
+    case "employment":
+      details.employerName = document.getElementById(ELEMENT_IDS.employerName)?.value || "";
+      break;
+    case "contract":
+      details.otherPartyName = document.getElementById(ELEMENT_IDS.otherPartyName)?.value || "";
+      break;
+    case "defamations":
+      details.otherPartyName = document.getElementById(ELEMENT_IDS.otherPartyName)?.value || "";
+      break;
+    case "mandates":
+      details.mandateDetails = document.getElementById(ELEMENT_IDS.mandateDetails)?.value || "";
+      break;
+    case "business":
+      details.businessName = document.getElementById(ELEMENT_IDS.businessName)?.value || "";
+      break;
+    case "common":
+      details.commonField = document.getElementById(ELEMENT_IDS.commonField)?.value || "";
+      break;
+    // Add more case types as needed
+    default:
+      break;
+  }
+  return details;
+}
+
 /**
  * Checks if all required fields in the form have been filled in and the phone number and email are valid.
  * @returns {boolean} - True if all required fields are valid, false otherwise.

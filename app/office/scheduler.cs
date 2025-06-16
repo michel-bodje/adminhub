@@ -86,6 +86,9 @@ class Scheduler
         public int BreakMinutes;       // buffer between appointments
         public int MaxDailyAppointments;
         public string[] Specialties;
+
+        // From caseDetails object in JSON:
+        public Dictionary<string, object> CaseDetails;
     }
 
     class Slot
@@ -158,6 +161,19 @@ class Scheduler
         {
             throw new Exception("Missing lawyer object in JSON.");
         }
+
+        // Parse caseDetails as Dictionary<string, object> (compat version)
+        var caseDetailsDict = new Dictionary<string, object>();
+        var cd = root["caseDetails"] as JObject;
+        if (cd != null)
+        {
+            foreach (var prop in cd.Properties())
+            {
+            caseDetailsDict[prop.Name] = prop.Value != null ? prop.Value.ToObject<object>() : null;
+            }
+        }
+        form.CaseDetails = caseDetailsDict;
+
         return form;
     }
 
@@ -315,10 +331,10 @@ static void CreateMeetingDraft(FormState form, Slot slot)
                 priceStyle = "background-color: #d3d3d3;";
             }
 
-            string caseDetails = GetCaseDetails(form);
+            string detailsHtml = GetCaseDetails(form.CaseType, form.CaseDetails);
 
             body += "<p><span style=\"" + priceStyle + "\">" +
-                    priceDetails + "</span>: " + caseDetails + "</p>";
+                    priceDetails + "</span>: " + detailsHtml + "</p>";
             body += "<p><strong>Payment</strong>  " + (form.IsPaymentMade ? "✔️" : "❌") + "<br>";
             if (form.IsPaymentMade)
                 body += form.PaymentMethod;
@@ -491,12 +507,48 @@ static void CreateMeetingDraft(FormState form, Slot slot)
     }
     
     // ---- Case details logic ----
-    static string GetCaseDetails(FormState form)
+    static string GetCaseDetails(string caseType, Dictionary<string, object> caseDetails)
     {
-        // Inline case-type logic; extend based on form.Specialties or form.CaseType
+        if (string.IsNullOrEmpty(caseType) || caseDetails == null)
+            return "";
 
-        // TODO
-        
-        return "";
+        switch (caseType)
+        {
+            case "divorce":
+            return "Divorce / Family Law<br><br>" +
+                   "<strong>Spouse Name:</strong> " + (caseDetails.ContainsKey("spouseName") ? caseDetails["spouseName"] : "") + "<br>" +
+                   "Conflict Search Done? " + (caseDetails.ContainsKey("conflictSearchDone") && caseDetails["conflictSearchDone"] is bool && (bool)caseDetails["conflictSearchDone"] ? "✔️" : "❌");
+            case "estate":
+            return "Successions / Estate Law<br><br>" +
+                   "<strong>Deceased Name:</strong> " + (caseDetails.ContainsKey("deceasedName") ? caseDetails["deceasedName"] : "") + "<br>" +
+                   "<strong>Executor Name:</strong> " + (caseDetails.ContainsKey("executorName") ? caseDetails["executorName"] : "") + "<br>" +
+                   "Conflict Search Done? " + (caseDetails.ContainsKey("conflictSearchDone") && caseDetails["conflictSearchDone"] is bool && (bool)caseDetails["conflictSearchDone"] ? "✔️" : "❌");
+            case "employment":
+            return "Employment Law<br><br>" +
+                   "<strong>Employer Name:</strong> " + (caseDetails.ContainsKey("employerName") ? caseDetails["employerName"] : "");
+            case "contract":
+            return "Contract Law<br><br>" +
+                   "<strong>Other Party:</strong> " + (caseDetails.ContainsKey("otherPartyName") ? caseDetails["otherPartyName"] : "");
+            case "defamations":
+            return "Defamations";
+            case "real_estate":
+            return "Real Estate";
+            case "name_change":
+            return "Name Change";
+            case "adoptions":
+            return "Adoptions";
+            case "mandates":
+            return "Regimes de Protection / Mandates<br><br>" +
+                   "<strong>Mandate Details:</strong> " + (caseDetails.ContainsKey("mandateDetails") ? caseDetails["mandateDetails"] : "");
+            case "business":
+            return "Business Law<br><br>" +
+                   "<strong>Business Name:</strong> " + (caseDetails.ContainsKey("businessName") ? caseDetails["businessName"] : "");
+            case "assermentation":
+            return "Assermentation";
+            case "common":
+            return caseDetails.ContainsKey("commonField") ? caseDetails["commonField"].ToString() : "";
+            default:
+            return "";
+        }
     }
 }

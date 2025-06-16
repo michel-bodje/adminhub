@@ -10,6 +10,7 @@ import {
   populateContractTitles,
   handleCaseDetails,
   handlePaymentOptions,
+  collectCaseDetails,
 } from "./index.js";
 
 window.addEventListener('pywebviewready', () => {
@@ -34,7 +35,8 @@ async function main() {
 /** Submits the current formState to the Python backend. */
 async function submitForm() {
   const lawyer = getLawyerById(formState.lawyerId);
-  await window.pywebview.api.submit_form(formState, lawyer);
+  const details = collectCaseDetails();
+  await window.pywebview.api.submit_form(formState, lawyer, details);
 }
 
 /** Attaches all event listeners for the application. */
