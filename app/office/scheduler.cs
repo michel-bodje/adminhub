@@ -331,34 +331,47 @@ static void CreateMeetingDraft(FormState form, Slot slot)
     // ---- Calendar fetch ----
     static List<Outlook.AppointmentItem> FetchCalendarEvents(int daysAhead = 14)
     {
+        Console.WriteLine("Entering fetch");
         var list = new List<Outlook.AppointmentItem>();
         Outlook.Application outlookApp = new Outlook.Application();
         Outlook.NameSpace ns = outlookApp.GetNamespace("MAPI");
         Outlook.MAPIFolder calendar = ns.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar);
         Outlook.Items items = calendar.Items;
+
         items.IncludeRecurrences = true;
         items.Sort("[Start]");
+
         DateTime now = DateTime.Now;
         DateTime end = now.AddDays(daysAhead);
 
-        // Simple filter approach: iterate all and pick those in range
-        // Use enumerator for compatibility with older compilers
-        System.Collections.IEnumerator enumerator = items.GetEnumerator();
+        Console.WriteLine("Building filter...");
+        string filter = string.Format("[Start] <= '{0:g}' AND [End] >= '{1:g}'", end, now);
+        Outlook.Items restrictedItems = items.Restrict(filter);
+
+        Console.WriteLine("Filtering visible appointments...");
+        System.Collections.IEnumerator enumerator = restrictedItems.GetEnumerator();
         while (enumerator.MoveNext())
         {
-            object obj = enumerator.Current;
-            Outlook.AppointmentItem item = obj as Outlook.AppointmentItem;
+            Outlook.AppointmentItem item = enumerator.Current as Outlook.AppointmentItem;
             if (item != null)
             {
-                DateTime s, e;
-                try { s = item.Start; e = item.End; }
-                catch { continue; } // skip non-appointments items
-                if (e <= now || s >= end) continue;
-                list.Add(item);
+                try
+                {
+                    // Skip all-day events and invisible/system items
+                    if (item.AllDayEvent) continue;
+                    list.Add(item);
+                }
+                catch
+                {
+                    continue; // skip broken ones
+                }
             }
         }
+
+        Console.WriteLine("Fetched " + list.Count + " visible appointments.");
         return list;
     }
+
 
     // ---- Slot generation ----
     static List<Slot> GenerateSlots(FormState form, List<Outlook.AppointmentItem> events)
@@ -431,7 +444,7 @@ static void CreateMeetingDraft(FormState form, Slot slot)
     static bool IsValidSlot(Slot slot, List<Outlook.AppointmentItem> events, FormState form)
     {
         // 1. Overlap check + breakMinutes buffer
-        foreach (var ev in events)
+        foreach (var ev in events.Where(ev => ev.RequiredAttendees.Contains(form.LawyerEmail)))
         {
             DateTime s, e;
             try { s = ev.Start; e = ev.End; }
