@@ -11,7 +11,7 @@ using Word = Microsoft.Office.Interop.Word;
 
 class Scheduler
 {
-    static string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+    static string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\");
     static string jsonPath = Path.Combine(baseDir, "app", "data.json");
 
     [STAThread] // Required for clipboard

@@ -3,7 +3,7 @@ import json
 import os
 import subprocess
 
-root_dir = os.path.abspath(os.path.join(__file__, "../../../"))
+root_dir = os.path.abspath(os.path.join(__file__, "../../"))
 
 class HubAPI:
     def submit_form(self, form, lwy, dets):
@@ -19,7 +19,6 @@ class HubAPI:
                 json.dump(data, f, indent=2)
 
             print("[AdminHub] Form data saved to:", data_path)
-
             return { "message": "Form received and saved." }
 
         except Exception as e:
@@ -36,15 +35,15 @@ class HubAPI:
             return { "error": str(e) }
         
     def run_exe(self, script_name):
-        script_path = os.path.join(root_dir, "app", "office", "bin", script_name + ".exe")
+        script_path = os.path.join(root_dir, "app", "src", "cs", "bin", script_name + ".exe")
         subprocess.run([script_path], check=True)
 
     def run_py(self, script_name):
-        script_path = os.path.join(root_dir, "app", "pclaw", script_name + ".py")
+        script_path = os.path.join(root_dir, "app", "src", "py", script_name + ".py")
         subprocess.run(["pythonw", script_path], check=True)
 
 if __name__ == '__main__':
     html_path = os.path.join(root_dir, "app", "web", "index.html")
     api = HubAPI()
     webview.create_window("Amlex Admin Hub", html_path, js_api=api, width=500, height=650)
-    webview.start(debug=False, gui='edgechromium')
+    webview.start(debug=True, gui='edgechromium')

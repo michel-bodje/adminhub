@@ -199,6 +199,9 @@ function attachEventListeners() {
       case ELEMENT_IDS.wordReceiptMenuBtn:
         showPage(ELEMENT_IDS.wordReceiptPage);
         break;
+      case ELEMENT_IDS.pclawMatterMenuBtn:
+        showPage(ELEMENT_IDS.pclawMatterPage);
+        break;
       default:
         break;
       }
@@ -239,6 +242,9 @@ function attachEventListeners() {
         case ELEMENT_IDS.wordReceiptSubmitBtn:
           createReceipt();
           break;
+        case ELEMENT_IDS.pclawMatterSubmitBtn:
+          newMatter();
+          break;
         default:
           break;
       }
@@ -247,95 +253,112 @@ function attachEventListeners() {
 }
 
 /** Schedules an appointment based on the form state. */
-function scheduleAppointment() {
-  submitForm()
-    .then(async () => {
-      await window.pywebview.api.run_exe("scheduler");
-      console.log("[LawHub] Appointment scheduled successfully.");
-      // Check checkboxes and run corresponding actions
-      if (document.getElementById("also-email").checked) {
-        // Automatically prepare and submit the confirmation email
-        sendConfirmation();
-      }
-      if (document.getElementById("also-pclaw").checked) {
-        // Automatically prepare new matter in PCLaw
-        await window.pywebview.api.run_py("new_matter");
-      }
-    })
-    .catch((error) => {
-      console.error("[LawHub] Error scheduling appointment:", error);
-      alert("Failed to schedule appointment. Please try again.");
-      throw error;
-    });
+async function scheduleAppointment() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_exe("scheduler");
+    console.log("[AdminHub] Appointment scheduled successfully.");
+
+    // Chain actions without re-submitting the form
+    const alsoEmail = document.getElementById("also-email").checked;
+    const alsoPclaw = document.getElementById("also-pclaw").checked;
+
+    if (alsoEmail) {
+      await window.pywebview.api.run_exe("emailConfirmation");
+      console.log("[AdminHub] Confirmation email prepared and submitted.");
+    }
+    if (alsoPclaw) {
+      await window.pywebview.api.run_py("new_matter");
+      console.log("[AdminHub] PCLaw matter created successfully.");
+    }
+  } catch (error) {
+    console.error("[AdminHub] Error scheduling appointment:", error);
+    alert("Failed to schedule appointment. Please try again.");
+    throw error;
+  }
 }
 
 /** Prepares a confirmation email. */
-function sendConfirmation() {
-  submitForm()
-    .then(async () => {
-      console.log("[LawHub] Confirmation email prepared and submitted.");
-      await window.pywebview.api.run_exe("emailConfirmation");
-    })
-    .catch((error) => {
-      console.error("[LawHub] Error preparing confirmation email:", error);
-      alert("Failed to prepare confirmation email. Please try again.");
-      throw error;
-    });
+async function sendConfirmation() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_exe("emailConfirmation");
+    console.log("[AdminHub] Confirmation email prepared and submitted.");
+  } catch (error) {
+    console.error("[AdminHub] Error preparing confirmation email:", error);
+    alert("Failed to prepare confirmation email. Please try again.");
+    throw error;
+  }
 }
 
 /** Prepares a reply email. */
-function sendReply() {
-  submitForm()
-    .then(async () => {
-      console.log("[LawHub] Reply email prepared and submitted.");
-      await window.pywebview.api.run_exe("emailReply");
-    })
-    .catch((error) => {
-      console.error("[LawHub] Error preparing reply email:", error);
-      alert("Failed to prepare reply email. Please try again.");
-      throw error;
-    });
+async function sendReply() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_exe("emailReply");
+    console.log("[AdminHub] Reply email prepared and submitted.");
+  } catch (error) {
+    console.error("[AdminHub] Error preparing reply email:", error);
+    alert("Failed to prepare reply email. Please try again.");
+    throw error;
+  }
 }
 
 /** Prepares a contract email. */
-function sendContract() {
-  submitForm()
-    .then(async () => {
-      console.log("[LawHub] Contract email prepared and submitted.");
-      await window.pywebview.api.run_exe("emailContract");
-    })
-    .catch((error) => {
-      console.error("[LawHub] Error preparing contract email:", error);
-      alert("Failed to prepare contract email. Please try again.");
-      throw error;
-    });
+async function sendContract() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_exe("emailContract");
+    console.log("[AdminHub] Contract email prepared and submitted.");
+  } catch (error) {
+    console.error("[AdminHub] Error preparing contract email:", error);
+    alert("Failed to prepare contract email. Please try again.");
+    throw error;
+  }
 }
 
 /** Create a word contract based on the form state. */
-function createContract() {
-  submitForm()
-    .then(async () => {
-      console.log("[LawHub] Word contract created successfully.");
-      await window.pywebview.api.run_exe("wordContract");
-      sendContract(); // Automatically prepare and submit the contract email
-    })
-    .catch((error) => {
-      console.error("[LawHub] Error creating word contract:", error);
-      alert("Failed to create contract doc or email. Please try again.");
-      throw error;
-    });
+async function createContract() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_exe("wordContract");
+    console.log("[AdminHub] Word contract created successfully.");
+    
+    const alsoContract = document.getElementById("also-contract").checked;
+    if (alsoContract) {
+      // Automatically prepare and submit the contract email
+      await window.pywebview.api.run_exe("emailContract");
+      console.log("[AdminHub] Contract email prepared and submitted.");
+    }
+  } catch (error) {
+    console.error("[AdminHub] Error creating word contract:", error);
+    alert("Failed to create contract doc or email. Please try again.");
+    throw error;
+  }
 }
 
 /** Create a word receipt based on the form state. */
-function createReceipt() {
-  submitForm()
-    .then(async () => {
-      console.log("[LawHub] Word receipt created successfully.");
-      await window.pywebview.api.run_exe("wordReceipt");
-    })
-    .catch((error) => {
-      console.error("[LawHub] Error creating word receipt:", error);
-      alert("Failed to create receipt doc. Please try again.");
-      throw error;
-    });
+async function createReceipt() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_exe("wordReceipt");
+    console.log("[AdminHub] Word receipt created successfully.");
+  } catch (error) {
+    console.error("[AdminHub] Error creating word receipt:", error);
+    alert("Failed to create receipt doc. Please try again.");
+    throw error;
+  }
+}
+
+// Create PCLaw matter based on the form state
+async function newMatter() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_py("new_matter");
+    console.log("[AdminHub] PCLaw matter created successfully.");
+  } catch (error) {
+    console.error("[AdminHub] Error writing PCLaw matter", error);
+    alert("Failed to write new PCLaw matter. Please try again.");
+    throw error;
+  }
 }

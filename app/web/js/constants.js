@@ -12,6 +12,7 @@ export const ELEMENT_IDS = {
     outlookMenuPage: "outlook-menu-page",
     wordMenuPage: "word-menu-page",
     pclawMenuPage: "pclaw-menu-page",
+    pclawMatterPage: "pclaw-matter-page",
 
     schedulePage: "schedule-page",
     confirmationPage: "confirmation-page",
@@ -34,6 +35,8 @@ export const ELEMENT_IDS = {
     userManualMenuBtn: "user-manual-btn",
     wordContractMenuBtn: "word-contract-menu-btn",
     wordReceiptMenuBtn: "word-receipt-menu-btn",
+    pclawMatterMenuBtn: "matter-menu-btn",
+
 
     scheduleSubmitBtn: "schedule-appointment-btn",
     confirmSubmitBtn: "send-confirmation-btn",
@@ -41,6 +44,7 @@ export const ELEMENT_IDS = {
     replySubmitBtn: "send-reply-btn",
     wordContractSubmitBtn: "generate-word-contract-btn",
     wordReceiptSubmitBtn: "generate-word-receipt-btn",
+    pclawMatterSubmitBtn: "matter-btn",
 
     // Form input IDs
     scheduleLawyerId: "schedule-lawyer-id",

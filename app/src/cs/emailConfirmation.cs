@@ -11,7 +11,7 @@ class Program
         try
         {
             // === Load JSON form state ===
-            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\");
             string jsonPath = Path.Combine(baseDir, "app", "data.json");
             string jsonText = File.ReadAllText(jsonPath);
 

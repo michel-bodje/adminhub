@@ -37,7 +37,6 @@
           </div>
         </div>
         
-        <div id="page-container">
         <!-- Main menu page -->
         <div id="menu-page" class="page menu active">
             <h1>Choose a Module</h1>
@@ -70,11 +69,11 @@
             <button type="button" class="back-btn" id="back-to-main-from-word">Back</button>
         </div>
 
-        <!-- PCLaw Submenu (empty for now) -->
+        <!-- PCLaw Submenu -->
         <div id="pclaw-menu-page" class="page menu">
             <h1>PCLaw Tasks</h1>
             <div>
-                <p>Coming soon...</p>
+                <button type="button" id="matter-menu-btn" class="menu-btn">New Matter</button>
             </div>
             <button type="button" class="back-btn" id="back-to-main-from-pclaw">Back</button>
         </div>
@@ -226,7 +225,7 @@
 
                 <div class="checkbox-container">
                     <label for="also-email">Draft confirmation email</label>
-                    <input type="checkbox" id="also-email" title="Draft a confirmation email after scheduling">
+                    <input type="checkbox" id="also-email" title="Draft a confirmation email after scheduling" checked>
                 </div>
                 <div class="checkbox-container">
                     <label for="also-pclaw">Write into PCLaw</label>
@@ -367,7 +366,12 @@
 
                 <!-- Input field for custom contract title -->
                 <input type="text" id="custom-contract-title" class="hidden" placeholder="Enter custom contract title">
-            
+                
+                <div class="checkbox-container">
+                    <label for="also-email">Draft contract email</label>
+                    <input type="checkbox" id="also-contract" title="Draft a contract email after generating" checked>
+                </div>
+
                 <button type="submit" id="generate-word-contract-btn" class="submit-btn">Generate</button>
                 <button type="button" class="back-btn">Back</button>
             </form>
@@ -415,6 +419,14 @@
                 <button type="button" class="back-btn">Back</button>
             </form>
         </div>
+
+        <!-- PCLaw New Matter -->
+        <div id="pclaw-matter-page" class="page">
+            <h1>New Matter</h1>
+            <form>
+                <button type="submit" id="matter-btn" class="submit-btn">Write</button>
+                <button type="button" class="back-btn">Back</button>
+            </form>
         </div>
     </main>
 </body>
