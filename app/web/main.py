@@ -41,7 +41,7 @@ class HubAPI:
 
     def run_py(self, script_name):
         script_path = os.path.join(root_dir, "app", "pclaw", script_name + ".py")
-        subprocess.run(["python", script_path], check=True)
+        subprocess.run(["pythonw", script_path], check=True)
 
 if __name__ == '__main__':
     html_path = os.path.join(root_dir, "app", "web", "index.html")

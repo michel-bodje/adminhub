@@ -250,9 +250,17 @@ function attachEventListeners() {
 function scheduleAppointment() {
   submitForm()
     .then(async () => {
-      console.log("[LawHub] Appointment scheduled successfully.");
       await window.pywebview.api.run_exe("scheduler");
-      sendConfirmation(); // Automatically prepare and submit the confirmation email
+      console.log("[LawHub] Appointment scheduled successfully.");
+      // Check checkboxes and run corresponding actions
+      if (document.getElementById("also-email").checked) {
+        // Automatically prepare and submit the confirmation email
+        sendConfirmation();
+      }
+      if (document.getElementById("also-pclaw").checked) {
+        // Automatically prepare new matter in PCLaw
+        await window.pywebview.api.run_py("new_matter");
+      }
     })
     .catch((error) => {
       console.error("[LawHub] Error scheduling appointment:", error);

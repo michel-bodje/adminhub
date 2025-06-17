@@ -11,17 +11,17 @@ using Word = Microsoft.Office.Interop.Word;
 
 class Scheduler
 {
+    static string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+    static string jsonPath = Path.Combine(baseDir, "app", "data.json");
+
     [STAThread] // Required for clipboard
     static void Main(string[] args)
     {
         try
         {
             // 1. Load data.json
-            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
-            string jsonPath = Path.Combine(baseDir, "app", "data.json");
             if (!File.Exists(jsonPath))
                 throw new FileNotFoundException("data.json not found.", jsonPath);
-
             JObject root = JObject.Parse(File.ReadAllText(jsonPath));
             var form = ParseFormState(root);
 
@@ -314,11 +314,14 @@ static void CreateMeetingDraft(FormState form, Slot slot)
     // ---- HTML body generation ----
     static string GenerateHtmlBody(FormState form)
     {
+        string formattedPhone = Util.FormatPhoneNumber(form.ClientPhone);
+        UpdateJsonPhone(formattedPhone);
+
         // Build body HTML
         string body = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
         body += "<p>" +
             "Client:&nbsp;&nbsp;&nbsp;" + form.ClientTitle + " " + form.ClientName + "<br>" +
-            "Phone:&nbsp;&nbsp;" + Util.FormatPhoneNumber(form.ClientPhone) + "<br>" +
+            "Phone:&nbsp;&nbsp;" + formattedPhone + "<br>" +
             "Email:&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"mailto:" + form.ClientEmail + "\">" + form.ClientEmail + "</a><br>" +
             "Lang:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + form.ClientLanguage + "</p>";
 
@@ -527,6 +530,28 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         var res = dt.AddMinutes(add);
         return new DateTime(res.Year, res.Month, res.Day, res.Hour, res.Minute / 30 * 30, 0);
     }
+
+    static void UpdateJsonPhone(string phoneNumber)
+    {
+        // Update the JSON file with the formatted phone number
+        try
+        {
+            if (File.Exists(jsonPath))
+            {
+                var json = JObject.Parse(File.ReadAllText(jsonPath));
+                if (json["form"] != null)
+                {
+                    json["form"]["clientPhone"] = phoneNumber;
+                    File.WriteAllText(jsonPath, json.ToString());
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or ignore, but don't block meeting creation
+            Console.WriteLine("Warning: Failed to update data.json with formatted phone: " + ex.Message);
+        }
+    }
     
     // ---- Case details logic ----
     static string GetCaseDetails(string caseType, Dictionary<string, object> caseDetails)
@@ -537,40 +562,40 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         switch (caseType)
         {
             case "divorce":
-            return "Divorce / Family Law<br><br>" +
-                   "<strong>Spouse Name:</strong> " + (caseDetails.ContainsKey("spouseName") ? caseDetails["spouseName"] : "") + "<br>" +
-                   "Conflict Search Done? " + (caseDetails.ContainsKey("conflictSearchDone") && caseDetails["conflictSearchDone"] is bool && (bool)caseDetails["conflictSearchDone"] ? "✔️" : "❌");
+                return "Divorce / Family Law<br><br>" +
+                       "<strong>Spouse Name:</strong> " + (caseDetails.ContainsKey("spouseName") ? caseDetails["spouseName"] : "") + "<br>" +
+                       "Conflict Search Done? " + (caseDetails.ContainsKey("conflictSearchDone") && caseDetails["conflictSearchDone"] is bool && (bool)caseDetails["conflictSearchDone"] ? "✔️" : "❌");
             case "estate":
-            return "Successions / Estate Law<br><br>" +
-                   "<strong>Deceased Name:</strong> " + (caseDetails.ContainsKey("deceasedName") ? caseDetails["deceasedName"] : "") + "<br>" +
-                   "<strong>Executor Name:</strong> " + (caseDetails.ContainsKey("executorName") ? caseDetails["executorName"] : "") + "<br>" +
-                   "Conflict Search Done? " + (caseDetails.ContainsKey("conflictSearchDone") && caseDetails["conflictSearchDone"] is bool && (bool)caseDetails["conflictSearchDone"] ? "✔️" : "❌");
+                return "Successions / Estate Law<br><br>" +
+                       "<strong>Deceased Name:</strong> " + (caseDetails.ContainsKey("deceasedName") ? caseDetails["deceasedName"] : "") + "<br>" +
+                       "<strong>Executor Name:</strong> " + (caseDetails.ContainsKey("executorName") ? caseDetails["executorName"] : "") + "<br>" +
+                       "Conflict Search Done? " + (caseDetails.ContainsKey("conflictSearchDone") && caseDetails["conflictSearchDone"] is bool && (bool)caseDetails["conflictSearchDone"] ? "✔️" : "❌");
             case "employment":
-            return "Employment Law<br><br>" +
-                   "<strong>Employer Name:</strong> " + (caseDetails.ContainsKey("employerName") ? caseDetails["employerName"] : "");
+                return "Employment Law<br><br>" +
+                       "<strong>Employer Name:</strong> " + (caseDetails.ContainsKey("employerName") ? caseDetails["employerName"] : "");
             case "contract":
-            return "Contract Law<br><br>" +
-                   "<strong>Other Party:</strong> " + (caseDetails.ContainsKey("otherPartyName") ? caseDetails["otherPartyName"] : "");
+                return "Contract Law<br><br>" +
+                       "<strong>Other Party:</strong> " + (caseDetails.ContainsKey("otherPartyName") ? caseDetails["otherPartyName"] : "");
             case "defamations":
-            return "Defamations";
+                return "Defamations";
             case "real_estate":
-            return "Real Estate";
+                return "Real Estate";
             case "name_change":
-            return "Name Change";
+                return "Name Change";
             case "adoptions":
-            return "Adoptions";
+                return "Adoptions";
             case "mandates":
-            return "Regimes de Protection / Mandates<br><br>" +
-                   "<strong>Mandate Details:</strong> " + (caseDetails.ContainsKey("mandateDetails") ? caseDetails["mandateDetails"] : "");
+                return "Regimes de Protection / Mandates<br><br>" +
+                       "<strong>Mandate Details:</strong> " + (caseDetails.ContainsKey("mandateDetails") ? caseDetails["mandateDetails"] : "");
             case "business":
-            return "Business Law<br><br>" +
-                   "<strong>Business Name:</strong> " + (caseDetails.ContainsKey("businessName") ? caseDetails["businessName"] : "");
+                return "Business Law<br><br>" +
+                       "<strong>Business Name:</strong> " + (caseDetails.ContainsKey("businessName") ? caseDetails["businessName"] : "");
             case "assermentation":
-            return "Assermentation";
+                return "Assermentation";
             case "common":
-            return caseDetails.ContainsKey("commonField") ? caseDetails["commonField"].ToString() : "";
+                return caseDetails.ContainsKey("commonField") ? caseDetails["commonField"].ToString() : "";
             default:
-            return "";
+                return "";
         }
     }
 }
