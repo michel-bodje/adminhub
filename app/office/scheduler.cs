@@ -4,12 +4,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Word = Microsoft.Office.Interop.Word;
 
 class Scheduler
 {
+    [STAThread] // Required for clipboard
     static void Main(string[] args)
     {
         try
@@ -55,6 +57,17 @@ class Scheduler
         {
             Console.WriteLine("Error scheduling appointment: " + ex.Message);
             Console.WriteLine("StackTrace: " + ex.StackTrace);
+
+            string errorMsg = "Error scheduling appointment:\n" + ex.Message + "\n\n"
+                + "StackTrace:\n" + ex.StackTrace;
+
+            System.Windows.Forms.MessageBox.Show(
+                errorMsg,
+                "Error",
+                System.Windows.Forms.MessageBoxButtons.OK,
+                System.Windows.Forms.MessageBoxIcon.Error
+            );
+            System.Windows.Forms.Clipboard.SetText(errorMsg);
         }
     }
 
@@ -455,12 +468,19 @@ static void CreateMeetingDraft(FormState form, Slot slot)
     {
         if (events.Any(e => e == null))
         {
-            Console.WriteLine("Warning: Null calendar items found in events list!");
+            string msg = "Warning: Null calendar items found in events list!";
+            Console.WriteLine(msg);
+            System.Windows.Forms.MessageBox.Show(
+                msg,
+                "Calendar Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
             return false;
         }
         
         // 1. Overlap check + breakMinutes buffer
-        foreach (var ev in events.Where(ev => ev != null && ev.Categories.Contains(form.LawyerName)))
+        foreach (var ev in events.Where(ev => ev != null && !string.IsNullOrEmpty(ev.Categories) && ev.Categories.Contains(form.LawyerName)))
         {
             DateTime s, e;
             try { s = ev.Start; e = ev.End; }
