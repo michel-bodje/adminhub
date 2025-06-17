@@ -103,6 +103,23 @@ public static class Util
         return total;
     }
 
+    /// <summary>
+    /// Formats the lawyer's name with a title prefix based on their ID.
+    /// </summary>
+    /// <param name="name">The name of the lawyer.</param>
+    /// <param name="id">The ID of the lawyer.</param>
+    /// <returns>
+    /// The formatted lawyer's name prefixed with "Me" if the ID is not one of the non-lawyer staff; otherwise, returns the name as is.
+    /// </returns>
+    public static string GetLawyerString(string name, string id)
+    {
+        if (id != "AR" && id != "MG" && id != "PM")
+        {
+            return "Me " + name;
+        }
+        return name;
+    }
+
     // ---- Word Document Utilities ----
 
     /// <summary>

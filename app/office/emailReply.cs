@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using Outlook = Microsoft.Office.Interop.Outlook;
 
 class Program
 {
@@ -10,13 +11,14 @@ class Program
         {
             // === Load and parse JSON ===
             string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
-            string jsonPath = Path.Combine(baseDir, "app" , "data.json");
+            string jsonPath = Path.Combine(baseDir, "app", "data.json");
             string jsonText = File.ReadAllText(jsonPath);
             JObject json = JObject.Parse(jsonText);
 
             string clientEmail = (string)json["form"]["clientEmail"];
             string clientLanguage = (string)json["form"]["clientLanguage"];
             string lawyerName = (string)json["lawyer"]["name"];
+            string lawyerId = (string)json["lawyer"]["id"];
 
             // === Load the appropriate HTML template ===
             string templateFile = clientLanguage == "English" ? "en/Reply.html" : "fr/Reply.html";
@@ -24,18 +26,19 @@ class Program
             string htmlBody = File.ReadAllText(templatePath);
 
             // === Replace placeholder ===
-            htmlBody = htmlBody.Replace("{{lawyerName}}", lawyerName);
+            string lawyerString = Util.GetLawyerString(lawyerName, lawyerId);
 
-            // === Start Outlook and create mail ===
-            Type outlookType = Type.GetTypeFromProgID("Outlook.Application");
-            dynamic outlookApp = Activator.CreateInstance(outlookType);
-            const int olMailItem = 0;
-            dynamic mail = outlookApp.CreateItem(olMailItem);
+            htmlBody = htmlBody.Replace("{{lawyerName}}", lawyerString);
+
+            // === Start Outlook and create mail using Interop ===
+            var outlookApp = new Microsoft.Office.Interop.Outlook.Application();
+            var mail = (Microsoft.Office.Interop.Outlook.MailItem)outlookApp.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem);
 
             mail.To = clientEmail;
             mail.Subject = clientLanguage == "English" ? "Reply - Allen Madelin" : "Réponse - Allen Madelin";
             mail.HTMLBody = htmlBody;
             mail.Display();
+            WindowFocus.ShowWithFocus(mail.GetInspector);
         }
         catch (Exception ex)
         {

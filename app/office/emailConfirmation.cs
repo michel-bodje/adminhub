@@ -83,11 +83,8 @@ class Program
                     .Replace("{{totalRates}}", totalRate.ToString("0.00"));
             }
 
-            string lawyerString = lawyerName;
-            if (lawyerId != "AR" && lawyerId != "MG" && lawyerId != "PM")
-            {
-                lawyerString = "Me " + lawyerName;
-            }
+            string lawyerString = Util.GetLawyerString(lawyerName, lawyerId);
+            
             htmlBody = htmlBody.Replace("{{lawyerName}}", lawyerString);
 
             // === Generate Outlook draft email ===

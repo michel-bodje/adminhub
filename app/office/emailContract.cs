@@ -17,23 +17,26 @@ class ContractEmail
             // === Read JSON ===
             JObject json = JObject.Parse(File.ReadAllText(jsonPath));
 
-            string clientEmail = json["form"]["clientEmail"].ToString();
-            string clientLanguage = json["form"]["clientLanguage"].ToString();
-            double depositAmount = json["form"]["depositAmount"].ToObject<double>();
-            string lawyerName = json["lawyer"]["name"].ToString();
+            string clientEmail = (string)json["form"]["clientEmail"];
+            string clientLanguage = (string)json["form"]["clientLanguage"];
+            double depositAmount = (double)json["form"]["depositAmount"];
+            string lawyerName = (string)json["lawyer"]["name"];
+            string lawyerId = (string)json["lawyer"]["id"];
 
             string lang = clientLanguage == "Français" ? "fr" : "en";
             string templatePath = Path.Combine(templateFolder, lang, "Contract.html");
 
             string htmlBody = File.ReadAllText(templatePath);
 
-            // === Replace placeholders ===
             double totalAmount = Util.AddTaxes(depositAmount, true);
 
+            string lawyerString = Util.GetLawyerString(lawyerName, lawyerId);
+
+            // === Replace placeholders ===
             htmlBody = htmlBody
                 .Replace("{{depositAmount}}", depositAmount.ToString("F0"))
                 .Replace("{{totalAmount}}", totalAmount.ToString("F2"))
-                .Replace("{{lawyerName}}", lawyerName);
+                .Replace("{{lawyerName}}", lawyerString);
 
             string subject = lang == "fr" ? "Contrat de services - Allen Madelin" : "Contract of services - Allen Madelin";
 
