@@ -5,7 +5,7 @@ import subprocess
 
 root_dir = os.path.abspath(os.path.join(__file__, "../../../"))
 
-class LawHubAPI:
+class HubAPI:
     def submit_form(self, form, lwy, dets):
         try:
             data_path = os.path.join(root_dir, "app", "data.json")
@@ -26,10 +26,6 @@ class LawHubAPI:
             print("[AdminHub] Error:", str(e))
             return { "message": "Failed to save form: " + str(e) }
 
-    def run_script(self, script_name):
-        script_path = os.path.join(root_dir, "app", "office", "bin", script_name + ".exe")
-        subprocess.run([script_path], check=True)
-        
     def get_lawyers(self):
         lawyers_path = os.path.join(root_dir, 'app', "web", "js", "lawyers.json")
         try:
@@ -38,9 +34,17 @@ class LawHubAPI:
                 return data["lawyers"]
         except Exception as e:
             return { "error": str(e) }
+        
+    def run_exe(self, script_name):
+        script_path = os.path.join(root_dir, "app", "office", "bin", script_name + ".exe")
+        subprocess.run([script_path], check=True)
+
+    def run_py(self, script_name):
+        script_path = os.path.join(root_dir, "app", "pclaw", script_name + ".py")
+        subprocess.run(["python", script_path], check=True)
 
 if __name__ == '__main__':
     html_path = os.path.join(root_dir, "app", "web", "index.html")
-    api = LawHubAPI()
+    api = HubAPI()
     webview.create_window("Amlex Admin Hub", html_path, js_api=api, width=500, height=700)
     webview.start(debug=False, gui='edgechromium')

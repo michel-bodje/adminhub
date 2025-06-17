@@ -100,6 +100,13 @@
                 <select id="schedule-client-language" required>
                     <!-- Options will be dynamically populated by JavaScript -->
                 </select>
+
+                <label for="schedule-client-title">Title:</label>
+                <select id="schedule-client-title" required>
+                    <option value="" disabled selected hidden>Select title</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                </select>
                 
                 <label for="case-type">Type of Case:</label>
                 <select id="case-type" required>
@@ -120,7 +127,7 @@
                     <!-- Divorce Case Details -->
                     <div id="divorce-details" hidden>
                         <label for="spouse-name">Spouse Name:</label>
-                        <input type="text" id="spouse-name" placeholder="Enter spouse's name"><br><br>
+                        <input type="text" id="spouse-name" placeholder="Enter spouse's name"><br>
 
                         <div class="checkbox-container">
                             <label for="conflict-search-done-divorce">Conflict Search Done?</label>

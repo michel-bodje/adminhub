@@ -75,6 +75,7 @@ class Scheduler
     class FormState
     {
         // From form:
+        public string ClientTitle;
         public string ClientName;
         public string ClientEmail;
         public string ClientPhone;
@@ -117,6 +118,7 @@ class Scheduler
         var f = root["form"];
         var form = new FormState
         {
+            ClientTitle = (string)f["clientTitle"],
             ClientName = (string)f["clientName"],
             ClientEmail = (string)f["clientEmail"],
             ClientPhone = (string)f["clientPhone"],
@@ -315,7 +317,7 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         // Build body HTML
         string body = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
         body += "<p>" +
-            "Client:&nbsp;&nbsp;&nbsp;" + form.ClientName + "<br>" +
+            "Client:&nbsp;&nbsp;&nbsp;" + form.ClientTitle + " " + form.ClientName + "<br>" +
             "Phone:&nbsp;&nbsp;" + Util.FormatPhoneNumber(form.ClientPhone) + "<br>" +
             "Email:&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"mailto:" + form.ClientEmail + "\">" + form.ClientEmail + "</a><br>" +
             "Lang:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + form.ClientLanguage + "</p>";

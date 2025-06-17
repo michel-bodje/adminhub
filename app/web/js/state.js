@@ -12,6 +12,7 @@ class FormState {
   reset() {
     this.lawyerId = "";
     this.location = "";
+    this.clientTitle = "";
     this.clientName = "";
     this.clientPhone = "";
     this.clientEmail = "";

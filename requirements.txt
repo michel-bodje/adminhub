@@ -1,6 +1,7 @@
 # Python requirements
 pywebview
 pyinstaller
+pywinauto
 
 # Windows requirements (manual installation required)
 # - Newtonsoft.Json.dll (place in app/office)

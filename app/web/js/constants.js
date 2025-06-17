@@ -58,6 +58,7 @@ export const ELEMENT_IDS = {
     wordReceiptClientName: "word-receipt-client-name",
 
     scheduleClientPhone: "schedule-client-phone",
+    scheduleClientTitle: "schedule-client-title",
 
     scheduleClientEmail: "schedule-client-email",
     confClientEmail: "conf-client-email",
