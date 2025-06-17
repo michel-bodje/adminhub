@@ -25,6 +25,7 @@ class Program
             string appointmentDate = (string)json["form"]["appointmentDate"];
             string appointmentTime = (string)json["form"]["appointmentTime"];
             string lawyerName = (string)json["lawyer"]["name"];
+            string lawyerId = (string)json["lawyer"]["id"];
 
             // === Validate required fields ===
             if (string.IsNullOrEmpty(clientEmail) || !Util.IsValidEmail(clientEmail))
@@ -82,7 +83,12 @@ class Program
                     .Replace("{{totalRates}}", totalRate.ToString("0.00"));
             }
 
-            htmlBody = htmlBody.Replace("{{lawyerName}}", lawyerName);
+            string lawyerString = lawyerName;
+            if (lawyerId != "AR" && lawyerId != "MG" && lawyerId != "PM")
+            {
+                lawyerString = "Me " + lawyerName;
+            }
+            htmlBody = htmlBody.Replace("{{lawyerName}}", lawyerString);
 
             // === Generate Outlook draft email ===
             Outlook.Application outlookApp = new Outlook.Application();

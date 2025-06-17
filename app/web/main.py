@@ -18,12 +18,12 @@ class LawHubAPI:
             with open(data_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
 
-            print("[LawHub] Form data saved to:", data_path)
+            print("[AdminHub] Form data saved to:", data_path)
 
             return { "message": "Form received and saved." }
 
         except Exception as e:
-            print("[LawHub] Error:", str(e))
+            print("[AdminHub] Error:", str(e))
             return { "message": "Failed to save form: " + str(e) }
 
     def run_script(self, script_name):
@@ -42,5 +42,5 @@ class LawHubAPI:
 if __name__ == '__main__':
     html_path = os.path.join(root_dir, "app", "web", "index.html")
     api = LawHubAPI()
-    webview.create_window("LawHub", html_path, js_api=api, width=500, height=600)
-    webview.start(debug=True, gui='edgechromium')
+    webview.create_window("Amlex Admin Hub", html_path, js_api=api, width=500, height=700)
+    webview.start(debug=False, gui='edgechromium')

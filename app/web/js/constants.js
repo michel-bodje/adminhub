@@ -8,16 +8,24 @@
  */
 export const ELEMENT_IDS = {
     // Page IDs
-    mainPage: "menu-page",
+    menuPage: "menu-page",
+    outlookMenuPage: "outlook-menu-page",
+    wordMenuPage: "word-menu-page",
+    pclawMenuPage: "pclaw-menu-page",
+
     schedulePage: "schedule-page",
-    confirmPage: "confirmation-page",
-    contractPage: "contract-page",
+    confirmationPage: "confirmation-page",
     replyPage: "reply-page",
+    contractPage: "contract-page",
     wordContractPage: "word-contract-page",
     wordReceiptPage: "word-receipt-page",
 
     // Button IDs
     backBtn: "back-btn",
+
+    outlookMenuBtn: "outlook-menu-btn",
+    wordMenuBtn: "word-menu-btn",
+    pclawMenuBtn: "pclaw-menu-btn",
 
     scheduleMenuBtn: "schedule-menu-btn",
     confirmMenuBtn: "conf-menu-btn",
@@ -46,9 +54,10 @@ export const ELEMENT_IDS = {
     confLocation: "conf-location",
 
     scheduleClientName: "schedule-client-name",
-    scheduleClientPhone: "schedule-client-phone",
     wordContractClientName: "word-contract-client-name",
     wordReceiptClientName: "word-receipt-client-name",
+
+    scheduleClientPhone: "schedule-client-phone",
 
     scheduleClientEmail: "schedule-client-email",
     confClientEmail: "conf-client-email",
@@ -74,6 +83,8 @@ export const ELEMENT_IDS = {
     wordReceiptDeposit: "word-receipt-deposit",
     wordContractTitle: "word-contract-title",
     customContractTitle: "custom-contract-title",
+    wordReceiptReason: "word-receipt-reason",
+    customReceiptReason: "custom-receipt-reason",
 
     refBarreau: "ref-barreau",
     existingClient: "existing-client",

@@ -77,6 +77,7 @@ if /i "%BASENAME%"=="wordReceipt" (
 REM === Compile ===
 echo Compiling %SOURCE% to %OUTPUT%...
 "%CSC_PATH%" /nologo /platform:x64 /target:winexe /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
+REM "%CSC_PATH%" /nologo /platform:x64 /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
 if errorlevel 1 (
     echo Compilation failed for %SOURCE%.
     exit /b 1

@@ -6,7 +6,7 @@
     <title>Amlex LawHub</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/pico.indigo.css">
+    <link rel="stylesheet" href="css/pico.blue.css">
     <link rel="stylesheet" href="css/main.css">
 
     <!-- JS -->
@@ -18,7 +18,7 @@
 <body>
     <header>
         <img src="res/icon.png" alt="Company Logo" class="logo">
-        <h1 class="ms-font-xl">Welcome to LawHub</h1>
+        <h1 class="ms-font-xl">Welcome to AdminHub</h1>
     </header>
     <main id="app-body">
        <!-- Loading overlay -->
@@ -39,16 +39,44 @@
         
         <div id="page-container">
         <!-- Main menu page -->
-        <div id="menu-page" class="page active">
-            <h1>What do you want to do?</h1>
+        <div id="menu-page" class="page menu active">
+            <h1>Choose a Module</h1>
             <div>
-                <button type="button" id="schedule-menu-btn" class="menu-btn">[OUTL] Create Appointment</button>
-                <button type="button" id="conf-menu-btn" class="menu-btn">[OUTL] Email Confirmation</button>
-                <button type="button" id="reply-menu-btn" class="menu-btn">[OUTL] Email Reply</button>
-                <button type="button" id="contract-menu-btn" class="menu-btn">[OUTL] Email Contract</button>
-                <button type="button" id="word-contract-menu-btn" class="menu-btn">[WORD] Create Contract</button>
-                <button type="button" id="word-receipt-menu-btn" class="menu-btn">[WORD] Create Receipt</button>
+                <button type="button" id="outlook-menu-btn" class="menu-btn">Outlook</button>
+                <button type="button" id="word-menu-btn" class="menu-btn">Word</button>
+                <button type="button" id="pclaw-menu-btn" class="menu-btn">PCLaw</button>
             </div>
+        </div>
+
+        <!-- Outlook Submenu -->
+        <div id="outlook-menu-page" class="page menu">
+            <h1>Outlook Tasks</h1>
+            <div>
+                <button type="button" id="schedule-menu-btn" class="menu-btn">Schedule Appointment</button>
+                <button type="button" id="conf-menu-btn" class="menu-btn">Email Confirmation</button>
+                <button type="button" id="reply-menu-btn" class="menu-btn">Email Reply</button>
+                <button type="button" id="contract-menu-btn" class="menu-btn">Email Contract</button>
+            </div>
+            <button type="button" class="back-btn" id="back-to-main-from-outlook">Back</button>
+        </div>
+
+        <!-- Word Submenu -->
+        <div id="word-menu-page" class="page menu">
+            <h1>Word Tasks</h1>
+            <div>
+                <button type="button" id="word-contract-menu-btn" class="menu-btn">Generate Contract</button>
+                <button type="button" id="word-receipt-menu-btn" class="menu-btn">Generate Receipt</button>
+            </div>
+            <button type="button" class="back-btn" id="back-to-main-from-word">Back</button>
+        </div>
+
+        <!-- PCLaw Submenu (empty for now) -->
+        <div id="pclaw-menu-page" class="page menu">
+            <h1>PCLaw Tasks</h1>
+            <div>
+                <p>Coming soon...</p>
+            </div>
+            <button type="button" class="back-btn" id="back-to-main-from-pclaw">Back</button>
         </div>
 
         <!-- Scheduler page -->
@@ -57,7 +85,7 @@
         The form is where client information is entered.
         -->
         <div id="schedule-page" class="page">
-            <h1>Create Appointment</h1>
+            <h1>Schedule Appointment</h1>
             <form>
                 <label for="schedule-client-name">Client Name:</label>
                 <input type="text" id="schedule-client-name" required placeholder="ex: John Doe">
@@ -232,7 +260,7 @@
                 </div>
 
                 <!-- End of page 2 -->
-                <button type="submit" id="send-confirmation-btn" class="submit-btn">Create</button>
+                <button type="submit" id="send-confirmation-btn" class="submit-btn">Draft</button>
                 <button type="button" class="back-btn">Back</button>
             </form> 
         </div>
@@ -255,7 +283,7 @@
                     <!-- Options will be dynamically populated by JavaScript -->
                 </select>
             <!-- End of page 4 -->
-            <button type="submit" id="send-reply-btn" class="submit-btn">Create</button>
+            <button type="submit" id="send-reply-btn" class="submit-btn">Draft</button>
             <button type="button" class="back-btn">Back</button>
             </form>
         </div>
@@ -284,14 +312,14 @@
                 <input type="number" id="email-contract-deposit" placeholder="Enter required deposit" required>
 
                 <!-- End of page 3 -->
-                <button type="submit" id="send-contract-btn" class="submit-btn">Create</button>
+                <button type="submit" id="send-contract-btn" class="submit-btn">Draft</button>
                 <button type="button" class="back-btn">Back</button>
             </form>
         </div>
 
         <!-- Contract Word -->
-        <div id="word-contract-page" class="page hidden">
-            <h1>Create Contract</h1>
+        <div id="word-contract-page" class="page">
+            <h1>Generate Contract</h1>
             <form>
                 <label for="word-contract-client-name">Client Name:</label>
                 <input type="text" id="word-contract-client-name" required placeholder="ex: John Doe">
@@ -314,23 +342,32 @@
 
                 <label for="word-contract-title">Contract Title:</label>
                 <select id="word-contract-title" required>
-                    <!-- Options will be dynamically populated by JavaScript -->
+                <option value="" disabled selected hidden>Representation in...</option>
+                <option value="divorce">Divorce</option>
+                <option value="estate">Estate</option>
+                <option value="limited">Limited Mandate</option>
+                <option value="other">Other (specify)</option>
                 </select>
 
                 <!-- Input field for custom contract title -->
                 <input type="text" id="custom-contract-title" class="hidden" placeholder="Enter custom contract title">
             
-                <button type="submit" id="generate-word-contract-btn" class="submit-btn">Generate Contract</button>
+                <button type="submit" id="generate-word-contract-btn" class="submit-btn">Generate</button>
                 <button type="button" class="back-btn">Back</button>
             </form>
         </div>
 
         <!-- Receipt Word -->
-        <div id="word-receipt-page" class="page hidden">
-            <h1>Create Receipt</h1>
+        <div id="word-receipt-page" class="page">
+            <h1>Generate Receipt</h1>
             <form>
                 <label for="word-receipt-client-name">Client Name:</label>
                 <input type="text" id="word-receipt-client-name" required placeholder="ex: John Doe">
+                
+                <label for="word-receipt-client-language">Preferred Language:</label>
+                <select id="word-receipt-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
 
                 <label for="word-receipt-deposit">Deposit:</label>
                 <input type="number" id="word-receipt-deposit" placeholder="Enter required deposit" required>
@@ -342,17 +379,23 @@
                     </select>
                 </div>
 
-                <label for="word-receipt-client-language">Preferred Language:</label>
-                <select id="word-receipt-client-language" required>
-                    <!-- Options will be dynamically populated by JavaScript -->
+                <label for="word-receipt-reason">Reason:</label>
+                <select type="text" id="word-receipt-reason" required>
+                    <option value="" disabled selected hidden>Select a reason</option>
+                    <option value="consultation">Consultation</option>
+                    <option value="trust">Trust</option>
+                    <option value="other">Other (specify)</option>
                 </select>
+
+                <!-- Input field for custom reason -->
+                <input type="text" id="custom-receipt-reason" class="hidden" placeholder="Enter custom reason">
 
                 <label for="word-receipt-lawyer-id">Lawyer ID:</label>
                 <select id="word-receipt-lawyer-id" required>
                     <!-- Options will be dynamically populated by JavaScript -->
                 </select>
 
-                <button type="submit" id="generate-word-receipt-btn" class="submit-btn">Generate Receipt</button>
+                <button type="submit" id="generate-word-receipt-btn" class="submit-btn">Generate</button>
                 <button type="button" class="back-btn">Back</button>
             </form>
         </div>

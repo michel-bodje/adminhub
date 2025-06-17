@@ -143,24 +143,6 @@ export const caseTypeHandlers = {
   },
 };
 
-/**
- * Returns the case details based on the selected case type.
- * If the case type is not found, throws an error.
- * @returns {string} - The case details as a string.
- * @throws {Error} - If the case type is not found.
- */
-export function getCaseDetails() {
-  try {
-    const details = caseTypeHandlers[formState.caseType]?.handler();
-    if (details) {
-      return details;
-    }
-    throw new Error("Selected case type not found.");
-  } catch (error) {
-    console.error(error.message);
-  }
-}
-
 /** Collects extra case details fields based on the selected case type. */
 export function collectCaseDetails() {
   const caseType = formState.caseType;
@@ -199,31 +181,4 @@ export function collectCaseDetails() {
       break;
   }
   return details;
-}
-
-/**
- * Checks if all required fields in the form have been filled in and the phone number and email are valid.
- * @returns {boolean} - True if all required fields are valid, false otherwise.
- */
-export function isValidInputs() {
-  try {
-    const caseType = formState.caseType;
-
-    if (!formState.clientName || !formState.clientPhone || !formState.clientEmail || !formState.clientLanguage || !caseType) {
-      throw new Error("Please fill in all required fields.");
-    }
-
-    if (!isValidPhoneNumber(formState.clientPhone)) {
-      throw new Error("Please provide a valid phone number.");
-    }
-
-    if (!isValidEmail(formState.clientEmail)) {
-      throw new Error("Please provide a valid email address.");
-    }
-
-    return true;
-  } catch (error) {
-    console.error(error.message);
-    return false;
-  }
 }

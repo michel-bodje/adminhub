@@ -26,6 +26,7 @@ class FormState {
     this.depositAmount = 0;
     this.paymentMethod = "";
     this.contractTitle = "";
+    this.receiptReason = "";
     this.notes = "";
   }
 

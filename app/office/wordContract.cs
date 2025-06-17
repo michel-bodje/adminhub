@@ -43,12 +43,28 @@ class Program
             wordApp = Activator.CreateInstance(wordType);
             doc = wordApp.Documents.Open(tempDocPath);
 
-            // === Replace placeholders ===
             double totalAmount = Util.AddTaxes(depositAmount, true);
             string today = DateTime.Today.ToString("D", CultureInfo.CreateSpecificCulture(locale));
 
+            // === Prepare contract title text ===
+            string titleText;
+            if (contractTitle == "divorce")
+                titleText = lang == "fr" ? "Représentation en divorce" : "Representation in Divorce";
+            else if (contractTitle == "estate")
+                titleText = lang == "fr" ? "Représentation en droit des successions" : "Representation in Estate Law";
+            else if (contractTitle == "limited")
+                titleText = lang == "fr" ? "Mandat Limité" : "Limited Mandate";
+            else
+                if (!string.IsNullOrWhiteSpace(contractTitle))
+                    titleText = lang == "fr"
+                        ? "Représentation en " + contractTitle
+                        : "Representation in " + contractTitle;
+                else
+                    titleText = "";
+
+            // === Replace placeholders ===
             Util.WordReplaceText(doc, "{clientName}", clientName);
-            Util.WordReplaceText(doc, "{contractTitle}", contractTitle);
+            Util.WordReplaceText(doc, "{contractTitle}", titleText);
             Util.WordReplaceText(doc, "{depositAmount}", depositAmount.ToString("F0"));
             Util.WordReplaceText(doc, "{totalAmount}", totalAmount.ToString("F2"));
             Util.WordReplaceText(doc, "{date}", today);

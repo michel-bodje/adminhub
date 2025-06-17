@@ -25,11 +25,6 @@ export function showPage(pageId) {
   const selectedPage = document.getElementById(pageId);
   if (selectedPage) {
     selectedPage.classList.add("active");
-
-    // If a Word page is shown, unhide all elements
-    if (pageId === ELEMENT_IDS.wordContractPage || pageId === ELEMENT_IDS.wordReceiptPage) {
-      selectedPage.classList.remove("hidden");
-    }
   }
 
   // Scroll to the top of the page
@@ -52,7 +47,7 @@ export function resetPage() {
   handlePaymentOptions();
 
   // Navigate back to main menu
-  showPage(ELEMENT_IDS.mainPage);
+  showPage(ELEMENT_IDS.menuPage);
 
   // Reset dropdowns
   populateCaseTypeDropdown();
@@ -60,7 +55,6 @@ export function resetPage() {
   populateLocationDropdown();
   populateLanguageDropdown();
   populatePaymentDropdown();
-  populateContractTitles();
 }
 
 /**
@@ -310,6 +304,7 @@ function emptyDropdown(dropdown, placeholder) {
   placeholderOption.textContent = placeholder;
   placeholderOption.disabled = true;
   placeholderOption.selected = true;
+  placeholderOption.hidden = true;
   dropdown.appendChild(placeholderOption);
 }
 
@@ -450,42 +445,6 @@ export function populateLocationDropdown() {
       "Select Location"
     );
   });
-}
-
-/**
- * Dynamically populates the contract title dropdown based on the selected language.
- */
-export function populateContractTitles() {
-  const language = formState.clientLanguage; // Get the selected language from formState
-  const contractTitleDropdown = document.getElementById(ELEMENT_IDS.wordContractTitle);
-
-  if (!contractTitleDropdown) {
-    console.error("Contract title dropdown not found.");
-    return;
-  }
-
-  // Define contract title options for each language
-  const titles = {
-    English: [
-      "Representation in Divorce",
-      "Representation in Estate Law",
-      "Limited Mandate",
-    ],
-    Français: [
-      "Représentation en divorce",
-      "Représentation en droit des successions",
-      "Mandat Limité",
-    ],
-  };
-
-  // Get the appropriate titles based on the selected language
-  const options = (titles[language] || []).map(title => ({ value: title, label: title }));
-
-  // Add an "Other" option
-  options.push({ value: "other", label: "Other (Specify)" });
-
-  // Populate the dropdown
-  populateDropdown(ELEMENT_IDS.wordContractTitle, options, "Select Contract Title");
 }
 
 /** Handles the case type dropdown change event. */

@@ -22,6 +22,7 @@ class Program
             string clientLanguage = (string)json["form"]["clientLanguage"];
             string paymentMethod = (string)json["form"]["paymentMethod"];
             double depositAmount = (double)json["form"]["depositAmount"];
+            string receiptReason = (string)json["form"]["receiptReason"];
             string lawyerName = (string)json["lawyer"]["name"];
 
             if (string.IsNullOrEmpty(clientName) || string.IsNullOrEmpty(lawyerName))
@@ -47,8 +48,18 @@ class Program
             dynamic wordApp = Activator.CreateInstance(wordType);
             dynamic doc = wordApp.Documents.Open(tempDocPath);
 
+            // === Prepare reason text ===
+            string reasonText;
+            if (receiptReason == "consultation")
+                reasonText = lang == "fr" ? "une consultation juridique" : "a legal consultation";
+            else if (receiptReason == "trust")
+                reasonText = lang == "fr" ? "un paiement en fidéicommis" : "a trust payment";
+            else
+                reasonText = receiptReason; // Use the raw value for custom/other reasons
+            
+            // === Replace placeholders ===
             Util.WordReplaceText(doc, "{user}", "Michel Assi-Bodje");
-            Util.WordReplaceText(doc, "{reason}", "{}");
+            Util.WordReplaceText(doc, "{reason}", reasonText);
             Util.WordReplaceText(doc, "{clientName}", clientName);
             Util.WordReplaceText(doc, "{paymentMethod}", paymentMethod);
             Util.WordReplaceText(doc, "{depositAmount}", formattedAmount);
@@ -59,8 +70,7 @@ class Program
             WindowFocus.ShowWithFocus(doc.ActiveWindow);
 
             // Show the print dialog for the user to choose settings and print
-            wordApp.Dialogs[88].Show(); // 88 = File > Print dialog
-
+            wordApp.Dialogs[97].Show(); // 97 = wdDialogFilePrint (Ctrl+P dialog)
 
             // === Ask user to export PDF ===
             using (var dialog = new SaveFileDialog())

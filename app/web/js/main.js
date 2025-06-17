@@ -7,14 +7,13 @@ import {
   setLawyers,
   getLawyerById,
   populateLawyerDropdown,
-  populateContractTitles,
   handleCaseDetails,
   handlePaymentOptions,
   collectCaseDetails,
 } from "./index.js";
 
 window.addEventListener('pywebviewready', () => {
-  console.log("[LawHub] pywebview is ready.");
+  console.log("[AdminHub] pywebview is ready.");
   main();
 });
 
@@ -25,7 +24,7 @@ async function main() {
     console.error("No lawyers loaded");
     return;
   } else {
-    console.log("[LawHub] Lawyers loaded:", lawyerList);
+    console.log("[AdminHub] Lawyers loaded:", lawyerList);
   }
   setLawyers(lawyerList);
   resetPage();
@@ -80,7 +79,6 @@ function attachEventListeners() {
         } else if (matchingKey.endsWith("ClientLanguage")) {
           // client language dropdown change
           formState.update("clientLanguage", value);
-            populateContractTitles();
         } else if (matchingKey.endsWith("scheduleMode")) {
           // appointment mode dropdown change
           const manualDate = document.getElementById(ELEMENT_IDS.manualDate);
@@ -143,9 +141,23 @@ function attachEventListeners() {
             customTitleInput.required = false;
             formState.update("contractTitle", value);
           }
+        } else if (matchingKey.endsWith("wordReceiptReason")) {
+          // Show/hide custom receipt reason input based on selection
+          const customReasonInput = document.getElementById(ELEMENT_IDS.customReceiptReason);
+          if (value === "other") {
+            customReasonInput.classList.remove("hidden");
+            customReasonInput.required = true;
+          } else {
+            customReasonInput.classList.add("hidden");
+            customReasonInput.required = false;
+            formState.update("receiptReason", value);
+        }
         } else if (matchingKey.endsWith("customContractTitle")) {
           // Update form state with custom contract title
           formState.update("contractTitle", value);
+        } else if (matchingKey.endsWith("customReceiptReason")) {
+          // Update form state with custom receipt reason
+          formState.update("receiptReason", value);
         }
       }
     });
@@ -157,26 +169,35 @@ function attachEventListeners() {
     button.addEventListener('click', (event) => {
       const { id } = event.target;
       switch (id) {
-        case ELEMENT_IDS.scheduleMenuBtn:
-          showPage(ELEMENT_IDS.schedulePage);
-          break;
-        case ELEMENT_IDS.confirmMenuBtn:
-          showPage(ELEMENT_IDS.confirmPage);
-          break;
-        case ELEMENT_IDS.contractMenuBtn:
-          showPage(ELEMENT_IDS.contractPage);
-          break;
-        case ELEMENT_IDS.replyMenuBtn:
-          showPage(ELEMENT_IDS.replyPage);
-          break;
-        case ELEMENT_IDS.wordContractMenuBtn:
-          showPage(ELEMENT_IDS.wordContractPage);
-          break;
-        case ELEMENT_IDS.wordReceiptMenuBtn:
-          showPage(ELEMENT_IDS.wordReceiptPage);
-          break;
-        default:
-          break;
+      case ELEMENT_IDS.outlookMenuBtn:
+        showPage(ELEMENT_IDS.outlookMenuPage);
+        break;
+      case ELEMENT_IDS.wordMenuBtn:
+        showPage(ELEMENT_IDS.wordMenuPage);
+        break;
+      case ELEMENT_IDS.pclawMenuBtn:
+        showPage(ELEMENT_IDS.pclawMenuPage);
+        break;
+      case ELEMENT_IDS.scheduleMenuBtn:
+        showPage(ELEMENT_IDS.schedulePage);
+        break;
+      case ELEMENT_IDS.confirmMenuBtn:
+        showPage(ELEMENT_IDS.confirmationPage);
+        break;
+      case ELEMENT_IDS.contractMenuBtn:
+        showPage(ELEMENT_IDS.contractPage);
+        break;
+      case ELEMENT_IDS.replyMenuBtn:
+        showPage(ELEMENT_IDS.replyPage);
+        break;
+      case ELEMENT_IDS.wordContractMenuBtn:
+        showPage(ELEMENT_IDS.wordContractPage);
+        break;
+      case ELEMENT_IDS.wordReceiptMenuBtn:
+        showPage(ELEMENT_IDS.wordReceiptPage);
+        break;
+      default:
+        break;
       }
     });
   });

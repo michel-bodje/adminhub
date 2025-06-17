@@ -370,18 +370,11 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         while (enumerator.MoveNext())
         {
             Outlook.AppointmentItem item = enumerator.Current as Outlook.AppointmentItem;
-            if (item != null)
+            
+            if (item != null && !item.AllDayEvent)
             {
-                try
-                {
-                    // Skip all-day events and invisible/system items
-                    if (item.AllDayEvent) continue;
-                    list.Add(item);
-                }
-                catch
-                {
-                    continue; // skip broken ones
-                }
+                try { list.Add(item); }
+                catch { continue; /* skip broken ones */}
             }
         }
 
@@ -460,12 +453,19 @@ static void CreateMeetingDraft(FormState form, Slot slot)
     // ---- Slot validation ----
     static bool IsValidSlot(Slot slot, List<Outlook.AppointmentItem> events, FormState form)
     {
+        if (events.Any(e => e == null))
+        {
+            Console.WriteLine("Warning: Null calendar items found in events list!");
+            return false;
+        }
+        
         // 1. Overlap check + breakMinutes buffer
-        foreach (var ev in events.Where(ev => ev.Categories.Contains(form.LawyerName)))
+        foreach (var ev in events.Where(ev => ev != null && ev.Categories.Contains(form.LawyerName)))
         {
             DateTime s, e;
             try { s = ev.Start; e = ev.End; }
             catch { continue; }
+            
             // apply break buffer
             DateTime bufStart = s.AddMinutes(-form.BreakMinutes);
             DateTime bufEnd = e.AddMinutes(form.BreakMinutes);
