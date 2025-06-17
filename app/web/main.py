@@ -46,5 +46,5 @@ class HubAPI:
 if __name__ == '__main__':
     html_path = os.path.join(root_dir, "app", "web", "index.html")
     api = HubAPI()
-    webview.create_window("Amlex Admin Hub", html_path, js_api=api, width=500, height=700)
+    webview.create_window("Amlex Admin Hub", html_path, js_api=api, width=500, height=650)
     webview.start(debug=False, gui='edgechromium')

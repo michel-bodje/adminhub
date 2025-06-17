@@ -76,7 +76,7 @@ function attachEventListeners() {
         } else if (matchingKey.endsWith("ClientEmail")) {
           // client email input change
           formState.update("clientEmail", value);
-        } else if (matchingKey.endsWith("Title")) {
+        } else if (matchingKey.endsWith("ClientTitle")) {
           // client title dropdown change
           formState.update("clientTitle", value);
         } else if (matchingKey.endsWith("ClientLanguage")) {
