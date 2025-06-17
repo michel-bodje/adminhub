@@ -11,12 +11,20 @@ using Word = Microsoft.Office.Interop.Word;
 
 class Scheduler
 {
+    // how to reference in Main?
     static string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\");
     static string jsonPath = Path.Combine(baseDir, "app", "data.json");
 
     [STAThread] // Required for clipboard
     static void Main(string[] args)
     {
+        string BASE_PATH;
+
+        if (args.Length > 0 && Directory.Exists(args[0]))
+            BASE_PATH = args[0];
+        else
+            BASE_PATH = AppDomain.CurrentDomain.BaseDirectory;
+
         try
         {
             // 1. Load data.json

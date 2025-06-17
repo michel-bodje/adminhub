@@ -6,15 +6,23 @@ using Outlook = Microsoft.Office.Interop.Outlook;
 
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
+        string BASE_PATH;
+
+        if (args.Length > 0 && Directory.Exists(args[0]))
+            BASE_PATH = args[0];
+        else
+            BASE_PATH = AppDomain.CurrentDomain.BaseDirectory;
+
         try
         {
-            // === Load JSON form state ===
-            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\");
-            string jsonPath = Path.Combine(baseDir, "app", "data.json");
+
+            string baseDir = Path.Combine(BASE_PATH, @"..\..\..");
+            string jsonPath = Path.Combine(baseDir, "data.json");
             string jsonText = File.ReadAllText(jsonPath);
 
+            // === Load JSON form state ===
             JObject json = JObject.Parse(jsonText);
 
             string clientEmail = (string)json["form"]["clientEmail"];
@@ -84,7 +92,7 @@ class Program
             }
 
             string lawyerString = Util.GetLawyerString(lawyerName, lawyerId);
-            
+
             htmlBody = htmlBody.Replace("{{lawyerName}}", lawyerString);
 
             // === Generate Outlook draft email ===

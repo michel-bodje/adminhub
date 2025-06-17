@@ -12,7 +12,7 @@ class Program
         try
         {
             // === Load JSON form state ===
-            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..");
             string jsonPath = Path.Combine(baseDir, "app", "data.json");
             string jsonText = File.ReadAllText(jsonPath);
             JObject json = JObject.Parse(jsonText);
@@ -30,7 +30,7 @@ class Program
 
             string lang = clientLanguage == "Français" ? "fr" : "en";
             string locale = lang == "fr" ? "fr-CA" : "en-US";
-            string templatePath = Path.Combine(baseDir, "templates", lang, "Receipt.docx");
+            string templatePath = Path.Combine(baseDir, "app", "templates", lang, "Receipt.docx");
 
             if (!File.Exists(templatePath))
                 throw new FileNotFoundException("Receipt template not found.", templatePath);

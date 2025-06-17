@@ -1,10 +1,10 @@
 import json
 import os
 
-root_dir = os.path.abspath(os.path.join(__file__, "../../../"))
-json_path = os.path.join(root_dir, "app", "data.json")
+APP_DIR = os.path.abspath(os.path.join(__file__, "../../"))
+JSON_PATH = os.path.join(APP_DIR, "data.json")
 
-def load_consultation_fields(json_path=json_path):
+def load_consultation_fields(json_path=JSON_PATH):
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 

@@ -5,12 +5,19 @@ using Outlook = Microsoft.Office.Interop.Outlook;
 
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
+        string BASE_PATH;
+
+        if (args.Length > 0 && Directory.Exists(args[0]))
+            BASE_PATH = args[0];
+        else
+            BASE_PATH = AppDomain.CurrentDomain.BaseDirectory;
+
         try
         {
             // === Load and parse JSON ===
-            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..");
             string jsonPath = Path.Combine(baseDir, "app", "data.json");
             string jsonText = File.ReadAllText(jsonPath);
             JObject json = JObject.Parse(jsonText);
@@ -22,7 +29,7 @@ class Program
 
             // === Load the appropriate HTML template ===
             string templateFile = clientLanguage == "English" ? "en/Reply.html" : "fr/Reply.html";
-            string templatePath = Path.Combine(baseDir, "templates", templateFile);
+            string templatePath = Path.Combine(baseDir, "app", "templates", templateFile);
             string htmlBody = File.ReadAllText(templatePath);
 
             // === Replace placeholder ===

@@ -25,7 +25,7 @@ if not exist "%CSC_PATH%" (
 REM === Build all .cs files if -a flag is used ===
 if /i "%~1"=="-a" (
     for %%F in (*.cs) do (
-        if /i not "%%F"==%UTIL% (
+        if /i not "%%F"=="%UTIL%" (
             set "SOURCE=%%F"
             set "BASENAME=%%~nF"
             set "OUTPUT=bin\%%~nF.exe"

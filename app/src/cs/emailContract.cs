@@ -6,13 +6,20 @@ using Outlook = Microsoft.Office.Interop.Outlook;
 
 class ContractEmail
 {
-    static void Main()
+    static void Main(string[] args)
     {
+        string BASE_PATH;
+
+        if (args.Length > 0 && Directory.Exists(args[0]))
+            BASE_PATH = args[0];
+        else
+            BASE_PATH = AppDomain.CurrentDomain.BaseDirectory;
+
         try
         {
-            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..");
             string jsonPath = Path.Combine(baseDir, "app", "data.json");
-            string templateFolder = Path.Combine(baseDir, "templates");
+            string templateFolder = Path.Combine(baseDir, "app", "templates");
 
             // === Read JSON ===
             JObject json = JObject.Parse(File.ReadAllText(jsonPath));
@@ -48,7 +55,7 @@ class ContractEmail
             mail.Subject = subject;
             mail.HTMLBody = htmlBody;
 
-            string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
+            string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..");
             string pathTempFile = Path.Combine(projectPath, "app", "latest_contract_path.txt");
 
             if (File.Exists(pathTempFile))
