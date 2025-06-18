@@ -45,15 +45,23 @@ class HubAPI:
                 data = json.load(f)
                 return data["lawyers"]
         except Exception as e:
-            return { "error": str(e) }
+            return {"error": str(e)}
         
     def run_exe(self, script_name):
         script_path = os.path.join(SRC_DIR, "cs", "bin", script_name + ".exe")
-        subprocess.run([script_path, BASE_PATH], check=True)
+        try:
+            subprocess.run([script_path, BASE_PATH], check=True)
+        except Exception as e:
+            print(f"[AdminHub] Error running EXE '{script_name}': {e}")
+            return {"error": str(e)}
 
     def run_py(self, script_name):
         script_path = os.path.join(SRC_DIR, "py", script_name + ".py")
-        subprocess.run(["pythonw", script_path, BASE_PATH], check=True)
+        try:
+            subprocess.run(["pythonw", script_path, BASE_PATH], check=True)
+        except Exception as e:
+            print(f"[AdminHub] Error running Python script '{script_name}': {e}")
+            return {"error": str(e)}
 
 if __name__ == '__main__':
     html_path = INDEX_HTML
