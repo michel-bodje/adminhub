@@ -13,14 +13,12 @@ fill_form_fields(label_input_map, fields)
 
 # Only fill billing tab if language is French
 if lang.startswith("fr"):
-    billing_pane = get_tab_pane(dlg, "Billing")
-    if billing_pane:
-        fill_billing_tab(billing_pane)
+    go_to_billing(dlg)
+    fill_billing_tab(dlg)
 
 # Fill all n/a in Custom tab
-custom_pane = get_tab_pane(dlg, "Custom")
-if custom_pane:
-    fill_custom_tab_fields(custom_pane)
+go_to_custom(dlg)
+fill_custom_tab(dlg)
 
 # Optionally press OK
 # dlg.child_window(title="OK", control_type="Button").click_input()

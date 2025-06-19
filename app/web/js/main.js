@@ -62,7 +62,7 @@ function attachEventListeners() {
         } else if (matchingKey.endsWith("Location")) {
           // location dropdown change
           formState.update("location", value);
-        } else if (matchingKey.includes("caseType")) {
+        } else if (matchingKey.endsWith("CaseType")) {
           // case type dropdown change
           formState.update("caseType", value);
           populateLawyerDropdown();

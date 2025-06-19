@@ -424,6 +424,53 @@
         <div id="pclaw-matter-page" class="page">
             <h1>New Matter</h1>
             <form>
+                <label for="matter-client-name">Client Name:</label>
+                <input type="text" id="matter-client-name" required placeholder="ex: John Doe">
+
+                <label for="matter-client-phone">Client Phone:</label>
+                <input type="tel" id="matter-client-phone" required placeholder="ex: +1234567890">
+
+                <label for="matter-client-email">Client Email:</label>
+                <input type="email" id="matter-client-email" required placeholder="ex: john@example.com">
+
+                <label for="matter-client-language">Preferred Language:</label>
+                <select id="matter-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="matter-client-title">Title:</label>
+                <select id="matter-client-title" required>
+                    <option value="" disabled selected hidden>Select title</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                </select>
+
+                <label for="matter-case-type">Type of Case:</label>
+                <select id="matter-case-type" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <label for="matter-lawyer-id">Lawyer ID:</label>
+                <select id="matter-lawyer-id" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <div id="matter-case-details" hidden>
+                    <!-- Common Case Details -->
+                    <div id="common-details" hidden>
+                        <label for="common-field">Specify Case Details:</label>
+                        <input type="text" id="common-field" placeholder="Provide additional details"></input>
+                    </div>
+                </div>
+
+                <div class="checkbox-container">
+                    <label for="matter-ref-barreau">Réf. Barreau?</label>
+                    <input type="checkbox" id="matter-ref-barreau" title="Is this client a reference from the Barreau?">
+                </div>
+                <div class="checkbox-container">
+                    <label for="matter-first-consultation">First Consultation?</label>
+                    <input type="checkbox" id="matter-first-consultation" title="Is this their first consultation?">
+                </div>
                 <button type="submit" id="matter-btn" class="submit-btn">Write</button>
                 <button type="button" class="back-btn">Back</button>
             </form>

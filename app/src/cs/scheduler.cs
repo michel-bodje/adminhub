@@ -11,7 +11,7 @@ using Word = Microsoft.Office.Interop.Word;
 
 class Scheduler
 {
-    // how to reference in Main?
+    // how to reference in Main? so we can get it from python
     static string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\");
     static string jsonPath = Path.Combine(baseDir, "app", "data.json");
 
