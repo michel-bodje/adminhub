@@ -77,40 +77,28 @@ def send_ctrl_arrow(direction: str = "right"):
     """
     seq = "^({RIGHT})" if direction.lower() == "right" else "^({LEFT})"
     keyboard.send_keys(seq)
-    sleep(0.2)
+    sleep(0.1)
 
-def focus_first_edit(dlg):
+def clear_focus(dlg):
     """
-    Focuses the first editable input in the dialog so that Ctrl+Arrow works.
-    Maybe just use tab instead?
+    Clear focus so that Ctrl+Arrow works.
     """
-    try:
-        edits = dlg.descendants(control_type="Edit")
-        if edits:
-            # Use set_focus() if available; else click_input to focus
-            try:
-                edits[0].set_focus()
-            except:
-                edits[0].click_input()
-            sleep(0.1)
-            return True
-    except Exception:
-        pass
-    return False
+    dlg.set_focus()
+    return True
 
-def move_tab(direction="left", repeat=1, dlg=None):
-            """
-            Moves tab left or right a number of times, focusing the first edit each time.
-            direction: "left" or "right"
-            repeat: number of times to move
-            dlg: dialog window to operate on (required)
-            """
-            if dlg is None:
-                raise ValueError("dlg parameter is required")
-            for _ in range(repeat):
-                focus_first_edit(dlg)
-                send_ctrl_arrow(direction)
-                sleep(0.2)
+def move_tab(direction="right", repeat=1, dlg=None):
+    """
+    Moves tab left or right a number of times, focusing the first edit each time.
+    direction: "left" or "right"
+    repeat: number of times to move
+    dlg: dialog window to operate on (required)
+    """
+    if dlg is None:
+        raise ValueError("dlg parameter is required")
+    for _ in range(repeat):
+        clear_focus(dlg)
+        send_ctrl_arrow(direction)
+        sleep(0.1)
 
 def detect_active_tab(dlg):
     """
@@ -137,17 +125,7 @@ def go_to_main(dlg):
     """
     Navigates to Main tab from wherever.
     """
-    current = detect_active_tab(dlg)
-    if current == "main":
-        return True
-    if current == "billing":
-        move_tab("left", 1, dlg)
-    elif current == "custom":       
-        move_tab("left", 2, dlg)
-    else:
-        # Unknown state: try left twice to land on Main
-        print("⚠️ Unknown tab state, trying to go to Main")
-        move_tab("left", 2, dlg)
+    move_tab("left", 2, dlg)
 
 def go_to_billing(dlg):
     """
@@ -268,7 +246,6 @@ def fill_billing_tab(dlg):
     """ Fills the Billing tab with the required values.
     This function assumes the Billing tab is already active.
     """
-
     # Use the robust checkbox clicker
     if not click_billing_checkbox(dlg):
         print("⚠️ Could not check 'Allow Bill Setting Overrides' via label/parent search")
@@ -283,6 +260,7 @@ def fill_billing_tab(dlg):
         edit = find_edit_by_label(dlg, old_value)
     if edit:
         edit.set_edit_text(new_value)
+        keyboard.send_keys("{TAB}")
         print("✓ Replaced Billing Template value")
         return True
     else:
@@ -293,7 +271,6 @@ def fill_billing_tab(dlg):
 def fill_custom_tab(dlg):
     """ Fills all editable fields in the Custom tab with 'n/a'.
     """
-
     edits = dlg.descendants(control_type="Edit")
     filled = 0
     for ctrl in edits:
