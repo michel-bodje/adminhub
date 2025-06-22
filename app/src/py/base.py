@@ -77,13 +77,19 @@ def send_ctrl_arrow(direction: str = "right"):
     """
     seq = "^({RIGHT})" if direction.lower() == "right" else "^({LEFT})"
     keyboard.send_keys(seq)
-    sleep(0.1)
+    sleep(0.2)
 
 def clear_focus(dlg):
     """
     Clear focus so that Ctrl+Arrow works.
     """
-    dlg.set_focus()
+    try:
+        dlg.set_focus()
+        print("Focus cleared")
+        sleep(0.2)
+    except:
+        print("Failed to clear focus")
+        return False
     return True
 
 def move_tab(direction="right", repeat=1, dlg=None):
@@ -98,7 +104,6 @@ def move_tab(direction="right", repeat=1, dlg=None):
     for _ in range(repeat):
         clear_focus(dlg)
         send_ctrl_arrow(direction)
-        sleep(0.1)
 
 def detect_active_tab(dlg):
     """

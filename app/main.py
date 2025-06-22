@@ -9,7 +9,7 @@ def get_base_path():
     if getattr(sys, 'frozen', False):  # Running as .exe (PyInstaller bundles it)
         return getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))  # temp folder with bundled files
     else:
-        return os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))  # Running in development mode
+        return os.path.abspath(os.path.join(os.path.dirname(__file__)))  # Running in development mode
 
 BASE_PATH = get_base_path()
 
