@@ -77,7 +77,7 @@ def send_ctrl_arrow(direction: str = "right"):
     """
     seq = "^({RIGHT})" if direction.lower() == "right" else "^({LEFT})"
     keyboard.send_keys(seq)
-    sleep(0.2)
+    sleep(0.5)
 
 def clear_focus(dlg):
     """
@@ -165,18 +165,18 @@ def click_billing_checkbox(dlg):
     except ElementNotFoundError:
         print("❌ Label DataItem not found")
         return False
-    
+
     parent_info = label.element_info.parent
     if not parent_info:
         print("❌ Label has no parent")
         return False
-    
+
     try:
         parent_wrapper = UIAWrapper(parent_info)
     except Exception:
         print("❌ Cannot wrap parent")
         return False
-    
+
     # 3. Among parent.children(), inspect nameless DataItem nodes for a CheckBox child
     checkbox = None
     for child in parent_wrapper.children():
@@ -246,7 +246,7 @@ def find_edit_by_label(dlg, target_value):
                     return edit
     print(f"⚠️ No Edit found with value '{target_value}'")
     return None
-                
+
 def fill_billing_tab(dlg):
     """ Fills the Billing tab with the required values.
     This function assumes the Billing tab is already active.
@@ -255,7 +255,7 @@ def fill_billing_tab(dlg):
     if not click_billing_checkbox(dlg):
         print("⚠️ Could not check 'Allow Bill Setting Overrides' via label/parent search")
         return
-    
+
     old_value = "RABILEN5"
     new_value = "RABILFR5"
 
@@ -272,7 +272,7 @@ def fill_billing_tab(dlg):
         print(f"⚠️ Could not find Edit with value '{old_value}'")
         print("❌ Failed to fill Billing tab")
         return False
-    
+
 def fill_custom_tab(dlg):
     """ Fills all editable fields in the Custom tab with 'n/a'.
     """
