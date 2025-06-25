@@ -16,7 +16,7 @@ def open_dialog(parent_window, dialog_title, button_title):
     parent_window.child_window(title=button_title, control_type="Button").click_input()
     sleep(1)
     dlg = parent_window.child_window(title=dialog_title, control_type="Window")
-    # dlg.wait("visible enabled ready")
+    dlg.wait("visible enabled ready", timeout=15)
     return dlg
 
 def find_nearest_input(label: BaseWrapper, inputs: list[BaseWrapper]):
@@ -77,11 +77,12 @@ def send_ctrl_arrow(direction: str = "right"):
     """
     seq = "^({RIGHT})" if direction.lower() == "right" else "^({LEFT})"
     keyboard.send_keys(seq)
-    sleep(0.5)
+    sleep(0.2)
 
 def clear_focus(dlg):
     """
     Clear focus so that Ctrl+Arrow works.
+    Seems to break navigation?
     """
     try:
         dlg.set_focus()
@@ -91,6 +92,24 @@ def clear_focus(dlg):
         print("Failed to clear focus")
         return False
     return True
+
+def focus_first_edit(dlg):
+    """
+    Focuses the first editable input in the dialog so that Ctrl+Arrow works.
+    """
+    try:
+        edits = dlg.descendants(control_type="Edit")
+        if edits:
+            # Use set_focus() if available; else click_input to focus
+            try:
+                edits[0].set_focus()
+            except:
+                edits[0].click_input()
+            sleep(0.1)
+            return True
+    except Exception:
+        pass
+    return False
 
 def move_tab(direction="right", repeat=1, dlg=None):
     """
@@ -102,7 +121,7 @@ def move_tab(direction="right", repeat=1, dlg=None):
     if dlg is None:
         raise ValueError("dlg parameter is required")
     for _ in range(repeat):
-        clear_focus(dlg)
+        focus_first_edit(dlg)
         send_ctrl_arrow(direction)
 
 def detect_active_tab(dlg):

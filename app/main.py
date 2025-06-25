@@ -50,15 +50,22 @@ class HubAPI:
     def run_exe(self, script_name):
         script_path = os.path.join(SRC_DIR, "cs", "bin", script_name + ".exe")
         try:
-            subprocess.run([script_path, BASE_PATH], check=True)
+            # subprocess.run([script_path, BASE_PATH], check=True)
+            os.startfile(script_path)
+            return {"message": f"Running EXE: {script_name}"}
         except Exception as e:
             print(f"[AdminHub] Error running EXE '{script_name}': {e}")
             return {"error": str(e)}
 
     def run_py(self, script_name):
+        """
+        In final version, use pyinstaller to bundle Python scripts into .exe files.
+        For development, we can run the scripts directly with pythonw.
+        """
         script_path = os.path.join(SRC_DIR, "py", script_name + ".py")
         try:
             subprocess.run(["pythonw", script_path, BASE_PATH], check=True)
+            return {"message": f"Running Python script: {script_name}"}
         except Exception as e:
             print(f"[AdminHub] Error running Python script '{script_name}': {e}")
             return {"error": str(e)}
@@ -67,4 +74,4 @@ if __name__ == '__main__':
     html_path = INDEX_HTML
     api = HubAPI()
     webview.create_window("Amlex Admin Hub", html_path, js_api=api, width=500, height=650)
-    webview.start(debug=True, gui='edgechromium')
+    webview.start(debug=False, gui='edgechromium')
