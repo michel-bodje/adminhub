@@ -3,21 +3,111 @@ from pywinauto.findwindows import find_windows
 from pywinauto.base_wrapper import BaseWrapper
 from pywinauto.controls.uiawrapper import UIAWrapper
 from pywinauto import keyboard
+from pywinauto.keyboard import send_keys
 from time import sleep
+from datetime import datetime
 
 def connect_to_pclaw():
+    """ Connects to the PCLaw Enterprise application and returns the main window. """
     hwnds = find_windows(title_re=".*PCLaw® Enterprise.*")
     app = Application(backend="uia").connect(handle=hwnds[0])
     main_win = app.window(handle=hwnds[0])
-    main_win.set_focus()
     return main_win
 
-def open_dialog(parent_window, dialog_title, button_title):
-    parent_window.child_window(title=button_title, control_type="Button").click_input()
-    sleep(1)
+def open_dialog(parent_window, dialog_title):
+    """ Returns a dialog window by title."""
+    # Replace with fill_new_matter()
+    new_matter_dialog()
     dlg = parent_window.child_window(title=dialog_title, control_type="Window")
     dlg.wait("visible enabled ready", timeout=15)
     return dlg
+
+def new_matter_dialog():
+    """ Opens the New Matter dialog using keyboard navigation. """
+    send_keys('%f')
+    sleep(0.2)
+    send_keys('{DOWN}')
+    sleep(0.2)
+    send_keys('{RIGHT}')
+    sleep(0.2)
+    send_keys('{ENTER}')
+
+def close_matter_dialog():
+    """ Opens the Close Matter dialog using keyboard navigation. """
+    send_keys('%f')
+    sleep(0.2)
+    send_keys('{DOWN}')
+    sleep(0.2)
+    send_keys('{RIGHT}')
+    sleep(0.2)
+    send_keys('{DOWN}{DOWN}')
+    sleep(0.2)
+    send_keys('{ENTER}')
+
+def register_dialog():
+    """ Opens the Register Matter dialog using keyboard navigation. """
+    send_keys('%d')
+    sleep(0.2)
+    send_keys('{UP}')
+    sleep(0.2)
+    send_keys('{ENTER}')
+
+def register_matter(matter_number: str):
+    """
+    Opens the Register Matter dialog and open the chosen matter number.
+    """
+    register_dialog()
+    send_keys("%m")
+    send_keys(matter_number)
+    sleep(0.3)
+    send_keys("%s")
+    sleep(0.3)
+    send_keys("{ENTER}")
+
+def bill_matter(matter_number: str, date: str):
+    """ Opens the Bill Matter dialog and go through the billing process. """
+    main = connect_to_pclaw()
+
+    # Fill basic fields
+    send_keys('^b')
+    send_keys("%m")
+    sleep(0.3)
+    send_keys(matter_number)
+    sleep(0.3)
+    send_keys("%b")
+    send_keys(date)
+    sleep(0.3)
+    send_keys("%a")
+    send_keys(date)
+    sleep(0.3)
+
+    # Click OK
+    main.child_window(title="OK", control_type="Button").click_input()
+
+    # Wait for new dialog to appear
+    sleep(5)
+    # Validate default bill settings
+    send_keys("%m")
+    send_keys("{ENTER}")
+    # Wait for the preview dialog to appear
+    sleep(5)
+    
+    # how to print???
+    # send_keys("%p")
+    dlg = main.child_window(title=".*Display Document*", control_type="Window")
+    dlg.child_window(title="Print", control_type="Button").click_input()
+   
+    """
+    # Wait for the print to complete
+    sleep(5)
+    send_keys("{ENTER}")
+    # Refresh
+    sleep(5)
+    send_keys("%m")
+    send_keys("%s")
+    sleep(0.5)
+    send_keys("{ENTER}")
+    """
 
 def find_nearest_input(label: BaseWrapper, inputs: list[BaseWrapper]):
     label_rect = label.rectangle()
