@@ -356,7 +356,7 @@ def find_edit_by_label(dlg, target_value):
     print(f"⚠️ No Edit found with value '{target_value}'")
     return None
 
-def fill_billing_tab(dlg):
+def fill_billing_tab_by_override(dlg):
     """ Fills the Billing tab with the required values.
     This function assumes the Billing tab is already active.
     """
@@ -380,6 +380,21 @@ def fill_billing_tab(dlg):
     else:
         print(f"⚠️ Could not find Edit with value '{old_value}'")
         print("❌ Failed to fill Billing tab")
+        return False
+
+def fill_billing_tab_by_value(dlg):
+    """
+    Fills the Billing tab by finding the Edit with value 'Default' and replacing it with 'Facture francais'.
+    """
+    edit = find_edit_by_value(dlg, "Default")
+    if edit:
+        edit.set_edit_text("Facture francais")
+        keyboard.send_keys(" ")
+        keyboard.send_keys("{BACKSPACE}")
+        print("✓ Replaced 'Default' with 'Facture francais' in Billing tab")
+        return True
+    else:
+        print("⚠️ Could not find Edit with value 'Default'")
         return False
 
 def fill_custom_tab(dlg):
