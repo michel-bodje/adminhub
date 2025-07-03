@@ -2,7 +2,9 @@
 pywebview
 pyinstaller
 pywinauto
-
+pyautogui
+pytesseract
+pillow
 # Windows requirements (manual installation required)
 # - Newtonsoft.Json.dll (place in app/office)
 # - Microsoft .NET Framework net48 (run NDP48-DevPack-ENU.exe)

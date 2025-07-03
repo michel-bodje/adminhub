@@ -6,7 +6,7 @@ fields = load_consultation_fields()
 
 main = connect_to_pclaw()
 main.set_focus()
-
+new_matter_dialog()
 dlg = open_dialog(main, "New Matter")
 
 label_input_map = build_label_input_map(dlg, fields)

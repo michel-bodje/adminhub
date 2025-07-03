@@ -6,6 +6,7 @@ from pywinauto import keyboard
 from pywinauto.keyboard import send_keys
 from time import sleep
 from datetime import datetime
+import ctypes
 
 def connect_to_pclaw():
     """ Connects to the PCLaw Enterprise application and returns the main window. """
@@ -16,8 +17,6 @@ def connect_to_pclaw():
 
 def open_dialog(parent_window, dialog_title):
     """ Returns a dialog window by title."""
-    # Replace with fill_new_matter()
-    new_matter_dialog()
     dlg = parent_window.child_window(title=dialog_title, control_type="Window")
     dlg.wait("visible enabled ready", timeout=15)
     return dlg
@@ -64,8 +63,12 @@ def register_matter(matter_number: str):
     sleep(0.3)
     send_keys("{ENTER}")
 
-def bill_matter(matter_number: str, date: str):
+def bill_matter(matter_number: str, date: str = None, options: bool = False):
     """ Opens the Bill Matter dialog and go through the billing process. """
+    if date is None:
+        print("⚠️ No date provided for billing. Aborting.")
+        return
+    
     main = connect_to_pclaw()
 
     # Fill basic fields
@@ -81,33 +84,241 @@ def bill_matter(matter_number: str, date: str):
     send_keys(date)
     sleep(0.3)
 
-    # Click OK
-    main.child_window(title="OK", control_type="Button").click_input()
+    # Potential extra logic here: what if they want to use options?
+    # If the dialog has options, we can handle them here.
+    if(options):
+        pass
+    else:
+        # Click OK
+        main.child_window(title="OK", control_type="Button").click_input()
 
     # Wait for new dialog to appear
-    sleep(5)
+    sleep(10)
     # Validate default bill settings
     send_keys("%m")
     send_keys("{ENTER}")
     # Wait for the preview dialog to appear
     sleep(5)
     
-    # how to print???
-    # send_keys("%p")
-    dlg = main.child_window(title=".*Display Document*", control_type="Window")
-    dlg.child_window(title="Print", control_type="Button").click_input()
-   
-    """
+    # print
+    send_keys("%p")
+    send_keys("%p")
+    send_keys("%p")
+    send_keys("%p")
+    send_keys("%p")
+
     # Wait for the print to complete
-    sleep(5)
+    sleep(0.3)
     send_keys("{ENTER}")
     # Refresh
-    sleep(5)
+    sleep(3)
     send_keys("%m")
     send_keys("%s")
-    sleep(0.5)
+    sleep(0.3)
     send_keys("{ENTER}")
-    """
+
+def close_matter(matter_number: str):
+    main = connect_to_pclaw()
+    main.set_focus()
+
+    close_matter_dialog()
+    
+    # Fill matter number
+    send_keys("%m")
+    send_keys(matter_number)
+    send_keys("{TAB}")
+    
+    # Let PCLaw load like the atrocious software it is
+    sleep(30)
+    send_keys("{ENTER}")
+
+    # Fill window, assume "No physical file"
+    send_keys("d")
+    send_keys("f")
+    sleep(0.3)
+    send_keys("No physical file", with_spaces=True)
+    sleep(0.3)
+    send_keys("{TAB}")
+    send_keys("v")
+    
+    # Run the OCR script to check balances
+    # before closing, we need to confirm balances are zero
+    no_balance = ocr_get_balance()
+
+    if no_balance:
+        sleep(0.3)
+        send_keys("{ENTER}")
+        sleep(0.3)
+        send_keys("{ENTER}")
+        sleep(0.3)
+        send_keys("{ENTER}")
+    else:
+        print("⚠️ Remaining balance is not zero. Matter should not be closed.")
+        #ctypes.windll.user32.MessageBoxW(0, "⚠️ Remaining balance is not zero. Matter should not be closed until all balances are cleared.", "Warning", 0x30)
+        pass
+
+def ocr_get_balance():
+    """ Uses OCR to extract financial data from the Close Matter dialog."""
+    import pytesseract
+    import pyautogui
+    import re
+
+    LABELS = ["Unbd D", "A/R", "Gen Rtnr", "Trust"]
+
+    # === Find the Close Matter Window ===
+    try:
+        close_win = open_dialog(connect_to_pclaw(), "Close Matter")
+        close_win.set_focus()
+    except Exception as e:
+        print("❌ Failed to locate Close Matter window:", e)
+        return False
+
+    # Get window bounds
+    rect = close_win.rectangle()
+    left, top, right, bottom = rect.left, rect.top, rect.right, rect.bottom
+    width, height = right - left, bottom - top
+
+    # Crop region = bottom ~25% of window where the financial data lives
+    crop_left = int(left + width * 0.05)
+    crop_right = int(left + width * 0.95)
+    crop_top = int(top + height * 0.70)
+    crop_bottom = int(top + height * 0.98)
+    crop_width = crop_right - crop_left
+    crop_height = crop_bottom - crop_top
+
+    # Take screenshot of the cropped region
+    screenshot = pyautogui.screenshot(region=(crop_left, crop_top, crop_width, crop_height))
+
+    # Preprocess: Grayscale + Binary Threshold
+    #gray = screenshot.convert("L")
+    # bw = gray.point(lambda x: 0 if x < 128 else 255, '1')  # Binary black/white
+
+    # (Optional) Save image to inspect
+    # screenshot.save("debug_crop.png")
+
+    # === OCR ===
+    custom_config = r'--oem 3 --psm 6'
+    text = pytesseract.image_to_string(screenshot, config=custom_config)
+    print("==== OCR Text ====")
+    print(text)
+
+    # Extract function
+    def extract_label_value(label, text):
+        if label == "A/R":
+            label_regex = r"A\S?R"
+        elif label == "Gen Rtnr":
+            label_regex = r"Gen\S*"
+        else:
+            label_regex = re.escape(label)
+
+        # Search for the label
+        label_match = re.search(label_regex, text, re.IGNORECASE)
+        if not label_match:
+            return None
+
+        # Search for the first number AFTER the label
+        post_label_text = text[label_match.end():]
+        number_match = re.search(r"(-?\d+(?:\.\d{1,2})?)", post_label_text)
+        if number_match:
+            return float(number_match.group(1))
+
+        return None
+
+    # Final result dictionary
+    amounts = {label: extract_label_value(label, text) for label in LABELS}
+
+    # === Check and Display ===
+    all_zero = True
+    print("==== Extracted Amounts ====")
+    for label, value in amounts.items():
+        if value is None:
+            print(f"{label}: Not found")
+            all_zero = False
+        else:
+            print(f"{label}: {value:.2f}")
+            if value != 0:
+                all_zero = False
+
+    if all_zero:
+        print("\n✅ All values are zero. Proceed.")
+        return True
+    else:
+        print("\n❌ Not all values are zero. Abort.")
+        return False
+
+def ocr_get_latest_date_if_no_trust():
+    import pytesseract
+    import pyautogui
+    import re
+    from datetime import datetime
+
+    # === Step 1: Locate Register window ===
+    try:
+        register_win = open_dialog(connect_to_pclaw(), "Register...")
+        register_win.set_focus()
+    except Exception as e:
+        print("❌ Failed to locate Register window:", e)
+        return None
+
+    # === Step 2: Screenshot bottom-right where "Trust" balance appears ===
+    rect = register_win.rectangle()
+    left, top, right, bottom = rect.left, rect.top, rect.right, rect.bottom
+    width, height = right - left, bottom - top
+
+    # Take full Register window screenshot
+    full_screenshot = pyautogui.screenshot(region=(left, top, width, height))
+    
+    # Crop
+    trust_crop = full_screenshot.crop((
+        0,                      # start from far left
+        int(height * 0.75),     # lower 25%
+        int(width * 0.5),       # to middle
+        height                  # to bottom
+    ))
+
+    #trust_crop.save("debug_trust_crop.png")  # Save for debugging
+
+    trust_text = pytesseract.image_to_string(trust_crop, config='--oem 3 --psm 6')
+    print("==== TRUST TEXT ====")
+    print(trust_text)
+
+    trust_match = re.search(r"Trust[:\s]*(-?\d+(?:\.\d{1,2})?)", trust_text)
+    trust_val = float(trust_match.group(1)) if trust_match else None
+    print("Trust Balance:", trust_val)
+
+    if trust_val is None or trust_val > 0:
+        print("❌ Trust balance is not zero. Abort.")
+        return None
+
+    # === Step 3: Screenshot top half (table rows) ===
+    # Just upper half, but starting from the very left
+    table_crop = full_screenshot.crop((
+        0, 0,
+        int(width * 0.5), int(height * 0.5)
+    ))
+
+    #table_crop.save("debug_table_crop.png")  # Save for debugging
+
+    table_text = pytesseract.image_to_string(table_crop, config='--oem 3 --psm 6')
+    print("==== TABLE TEXT ====")
+    print(table_text)
+
+    # === Step 4: Extract dates ===
+    date_matches = re.findall(r"\b(20\d{2})[/-](\d{1,2})[/-](\d{1,2})\b", table_text)
+    dates = []
+    for y, m, d in date_matches:
+        try:
+            dates.append(datetime(int(y), int(m), int(d)))
+        except:
+            continue
+
+    if not dates:
+        print("❌ No valid dates found.")
+        return None
+
+    latest = max(dates)
+    print("✅ Latest Date:", latest.strftime("%Y/%m/%d"))
+    return latest.strftime("%Y/%m/%d")
 
 def find_nearest_input(label: BaseWrapper, inputs: list[BaseWrapper]):
     label_rect = label.rectangle()
