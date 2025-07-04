@@ -1,8 +1,8 @@
 from base import *
 from parse_json import *
 
-main = connect_to_pclaw()
-main.set_focus()
+win = connect_to_pclaw()
+win.set_focus()
 
 # replace with form data? how to pass strings?
 matter = "4873-001"

@@ -15,7 +15,7 @@ def connect_to_pclaw():
     main_win = app.window(handle=hwnds[0])
     return main_win
 
-def open_dialog(parent_window, dialog_title):
+def get_dialog(parent_window, dialog_title):
     """ Returns a dialog window by title."""
     dlg = parent_window.child_window(title=dialog_title, control_type="Window")
     dlg.wait("visible enabled ready", timeout=15)
@@ -68,7 +68,7 @@ def bill_matter(matter_number: str, date: str = None, options: bool = False):
     if date is None:
         print("⚠️ No date provided for billing. Aborting.")
         return
-    
+
     main = connect_to_pclaw()
 
     # Fill basic fields
@@ -99,7 +99,7 @@ def bill_matter(matter_number: str, date: str = None, options: bool = False):
     send_keys("{ENTER}")
     # Wait for the preview dialog to appear
     sleep(5)
-    
+
     # print
     send_keys("%p")
     send_keys("%p")
@@ -122,12 +122,12 @@ def close_matter(matter_number: str):
     main.set_focus()
 
     close_matter_dialog()
-    
+
     # Fill matter number
     send_keys("%m")
     send_keys(matter_number)
     send_keys("{TAB}")
-    
+
     # Let PCLaw load like the atrocious software it is
     sleep(30)
     send_keys("{ENTER}")
@@ -140,7 +140,7 @@ def close_matter(matter_number: str):
     sleep(0.3)
     send_keys("{TAB}")
     send_keys("v")
-    
+
     # Run the OCR script to check balances
     # before closing, we need to confirm balances are zero
     no_balance = ocr_get_balance()
@@ -267,7 +267,7 @@ def ocr_get_latest_date_if_no_trust():
 
     # Take full Register window screenshot
     full_screenshot = pyautogui.screenshot(region=(left, top, width, height))
-    
+
     # Crop
     trust_crop = full_screenshot.crop((
         0,                      # start from far left

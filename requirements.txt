@@ -1,10 +1,11 @@
 # Python requirements
-pywebview
 pyinstaller
+pywebview
 pywinauto
 pyautogui
 pytesseract
 pillow
+
 # Windows requirements (manual installation required)
-# - Newtonsoft.Json.dll (place in app/office)
-# - Microsoft .NET Framework net48 (run NDP48-DevPack-ENU.exe)
+# - Newtonsoft.Json.dll (included in app/src/cs/bin)
+# - Microsoft .NET Framework net48 (install NDP48-DevPack-ENU.exe, needed for compilation)

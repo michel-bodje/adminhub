@@ -1,14 +1,15 @@
 from base import *
 from parse_json import *
 
+win = connect_to_pclaw()
+win.set_focus()
+
+new_matter_dialog()
+
+dlg = get_dialog(win, "New Matter")
+
 # Define the specific fields for New Matter
 fields = load_consultation_fields()
-
-main = connect_to_pclaw()
-main.set_focus()
-new_matter_dialog()
-dlg = open_dialog(main, "New Matter")
-
 label_input_map = build_label_input_map(dlg, fields)
 
 # Fill main tab
