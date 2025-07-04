@@ -5,7 +5,7 @@ win = connect_to_pclaw()
 win.set_focus()
 
 # matter string needs to be passed thru json
-matter = "4873-001"
+matter = ""
 
 register_matter(matter)
 sleep(3)

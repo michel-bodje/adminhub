@@ -5,8 +5,6 @@ from pywinauto.controls.uiawrapper import UIAWrapper
 from pywinauto import keyboard
 from pywinauto.keyboard import send_keys
 from time import sleep
-from datetime import datetime
-import ctypes
 
 def connect_to_pclaw():
     """ Connects to the PCLaw Enterprise application and returns the main window. """
@@ -95,9 +93,9 @@ def bill_matter(matter_number: str, date: str = None, options: bool = False):
     # Validate default bill settings
     send_keys("%m")
     send_keys("{ENTER}")
-    # Wait for the preview dialog to appear
-    sleep(5)
 
+    # Wait for the preview dialog to appear
+    sleep(6)
     # print: send that shortcut enough times to trigger
     send_keys("%p")
     send_keys("%p")
@@ -106,13 +104,13 @@ def bill_matter(matter_number: str, date: str = None, options: bool = False):
     send_keys("%p")
 
     # Wait for the print to complete
-    sleep(0.5)
+    sleep(2)
     send_keys("{ENTER}")
     # Refresh
-    sleep(3)
+    sleep(0.3)
     send_keys("%m")
     send_keys("%s")
-    sleep(0.5)
+    sleep(0.3)
     send_keys("{ENTER}")
 
 def close_matter(matter_number: str):
@@ -168,7 +166,7 @@ def ocr_get_balance():
 
     # === Find the Close Matter Window ===
     try:
-        close_win = open_dialog(connect_to_pclaw(), "Close Matter")
+        close_win = get_dialog(connect_to_pclaw(), "Close Matter")
         close_win.set_focus()
     except Exception as e:
         print("❌ Failed to locate Close Matter window:", e)
@@ -256,7 +254,7 @@ def ocr_get_latest_date():
 
     # === Locate Register window ===
     try:
-        register_win = open_dialog(connect_to_pclaw(), "Register...")
+        register_win = get_dialog(connect_to_pclaw(), "Register...")
         register_win.set_focus()
     except Exception as e:
         print("❌ Failed to locate Register window:", e)
@@ -285,13 +283,23 @@ def ocr_get_latest_date():
     # print("==== TRUST TEXT ====")
     # print(trust_text)
 
-    trust_match = re.search(r"Trust[:\s]*(-?\d+(?:\.\d{1,2})?)", trust_text)
+    # Match for "Trust"
+    trust_match = re.search(r"Trust[:\s]*(-?\d+(?:\.\d{1,2})?)", trust_text, re.IGNORECASE)
     trust_val = float(trust_match.group(1)) if trust_match else None
 
+    # Match for "Gen Rtnr"
+    retainer_match = re.search(r"Gen(?:\s+\S+)?[:\s]*(-?\d+(?:\.\d{1,2})?)", trust_text, re.IGNORECASE)
+    retainer_val = float(retainer_match.group(1)) if retainer_match else None
+
     print("Trust Balance:", trust_val)
+    print("Gen Rtnr :", retainer_val)
 
     if trust_val is None or trust_val > 0:
         print("❌ Trust balance is not zero. Abort.")
+        return None
+    
+    if retainer_val is None or retainer_val not in (143.72, 402.41):
+        print(f"❌ Gen Rtnr is {retainer_val}, requiring manual verification. Abort.")
         return None
 
     # === Screenshot top half (table rows) ===
