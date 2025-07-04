@@ -4,12 +4,13 @@ from parse_json import *
 win = connect_to_pclaw()
 win.set_focus()
 
-# replace with form data? how to pass strings?
+# matter string needs to be passed thru json
 matter = "4873-001"
 
 register_matter(matter)
 sleep(3)
 
-date = ocr_get_latest_date_if_no_trust()
+date = ocr_get_latest_date()
 
-bill_matter(matter, date)
+if (date):
+    bill_matter(matter, date)

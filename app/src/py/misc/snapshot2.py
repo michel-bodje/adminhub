@@ -1,7 +1,11 @@
 from base import *
 import sys
 
-dlg = get_dialog(connect_to_pclaw(), "New Matter")
+win = connect_to_pclaw()
+
+new_matter_dialog()
+
+dlg = get_dialog(win, "New Matter")
 
 # setup a ui dialog window
 go_to_billing(dlg)
