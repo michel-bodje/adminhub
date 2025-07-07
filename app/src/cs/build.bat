@@ -64,6 +64,12 @@ if /i "%BASENAME%"=="emailContract" (
 if /i "%BASENAME%"=="emailReply" (
     set "REFS=%REFS% /r:%OUTLOOK_DLL%"
 )
+if /i "%BASENAME%"=="emailReview" (
+    set "REFS=%REFS% /r:%OUTLOOK_DLL%"
+)
+if /i "%BASENAME%"=="emailSuivi" (
+    set "REFS=%REFS% /r:%OUTLOOK_DLL%"
+)
 if /i "%BASENAME%"=="scheduler" (
     set "REFS=%REFS% /r:%OUTLOOK_DLL% /r:%WORD_DLL%"
 )
