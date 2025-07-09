@@ -6,7 +6,7 @@
     <title>Amlex LawHub</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/pico.blue.css">
+    <link rel="stylesheet" href="css/pico.indigo.css">
     <link rel="stylesheet" href="css/main.css">
 
     <!-- JS -->
@@ -54,6 +54,8 @@
                 <button type="button" id="schedule-menu-btn" class="menu-btn">Schedule Appointment</button>
                 <button type="button" id="conf-menu-btn" class="menu-btn">Email Confirmation</button>
                 <button type="button" id="reply-menu-btn" class="menu-btn">Email Reply</button>
+                <button type="button" id="followup-menu-btn" class="menu-btn">Email Follow-up</button>
+                <button type="button" id="review-menu-btn" class="menu-btn">Email Review Request</button>
                 <button type="button" id="contract-menu-btn" class="menu-btn">Email Contract</button>
             </div>
             <button type="button" class="back-btn" id="back-to-main-from-outlook">Back</button>
@@ -90,10 +92,10 @@
                 <input type="text" id="schedule-client-name" required placeholder="ex: John Doe">
 
                 <label for="schedule-client-phone">Client Phone:</label>
-                <input type="tel" id="schedule-client-phone" required placeholder="ex: +1234567890">
+                <input type="tel" id="schedule-client-phone" placeholder="ex: +1234567890">
             
                 <label for="schedule-client-email">Client Email:</label>
-                <input type="email" id="schedule-client-email" required placeholder="ex: john@example.com">
+                <input type="email" id="schedule-client-email" placeholder="ex: john@example.com">
 
                 <label for="schedule-client-language">Preferred Language:</label>
                 <select id="schedule-client-language" required>
@@ -303,6 +305,40 @@
             </form>
         </div>
 
+        <!-- Follow-up page -->
+        <div id="followup-page" class="page">
+            <h1>Email Follow-up</h1>
+            <form>
+                <label for="followup-client-email">Client Email:</label>
+                <input type="email" id="followup-client-email" required placeholder="ex: john@example.com">
+
+                <label for="followup-client-language">Preferred Language:</label>
+                <select id="followup-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <button type="submit" id="send-followup-btn" class="submit-btn">Draft</button>
+                <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+
+        <!-- Review page -->
+        <div id="review-page" class="page">
+            <h1>Email Review Request</h1>
+            <form>
+                <label for="review-client-email">Client Email:</label>
+                <input type="email" id="review-client-email" required placeholder="ex: john@example.com">
+
+                <label for="review-client-language">Preferred Language:</label>
+                <select id="review-client-language" required>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+
+                <button type="submit" id="send-review-btn" class="submit-btn">Draft</button>
+                <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+
         <!-- Contract page -->
         <!-- 
         Creates a contract email.
@@ -428,10 +464,10 @@
                 <input type="text" id="matter-client-name" required placeholder="ex: John Doe">
 
                 <label for="matter-client-phone">Client Phone:</label>
-                <input type="tel" id="matter-client-phone" required placeholder="ex: +1234567890">
+                <input type="tel" id="matter-client-phone" placeholder="ex: +1234567890">
 
                 <label for="matter-client-email">Client Email:</label>
-                <input type="email" id="matter-client-email" required placeholder="ex: john@example.com">
+                <input type="email" id="matter-client-email" placeholder="ex: john@example.com">
 
                 <label for="matter-client-language">Preferred Language:</label>
                 <select id="matter-client-language" required>

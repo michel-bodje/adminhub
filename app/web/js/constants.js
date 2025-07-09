@@ -25,6 +25,8 @@ export const ELEMENT_IDS = {
     scheduleMenuBtn: "schedule-menu-btn",
     confirmMenuBtn: "conf-menu-btn",
     replyMenuBtn: "reply-menu-btn",
+    followupMenuBtn: "followup-menu-btn",
+    reviewMenuBtn: "review-menu-btn",
     contractMenuBtn: "contract-menu-btn",
 
     // --- Word Submenu Buttons ---
@@ -90,6 +92,18 @@ export const ELEMENT_IDS = {
     replyClientLanguage: "reply-client-language",
     replyLawyerId: "reply-lawyer-id",
     replySubmitBtn: "send-reply-btn",
+
+    // --- Email Follow-up Page ---
+    followupPage: "followup-page",
+    followupClientEmail: "followup-client-email",
+    followupClientLanguage: "followup-client-language",
+    followupSubmitBtn: "send-followup-btn",
+
+    // --- Email Review Page ---
+    reviewPage: "review-page",
+    reviewClientEmail: "review-client-email",
+    reviewClientLanguage: "review-client-language",
+    reviewSubmitBtn: "send-review-btn",
 
     // --- Email Contract Page ---
     contractPage: "contract-page",

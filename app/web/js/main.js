@@ -193,6 +193,12 @@ function attachEventListeners() {
       case ELEMENT_IDS.replyMenuBtn:
         showPage(ELEMENT_IDS.replyPage);
         break;
+      case ELEMENT_IDS.followupMenuBtn:
+        showPage(ELEMENT_IDS.followupPage);
+        break;
+      case ELEMENT_IDS.reviewMenuBtn:
+        showPage(ELEMENT_IDS.reviewPage);
+        break;
       case ELEMENT_IDS.wordContractMenuBtn:
         showPage(ELEMENT_IDS.wordContractPage);
         break;
@@ -236,6 +242,11 @@ function attachEventListeners() {
         case ELEMENT_IDS.replySubmitBtn:
           sendReply();
           break;
+        case ELEMENT_IDS.reviewSubmitBtn:
+          sendReview();
+          break;
+        case ELEMENT_IDS.followupSubmitBtn:
+          sendFollowup();
         case ELEMENT_IDS.wordContractSubmitBtn:
           createContract();
           break;
@@ -300,6 +311,32 @@ async function sendReply() {
   } catch (error) {
     console.error("[AdminHub] Error preparing reply email:", error);
     alert("Failed to prepare reply email. Please try again.");
+    throw error;
+  }
+}
+
+/** Prepares a follow-up email. */
+async function sendFollowup() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_exe("emailSuivi");
+    console.log("[AdminHub] Follow-up email prepared and submitted.");
+  } catch (error) {
+    console.error("[AdminHub] Error preparing follow-up email:", error);
+    alert("Failed to prepare follow-up email. Please try again.");
+    throw error;
+  }
+}
+
+/** Prepares a review request email. */
+async function sendReview() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run_exe("emailReview");
+    console.log("[AdminHub] Review request email prepared and submitted.");
+  } catch (error) {
+    console.error("[AdminHub] Error preparing review request email:", error);
+    alert("Failed to prepare review request email. Please try again.");
     throw error;
   }
 }
