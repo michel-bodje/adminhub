@@ -100,7 +100,7 @@ export const caseTypeHandlers = {
     },
   },
   mandates: {
-    label: "Regimes de Protection / Mandates",
+    label: "Regimes de Protection",
     handler: function () {
       const mandateDetails = document.getElementById(ELEMENT_IDS.mandateDetails).value;
       return `
