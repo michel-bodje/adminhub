@@ -14,10 +14,9 @@ def get_base_path():
         return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 ROOT_DIR = get_base_path()
-
+DATA_JSON = os.path.abspath(os.path.join(ROOT_DIR, 'data', 'data.json'))
 WEB_DIR = os.path.join(ROOT_DIR, 'app', 'web')
 SRC_DIR = os.path.join(ROOT_DIR, 'app', 'src')
-DATA_JSON = os.path.abspath(os.path.join(get_base_path(), 'data', 'data.json'))
 INDEX_HTML = os.path.join(WEB_DIR, 'index.html')
 
 class HubAPI:
