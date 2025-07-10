@@ -6,6 +6,8 @@ public static class Util
 {
     // ---- Client Utilities ----
 
+    public static string RootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\");
+    public static string JsonPath = Path.Combine(RootDir, "data", "data.json");
     /// <summary>
     /// Utility function to validate an email address.
     /// </summary>

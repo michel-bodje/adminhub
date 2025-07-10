@@ -11,10 +11,6 @@ using Word = Microsoft.Office.Interop.Word;
 
 class Scheduler
 {
-    // how to reference in Main? so we can get it from python
-    static string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\");
-    static string jsonPath = Path.Combine(baseDir, "app", "data.json");
-
     [STAThread] // Required for clipboard
     static void Main(string[] args)
     {
@@ -28,9 +24,9 @@ class Scheduler
         try
         {
             // 1. Load data.json
-            if (!File.Exists(jsonPath))
-                throw new FileNotFoundException("data.json not found.", jsonPath);
-            JObject root = JObject.Parse(File.ReadAllText(jsonPath));
+            if (!File.Exists(Util.JsonPath))
+                throw new FileNotFoundException("data.json not found.", Util.JsonPath);
+            JObject root = JObject.Parse(File.ReadAllText(Util.JsonPath));
             var form = ParseFormState(root);
 
             // 2. Validate minimal inputs
@@ -544,13 +540,13 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         // Update the JSON file with the formatted phone number
         try
         {
-            if (File.Exists(jsonPath))
+            if (File.Exists(Util.JsonPath))
             {
-                var json = JObject.Parse(File.ReadAllText(jsonPath));
+                var json = JObject.Parse(File.ReadAllText(Util.JsonPath));
                 if (json["form"] != null)
                 {
                     json["form"]["clientPhone"] = phoneNumber;
-                    File.WriteAllText(jsonPath, json.ToString());
+                    File.WriteAllText(Util.JsonPath, json.ToString());
                 }
             }
         }

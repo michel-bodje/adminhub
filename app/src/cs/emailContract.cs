@@ -17,12 +17,10 @@ class ContractEmail
 
         try
         {
-            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..");
-            string jsonPath = Path.Combine(baseDir, "app", "data.json");
-            string templateFolder = Path.Combine(baseDir, "app", "templates");
+            string templateFolder = Path.Combine(Util.RootDir, "app", "templates");
 
             // === Read JSON ===
-            JObject json = JObject.Parse(File.ReadAllText(jsonPath));
+            JObject json = JObject.Parse(File.ReadAllText(Util.JsonPath));
 
             string clientEmail = (string)json["form"]["clientEmail"];
             string clientLanguage = (string)json["form"]["clientLanguage"];

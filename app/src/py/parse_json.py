@@ -2,7 +2,7 @@ import json
 import os
 
 APP_DIR = os.path.abspath(os.path.join(__file__, "../../.."))
-JSON_PATH = os.path.join(APP_DIR, "data.json")
+JSON_PATH = os.path.join(APP_DIR, "data", "data.json")
 
 def load_json(json_path=JSON_PATH):
     with open(json_path, "r", encoding="utf-8") as f:

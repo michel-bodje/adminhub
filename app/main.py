@@ -9,13 +9,14 @@ def get_base_path():
     if getattr(sys, 'frozen', False):  # Running as .exe (PyInstaller bundles it)
         return getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))  # temp folder with bundled files
     else:
-        return os.path.abspath(os.path.join(os.path.dirname(__file__)))  # Running in development mode
+        # Go up one directory from the current file's directory to get the project root
+        return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-BASE_PATH = get_base_path()
+ROOT_DIR = get_base_path()
 
-WEB_DIR = os.path.join(BASE_PATH, 'web')
-SRC_DIR = os.path.join(BASE_PATH, 'src')
-DATA_JSON = os.path.join(BASE_PATH, 'data.json')
+WEB_DIR = os.path.join(ROOT_DIR, 'app', 'web')
+SRC_DIR = os.path.join(ROOT_DIR, 'app', 'src')
+DATA_JSON = os.path.join(ROOT_DIR, 'data', 'data.json')
 INDEX_HTML = os.path.join(WEB_DIR, 'index.html')
 
 class HubAPI:
@@ -50,7 +51,7 @@ class HubAPI:
     def run_exe(self, script_name):
         script_path = os.path.join(SRC_DIR, "cs", "bin", script_name + ".exe")
         try:
-            # subprocess.run([script_path, BASE_PATH], check=True)
+            # subprocess.run([script_path, ROOT_DIR], check=True)
             os.startfile(script_path)
             return {"message": f"Running EXE: {script_name}"}
         except Exception as e:
@@ -64,7 +65,7 @@ class HubAPI:
         """
         script_path = os.path.join(SRC_DIR, "py", script_name + ".py")
         try:
-            subprocess.run(["pythonw", script_path, BASE_PATH], check=True)
+            subprocess.run(["pythonw", script_path, ROOT_DIR], check=True)
             return {"message": f"Running Python script: {script_name}"}
         except Exception as e:
             print(f"[AdminHub] Error running Python script '{script_name}': {e}")

@@ -8,19 +8,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        string BASE_PATH;
-
-        if (args.Length > 0 && Directory.Exists(args[0]))
-            BASE_PATH = args[0];
-        else
-            BASE_PATH = AppDomain.CurrentDomain.BaseDirectory;
-
         try
         {
-
-            string baseDir = Path.Combine(BASE_PATH, @"..\..\..");
-            string jsonPath = Path.Combine(baseDir, "data.json");
-            string jsonText = File.ReadAllText(jsonPath);
+            string jsonText = File.ReadAllText(Util.JsonPath);
 
             // === Load JSON form state ===
             JObject json = JObject.Parse(jsonText);
@@ -43,7 +33,7 @@ class Program
 
             string lang = (clientLanguage == "Français") ? "fr" : "en";
             string templateName = char.ToUpper(location[0]) + location.Substring(1).ToLower() + ".html";
-            string templatePath = Path.Combine(baseDir, "templates", lang, templateName);
+            string templatePath = Path.Combine(Util.RootDir, "app", "templates", lang, templateName);
 
             if (!File.Exists(templatePath))
                 throw new FileNotFoundException("Template not found.", templatePath);
