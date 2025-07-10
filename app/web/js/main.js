@@ -267,7 +267,7 @@ function attachEventListeners() {
 async function scheduleAppointment() {
   try {
     await submitForm();
-    await window.pywebview.api.run_exe("scheduler");
+    await window.pywebview.api.run("scheduler");
     console.log("[AdminHub] Appointment scheduled successfully.");
 
     // Chain actions without re-submitting the form
@@ -275,11 +275,11 @@ async function scheduleAppointment() {
     const alsoPclaw = document.getElementById("also-pclaw").checked;
 
     if (alsoEmail) {
-      await window.pywebview.api.run_exe("emailConfirmation");
+      await window.pywebview.api.run("emailConfirmation");
       console.log("[AdminHub] Confirmation email prepared and submitted.");
     }
     if (alsoPclaw) {
-      await window.pywebview.api.run_py("new_matter");
+      await window.pywebview.api.run("new_matter.py");
       console.log("[AdminHub] PCLaw matter created successfully.");
     }
   } catch (error) {
@@ -293,7 +293,7 @@ async function scheduleAppointment() {
 async function sendConfirmation() {
   try {
     await submitForm();
-    await window.pywebview.api.run_exe("emailConfirmation");
+    await window.pywebview.api.run("emailConfirmation");
     console.log("[AdminHub] Confirmation email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing confirmation email:", error);
@@ -306,7 +306,7 @@ async function sendConfirmation() {
 async function sendReply() {
   try {
     await submitForm();
-    await window.pywebview.api.run_exe("emailReply");
+    await window.pywebview.api.run("emailReply");
     console.log("[AdminHub] Reply email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing reply email:", error);
@@ -319,7 +319,7 @@ async function sendReply() {
 async function sendFollowup() {
   try {
     await submitForm();
-    await window.pywebview.api.run_exe("emailSuivi");
+    await window.pywebview.api.run("emailSuivi");
     console.log("[AdminHub] Follow-up email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing follow-up email:", error);
@@ -332,7 +332,7 @@ async function sendFollowup() {
 async function sendReview() {
   try {
     await submitForm();
-    await window.pywebview.api.run_exe("emailReview");
+    await window.pywebview.api.run("emailReview");
     console.log("[AdminHub] Review request email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing review request email:", error);
@@ -345,7 +345,7 @@ async function sendReview() {
 async function sendContract() {
   try {
     await submitForm();
-    await window.pywebview.api.run_exe("emailContract");
+    await window.pywebview.api.run("emailContract");
     console.log("[AdminHub] Contract email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing contract email:", error);
@@ -358,13 +358,13 @@ async function sendContract() {
 async function createContract() {
   try {
     await submitForm();
-    await window.pywebview.api.run_exe("wordContract");
+    await window.pywebview.api.run("wordContract");
     console.log("[AdminHub] Word contract created successfully.");
     
     const alsoContract = document.getElementById("also-contract").checked;
     if (alsoContract) {
       // Automatically prepare and submit the contract email
-      await window.pywebview.api.run_exe("emailContract");
+      await window.pywebview.api.run("emailContract");
       console.log("[AdminHub] Contract email prepared and submitted.");
     }
   } catch (error) {
@@ -378,7 +378,7 @@ async function createContract() {
 async function createReceipt() {
   try {
     await submitForm();
-    await window.pywebview.api.run_exe("wordReceipt");
+    await window.pywebview.api.run("wordReceipt");
     console.log("[AdminHub] Word receipt created successfully.");
   } catch (error) {
     console.error("[AdminHub] Error creating word receipt:", error);
@@ -391,7 +391,7 @@ async function createReceipt() {
 async function newMatter() {
   try {
     await submitForm();
-    await window.pywebview.api.run_py("new_matter");
+    await window.pywebview.api.run("new_matter.py");
     console.log("[AdminHub] PCLaw matter created successfully.");
   } catch (error) {
     console.error("[AdminHub] Error writing PCLaw matter", error);

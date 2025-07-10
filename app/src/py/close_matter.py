@@ -1,10 +1,14 @@
 from base import *
 from parse_json import *
 
-win = connect_to_pclaw()
-win.set_focus()
+def main():
+    win = connect_to_pclaw()
+    win.set_focus()
 
-# matter string needs to be passed thru json
-matter = ""
+    # Matter string needs to be passed through JSON or other means
+    matter = ""  # TODO: Load matter value appropriately
 
-close_matter(matter)
+    close_matter(matter)
+
+if __name__ == "__main__":
+    main()

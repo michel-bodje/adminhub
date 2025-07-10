@@ -1,30 +1,34 @@
 from base import *
 from parse_json import *
 
-win = connect_to_pclaw()
-win.set_focus()
+def main():
+    win = connect_to_pclaw()
+    win.set_focus()
 
-new_matter_dialog()
+    new_matter_dialog()
 
-dlg = get_dialog(win, "New Matter")
+    dlg = get_dialog(win, "New Matter")
 
-# Define the specific fields for New Matter
-fields = load_consultation_fields()
-label_input_map = build_label_input_map(dlg, fields)
+    # Define the specific fields for New Matter
+    fields = load_consultation_fields()
+    label_input_map = build_label_input_map(dlg, fields)
 
-# Fill main tab
-fill_form_fields(label_input_map, fields)
+    # Fill main tab
+    fill_form_fields(label_input_map, fields)
 
-# Only fill billing tab if language is French
-if get_language().startswith("fr"):
-    go_to_billing(dlg)
-    fill_billing_tab_by_override(dlg)
+    # Only fill billing tab if language is French
+    if get_language().startswith("fr"):
+        go_to_billing(dlg)
+        fill_billing_tab_by_override(dlg)
 
-# Fill all n/a in Custom tab
-go_to_custom(dlg)
-fill_custom_tab(dlg)
+    # Fill all n/a in Custom tab
+    go_to_custom(dlg)
+    fill_custom_tab(dlg)
 
-go_to_main(dlg)
+    go_to_main(dlg)
 
-# Optionally press OK
-# dlg.child_window(title="OK", control_type="Button").click_input()
+    # Optionally press OK
+    # dlg.child_window(title="OK", control_type="Button").click_input()
+
+if __name__ == "__main__":
+    main()

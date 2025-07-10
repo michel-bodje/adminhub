@@ -1,10 +1,13 @@
 import json
 import os
 
-APP_DIR = os.path.abspath(os.path.join(__file__, "../../.."))
-JSON_PATH = os.path.join(APP_DIR, "data", "data.json")
+ROOT_DIR = os.path.abspath(os.path.join(__file__, "../../../.."))
+DATA_JSON = os.path.join(ROOT_DIR, "data", "data.json")
 
-def load_json(json_path=JSON_PATH):
+if __name__ == "__main__":
+    print("DATA_JSON path:", DATA_JSON)
+
+def load_json(json_path=DATA_JSON):
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -111,7 +114,7 @@ def get_case_details():
     else:
         mapping = {
             "divorce": "Divorce / Family Law",
-            "estate": "Successions / Estate Law",
+            "estate": "Estate Law",
             "employment": "Employment Law",
             "contract": "Contract Law",
             "defamations": "Defamations",
