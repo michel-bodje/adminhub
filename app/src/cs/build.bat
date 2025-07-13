@@ -5,20 +5,24 @@ pushd %~dp0
 REM === Validate input ===
 if "%~1"=="" (
     echo Usage: build.bat ^<YourFile.cs^>  or  build.bat -a
+    popd
+    endlocal
     exit /b 1
 )
 
 REM === Set vars ===
 set "CSC_PATH=%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
-set "JSON_DLL=bin\Newtonsoft.Json.dll"
-set "OUTLOOK_DLL=bin\Microsoft.Office.Interop.Outlook.dll"
-set "WORD_DLL=bin\Microsoft.Office.Interop.Word.dll"
-set "EXCEL_DLL=bin\Microsoft.Office.Interop.Excel.dll"
+set "JSON_DLL=..\..\bin\Newtonsoft.Json.dll"
+set "OUTLOOK_DLL=..\..\bin\Microsoft.Office.Interop.Outlook.dll"
+set "WORD_DLL=..\..\bin\Microsoft.Office.Interop.Word.dll"
+set "EXCEL_DLL=..\..\bin\Microsoft.Office.Interop.Excel.dll"
 set "UTIL=util.cs"
 
 REM === Check if csc exists ===
 if not exist "%CSC_PATH%" (
     echo ERROR: csc.exe not found at %CSC_PATH%
+    popd
+    endlocal
     exit /b 1
 )
 
@@ -26,34 +30,40 @@ REM === Build all .cs files if -a flag is used ===
 if /i "%~1"=="-a" (
     for %%F in (*.cs) do (
         if /i not "%%F"=="%UTIL%" (
-            set "SOURCE=%%F"
-            set "BASENAME=%%~nF"
-            set "OUTPUT=bin\%%~nF.exe"
-            call :buildone
+            call :buildone "%%F"
+            if errorlevel 1 (
+                echo Build failed for %%F
+                popd
+                endlocal
+                exit /b 1
+            )
         )
     )
-    goto :eof
+    popd
+    endlocal
+    exit /b 0
 )
 
 REM === Build single file ===
-set "SOURCE=%~1"
-set "BASENAME=%~n1"
-set "OUTPUT=bin\%BASENAME%.exe"
-
-call :buildone
-
+call :buildone "%~1"
+set BUILD_RESULT=%ERRORLEVEL%
 popd
 endlocal
-goto :eof
+exit /b %BUILD_RESULT%
 
+REM === Build function ===
 :buildone
-REM === Check if source file exists ===
+set "SOURCE=%~1"
+set "BASENAME=%~n1"
+set "OUTPUT=..\..\bin\%BASENAME%.exe"
+
+REM Check if source file exists
 if not exist "%SOURCE%" (
     echo ERROR: Source file "%SOURCE%" not found.
     exit /b 1
 )
 
-REM === Determine references based on script name ===
+REM Determine references based on script name
 set "REFS=/r:%JSON_DLL% "
 if /i "%BASENAME%"=="emailConfirmation" (
     set "REFS=%REFS% /r:%OUTLOOK_DLL%"
@@ -80,10 +90,10 @@ if /i "%BASENAME%"=="wordReceipt" (
     set "REFS=%REFS% /r:%WORD_DLL%"
 )
 
-REM === Compile ===
+REM Compile
 echo Compiling %SOURCE% to %OUTPUT%...
-"%CSC_PATH%" /nologo /platform:x64 /target:winexe /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
-REM "%CSC_PATH%" /nologo /platform:x64 /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
+REM "%CSC_PATH%" /nologo /platform:x64 /target:winexe /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
+"%CSC_PATH%" /nologo /platform:x64 /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
 if errorlevel 1 (
     echo Compilation failed for %SOURCE%.
     exit /b 1

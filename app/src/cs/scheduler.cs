@@ -14,13 +14,6 @@ class Scheduler
     [STAThread] // Required for clipboard
     static void Main(string[] args)
     {
-        string BASE_PATH;
-
-        if (args.Length > 0 && Directory.Exists(args[0]))
-            BASE_PATH = args[0];
-        else
-            BASE_PATH = AppDomain.CurrentDomain.BaseDirectory;
-
         try
         {
             // 1. Load data.json
@@ -245,75 +238,75 @@ class Scheduler
     }
 
     // ---- Outlook meeting draft ----
-static void CreateMeetingDraft(FormState form, Slot slot)
-{
-    Outlook.Application outlookApp = null;
-    Outlook.AppointmentItem appt = null;
-    string tempFile = null;
-
-    try
+    static void CreateMeetingDraft(FormState form, Slot slot)
     {
-        // Initialize Outlook
-        outlookApp = new Outlook.Application();
-        appt = (Outlook.AppointmentItem)outlookApp.CreateItem(Outlook.OlItemType.olAppointmentItem);
-
-        // Set basic properties
-        appt.Subject = form.ClientName;
-        appt.Start = slot.Start;
-        appt.Duration = 60;
-        appt.Location = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(slot.Location);
-        appt.RequiredAttendees = form.LawyerEmail;
-        appt.MeetingStatus = Outlook.OlMeetingStatus.olMeeting;
-        appt.Body = " "; // Required placeholder for WordEditor
-
-        // Force name resolution
-        Outlook.Recipients recipients = appt.Recipients;
-        recipients.ResolveAll();
-
-        // Set categories
-        try { appt.Categories = form.LawyerName; } catch { }
-
-        // Generate HTML
-        string htmlBody = GenerateHtmlBody(form);
-        tempFile = Path.GetTempFileName();
-        File.WriteAllText(tempFile, htmlBody);
-
-        // Initialize Word Editor
-        appt.Display(); // Must display before accessing WordEditor
-
-        Outlook.Inspector inspector = appt.GetInspector;
-        WindowFocus.ShowWithFocus(inspector); // Force focus
-
-        Word.Document wordDoc = inspector.WordEditor as Word.Document;
-
-        if (wordDoc != null)
+        Outlook.Application outlookApp = null;
+        Outlook.AppointmentItem appt = null;
+        string tempFile = null;
+    
+        try
         {
-            Word.Range range = wordDoc.Content;
-            range.InsertFile(tempFile, ConfirmConversions: false, Link: false, Attachment: false);
+            // Initialize Outlook
+            outlookApp = new Outlook.Application();
+            appt = (Outlook.AppointmentItem)outlookApp.CreateItem(Outlook.OlItemType.olAppointmentItem);
+    
+            // Set basic properties
+            appt.Subject = form.ClientName;
+            appt.Start = slot.Start;
+            appt.Duration = 60;
+            appt.Location = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(slot.Location);
+            appt.RequiredAttendees = form.LawyerEmail;
+            appt.MeetingStatus = Outlook.OlMeetingStatus.olMeeting;
+            appt.Body = " "; // Required placeholder for WordEditor
+    
+            // Force name resolution
+            Outlook.Recipients recipients = appt.Recipients;
+            recipients.ResolveAll();
+    
+            // Set categories
+            try { appt.Categories = form.LawyerName; } catch { }
+    
+            // Generate HTML
+            string htmlBody = GenerateHtmlBody(form);
+            tempFile = Path.GetTempFileName();
+            File.WriteAllText(tempFile, htmlBody);
+    
+            // Initialize Word Editor
+            appt.Display(); // Must display before accessing WordEditor
+    
+            Outlook.Inspector inspector = appt.GetInspector;
+            WindowFocus.ShowWithFocus(inspector); // Force focus
+    
+            Word.Document wordDoc = inspector.WordEditor as Word.Document;
+    
+            if (wordDoc != null)
+            {
+                Word.Range range = wordDoc.Content;
+                range.InsertFile(tempFile, ConfirmConversions: false, Link: false, Attachment: false);
+            }
+            else
+            {
+                throw new Exception("Failed to initialize Word editor for appointment body.");
+            }
+    
+            // Keep the appointment visible
+            Marshal.ReleaseComObject(inspector);
         }
-        else
+        catch (Exception ex)
         {
-            throw new Exception("Failed to initialize Word editor for appointment body.");
+            throw new Exception("Failed to create meeting draft: " + ex.Message);
         }
-
-        // Keep the appointment visible
-        Marshal.ReleaseComObject(inspector);
+        finally
+        {
+            // Cleanup
+            if (tempFile != null && File.Exists(tempFile))
+                File.Delete(tempFile);
+            
+            // Note: Don't release appt object here - we want it to remain open
+            if (outlookApp != null)
+                Marshal.ReleaseComObject(outlookApp);
+        }
     }
-    catch (Exception ex)
-    {
-        throw new Exception("Failed to create meeting draft: " + ex.Message);
-    }
-    finally
-    {
-        // Cleanup
-        if (tempFile != null && File.Exists(tempFile))
-            File.Delete(tempFile);
-        
-        // Note: Don't release appt object here - we want it to remain open
-        if (outlookApp != null)
-            Marshal.ReleaseComObject(outlookApp);
-    }
-}
 
     // ---- HTML body generation ----
     static string GenerateHtmlBody(FormState form)
@@ -403,7 +396,6 @@ static void CreateMeetingDraft(FormState form, Slot slot)
         Console.WriteLine("Fetched " + list.Count + " visible appointments.");
         return list;
     }
-
 
     // ---- Slot generation ----
     static List<Slot> GenerateSlots(FormState form, List<Outlook.AppointmentItem> events)

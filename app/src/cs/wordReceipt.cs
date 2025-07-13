@@ -11,11 +11,8 @@ class Program
     {
         try
         {
-            // === Load JSON form state ===
-            string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..");
-            string jsonPath = Path.Combine(baseDir, "app", "data.json");
-            string jsonText = File.ReadAllText(jsonPath);
-            JObject json = JObject.Parse(jsonText);
+            // === Load JSON ===
+            JObject json = JObject.Parse(File.ReadAllText(Util.JsonPath));
 
             // === Extract form values ===
             string clientName = (string)json["form"]["clientName"];
@@ -30,7 +27,7 @@ class Program
 
             string lang = clientLanguage == "Français" ? "fr" : "en";
             string locale = lang == "fr" ? "fr-CA" : "en-US";
-            string templatePath = Path.Combine(baseDir, "app", "templates", lang, "Receipt.docx");
+            string templatePath = Path.Combine(Util.RootDir, "app", "templates", lang, "Receipt.docx");
 
             if (!File.Exists(templatePath))
                 throw new FileNotFoundException("Receipt template not found.", templatePath);
@@ -69,8 +66,8 @@ class Program
             wordApp.Visible = true;
             WindowFocus.ShowWithFocus(doc.ActiveWindow);
 
-            // Show the print dialog for the user to choose settings and print
-            wordApp.Dialogs[97].Show(); // 97 = wdDialogFilePrint (Ctrl+P dialog)
+            // Show the standard Windows print dialog for the user to print the document
+            doc.PrintOut();
 
             // === Ask user to export PDF ===
             using (var dialog = new SaveFileDialog())
@@ -79,9 +76,7 @@ class Program
                 dialog.Title = "Save Receipt as PDF";
                 dialog.FileName = DateTime.Now.ToString("yyyy-MM-dd") + "_" + clientName.Replace(" ", "-") + "_" + ".pdf";
 
-                string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
-
-                string tempFilePath = Path.Combine(projectPath, "app", "latest_receipt_path.txt");
+                string tempFilePath = Path.Combine(Util.RootDir, "data", "latest_receipt_path.txt");
     
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {

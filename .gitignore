@@ -1,4 +1,5 @@
-data/data.json
+app/build/
+app/build/main/
 .hintrc
 
 node_modules/

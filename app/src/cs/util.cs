@@ -6,7 +6,7 @@ public static class Util
 {
     // ---- Client Utilities ----
 
-    public static string RootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\");
+    public static string RootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\");
     public static string JsonPath = Path.Combine(RootDir, "data", "data.json");
     /// <summary>
     /// Utility function to validate an email address.
@@ -169,12 +169,11 @@ public static class Util
 
     public static void CallWordCleaner(string tempDocPath, string tempFilePath = "")
     {
-        string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
         Console.WriteLine("User skipped PDF export. Scheduling temp cleanup...");
         Console.WriteLine("Word document remains open for editing.");
         // If user cancels, delete the temp file later
         // Schedule cleanup using a separate executable
-        string cleanerExe = Path.Combine(baseDir, "app", "office", "bin", "cleanTempDoc.exe");
+        string cleanerExe = Path.Combine(RootDir, "app", "bin", "cleanTempDoc.exe");
         if (File.Exists(cleanerExe))
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo

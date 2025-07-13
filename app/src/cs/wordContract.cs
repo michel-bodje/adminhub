@@ -80,8 +80,7 @@ class Program
                     ? "Contrat de services_" + clientName.Replace(" ", "-") + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf"
                     : "Contract of services_" + clientName.Replace(" ", "-") + "_" + DateTime.Today.ToString("yyyy-MM-dd") + ".pdf";
 
-                string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..");
-                string tempFilePath = Path.Combine(projectPath, "app", "latest_contract_path.txt");
+                string tempFilePath = Path.Combine(Util.RootDir, "data", "latest_contract_path.txt");
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {

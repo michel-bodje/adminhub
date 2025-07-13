@@ -7,5 +7,5 @@ pytesseract
 pillow
 
 # Windows requirements (manual installation required)
-# - Newtonsoft.Json.dll (included in app/src/cs/bin)
-# - Microsoft .NET Framework net48 (install NDP48-DevPack-ENU.exe, needed for compilation)
+# - Newtonsoft.Json.dll (included in app/bin/)
+# - Microsoft .NET Framework net48 (install NDP48-DevPack-ENU.exe from https://dotnet.microsoft.com/download/dotnet-framework/net48, needed for csharp compile)

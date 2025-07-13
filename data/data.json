@@ -1,0 +1,40 @@
+{
+  "form": {
+    "lawyerId": "YK",
+    "location": "office",
+    "clientTitle": "Mr.",
+    "clientName": "John Doe",
+    "clientPhone": "123-456-7890",
+    "clientEmail": "john@example.com",
+    "clientLanguage": "English",
+    "caseType": "adoptions",
+    "appointmentDate": "2025-07-14",
+    "appointmentTime": "11:00",
+    "isFirstConsultation": true,
+    "isRefBarreau": false,
+    "isExistingClient": false,
+    "isPaymentMade": false,
+    "depositAmount": 0,
+    "paymentMethod": "",
+    "contractTitle": "",
+    "receiptReason": "",
+    "notes": ""
+  },
+  "lawyer": {
+    "id": "YK",
+    "name": "Yasmine Kone",
+    "email": "yasmine.kone@amlex.ca",
+    "workingHours": {
+      "start": "9:00",
+      "end": "17:00"
+    },
+    "breakMinutes": 30,
+    "maxDailyAppointments": 5,
+    "specialties": [
+      "adoptions",
+      "divorce",
+      "common"
+    ]
+  },
+  "caseDetails": {}
+}

@@ -4,22 +4,13 @@ using System.Globalization;
 using Newtonsoft.Json.Linq;
 using Outlook = Microsoft.Office.Interop.Outlook;
 
-class ContractEmail
+class Program
 {
     static void Main(string[] args)
     {
-        string BASE_PATH;
-
-        if (args.Length > 0 && Directory.Exists(args[0]))
-            BASE_PATH = args[0];
-        else
-            BASE_PATH = AppDomain.CurrentDomain.BaseDirectory;
-
         try
         {
-            string templateFolder = Path.Combine(Util.RootDir, "app", "templates");
-
-            // === Read JSON ===
+            // === Load JSON ===
             JObject json = JObject.Parse(File.ReadAllText(Util.JsonPath));
 
             string clientEmail = (string)json["form"]["clientEmail"];
@@ -29,12 +20,12 @@ class ContractEmail
             string lawyerId = (string)json["lawyer"]["id"];
 
             string lang = clientLanguage == "Français" ? "fr" : "en";
-            string templatePath = Path.Combine(templateFolder, lang, "Contract.html");
+
+            string templatePath = Path.Combine(Util.RootDir, "app", "templates", lang, "Contract.html");
 
             string htmlBody = File.ReadAllText(templatePath);
 
             double totalAmount = Util.AddTaxes(depositAmount, true);
-
             string lawyerString = Util.GetLawyerString(lawyerName, lawyerId);
 
             // === Replace placeholders ===
@@ -43,7 +34,9 @@ class ContractEmail
                 .Replace("{{totalAmount}}", totalAmount.ToString("F2"))
                 .Replace("{{lawyerName}}", lawyerString);
 
-            string subject = lang == "fr" ? "Contrat de services - Allen Madelin" : "Contract of services - Allen Madelin";
+            string subject = lang == "fr"
+                ? "Contrat de services - Allen Madelin"
+                : "Contract of services - Allen Madelin";
 
             // === Create email using Outlook Interop ===
             var outlookApp = new Microsoft.Office.Interop.Outlook.Application();
@@ -53,8 +46,7 @@ class ContractEmail
             mail.Subject = subject;
             mail.HTMLBody = htmlBody;
 
-            string projectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..");
-            string pathTempFile = Path.Combine(projectPath, "app", "latest_contract_path.txt");
+            string pathTempFile = Path.Combine(Util.RootDir, "data", "latest_contract_path.txt");
 
             if (File.Exists(pathTempFile))
             {
