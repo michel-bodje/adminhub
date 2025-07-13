@@ -290,7 +290,7 @@ async function scheduleAppointment() {
       console.log("[AdminHub] Confirmation email prepared and submitted.");
     }
     if (alsoPclaw) {
-      await window.pywebview.api.run("new_matter.py");
+      await window.pywebview.api.run("new_matter");
       console.log("[AdminHub] PCLaw matter created successfully.");
     }
   } catch (error) {
@@ -402,7 +402,7 @@ async function createReceipt() {
 async function newMatter() {
   try {
     await submitForm();
-    await window.pywebview.api.run("new_matter.py");
+    await window.pywebview.api.run("new_matter");
     console.log("[AdminHub] PCLaw matter created successfully.");
   } catch (error) {
     console.error("[AdminHub] Error writing PCLaw matter", error);
@@ -414,7 +414,7 @@ async function newMatter() {
 async function closeMatter() {
   try {
     const matterId = document.getElementById(ELEMENT_IDS.closeMatterId).value;
-    await window.pywebview.api.run("close_matter.py", matterId);
+    await window.pywebview.api.run("close_matter", matterId);
     console.log("[AdminHub] PCLaw matter closed successfully.");
   } catch (error) {
     console.error("[AdminHub] Error closing PCLaw matter", error);
@@ -426,7 +426,7 @@ async function closeMatter() {
 async function billMatter() {
   try {
     const matterId = document.getElementById(ELEMENT_IDS.billMatterId).value;
-    await window.pywebview.api.run("bill_matter.py", matterId);
+    await window.pywebview.api.run("bill_matter", matterId);
     console.log("[AdminHub] PCLaw matter billed successfully.");
   } catch (error) {
     console.error("[AdminHub] Error billing PCLaw matter", error);
