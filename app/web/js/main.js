@@ -315,19 +315,6 @@ async function sendReply() {
   }
 }
 
-/** Prepares a follow-up email. */
-async function sendFollowup() {
-  try {
-    await submitForm();
-    await window.pywebview.api.run("emailSuivi");
-    console.log("[AdminHub] Follow-up email prepared and submitted.");
-  } catch (error) {
-    console.error("[AdminHub] Error preparing follow-up email:", error);
-    alert("Failed to prepare follow-up email. Please try again.");
-    throw error;
-  }
-}
-
 /** Prepares a review request email. */
 async function sendReview() {
   try {
@@ -337,6 +324,19 @@ async function sendReview() {
   } catch (error) {
     console.error("[AdminHub] Error preparing review request email:", error);
     alert("Failed to prepare review request email. Please try again.");
+    throw error;
+  }
+}
+
+/** Prepares a follow-up email. */
+async function sendFollowup() {
+  try {
+    await submitForm();
+    await window.pywebview.api.run("emailSuivi");
+    console.log("[AdminHub] Follow-up email prepared and submitted.");
+  } catch (error) {
+    console.error("[AdminHub] Error preparing follow-up email:", error);
+    alert("Failed to prepare follow-up email. Please try again.");
     throw error;
   }
 }
