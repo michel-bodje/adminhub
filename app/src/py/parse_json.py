@@ -1,8 +1,5 @@
 import json
-import os
-
-ROOT_DIR = os.path.abspath(os.path.join(__file__, "../../../.."))
-DATA_JSON = os.path.join(ROOT_DIR, "data", "data.json")
+from config import DATA_JSON
 
 if __name__ == "__main__":
     print("DATA_JSON path:", DATA_JSON)
