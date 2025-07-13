@@ -66,8 +66,8 @@ class Program
             wordApp.Visible = true;
             WindowFocus.ShowWithFocus(doc.ActiveWindow);
 
-            // Show the standard Windows print dialog for the user to print the document
-            doc.PrintOut();
+            // Show the print dialog for the user to choose settings and print
+            wordApp.Dialogs[88].Show(); // 88 = File > Print dialog
 
             // === Ask user to export PDF ===
             using (var dialog = new SaveFileDialog())
