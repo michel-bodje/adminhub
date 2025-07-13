@@ -5,6 +5,11 @@ from pywinauto.controls.uiawrapper import UIAWrapper
 from pywinauto import keyboard
 from pywinauto.keyboard import send_keys
 from time import sleep
+from datetime import datetime
+import os
+import re
+import pytesseract
+import pyautogui
 
 def connect_to_pclaw():
     """ Connects to the PCLaw Enterprise application and returns the main window. """
@@ -158,9 +163,7 @@ def close_matter(matter_number: str):
 
 def ocr_get_balance():
     """ Uses OCR to extract financial data from the Close Matter dialog."""
-    import pytesseract
-    import pyautogui
-    import re
+    pytesseract.pytesseract.tesseract_cmd = os.path.join(os.path.dirname(__file__), "tesseract", "tesseract.exe")
 
     LABELS = ["Unbd D", "A/R", "Gen Rtnr", "Trust"]
 
@@ -247,10 +250,7 @@ def ocr_get_latest_date():
     aborting if there is a trust balance.
     You need manual user checking when it comes to trusts.
     """
-    import pytesseract
-    import pyautogui
-    import re
-    from datetime import datetime
+    pytesseract.pytesseract.tesseract_cmd = os.path.join(os.path.dirname(__file__), "tesseract", "tesseract.exe")
 
     # === Locate Register window ===
     try:
