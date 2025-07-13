@@ -1,3 +1,4 @@
+import sys
 from base import *
 from parse_json import *
 
@@ -5,8 +6,11 @@ def main():
     win = connect_to_pclaw()
     win.set_focus()
 
-    # matter string needs to be passed thru json
-    matter = ""
+    # Get matter from command line argument
+    if len(sys.argv) > 1:
+        matter = sys.argv[1]
+    else:
+        matter = ""
 
     register_matter(matter)
     sleep(3)

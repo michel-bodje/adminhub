@@ -208,6 +208,12 @@ function attachEventListeners() {
       case ELEMENT_IDS.pclawMatterMenuBtn:
         showPage(ELEMENT_IDS.pclawMatterPage);
         break;
+      case ELEMENT_IDS.pclawCloseMatterMenuBtn:
+        showPage(ELEMENT_IDS.pclawCloseMatterPage);
+        break;
+      case ELEMENT_IDS.pclawBillMatterMenuBtn:
+        showPage(ELEMENT_IDS.pclawBillMatterPage);
+        break;
       default:
         break;
       }
@@ -255,6 +261,11 @@ function attachEventListeners() {
           break;
         case ELEMENT_IDS.pclawMatterSubmitBtn:
           newMatter();
+        case ELEMENT_IDS.pclawCloseMatterSubmitBtn:
+          closeMatter();
+          break;
+        case ELEMENT_IDS.pclawBillMatterSubmitBtn:
+          billMatter();
           break;
         default:
           break;
@@ -396,6 +407,30 @@ async function newMatter() {
   } catch (error) {
     console.error("[AdminHub] Error writing PCLaw matter", error);
     alert("Failed to write new PCLaw matter. Please try again.");
+    throw error;
+  }
+}
+
+async function closeMatter() {
+  try {
+    const matterId = document.getElementById(ELEMENT_IDS.closeMatterId).value;
+    await window.pywebview.api.run("close_matter.py", matterId);
+    console.log("[AdminHub] PCLaw matter closed successfully.");
+  } catch (error) {
+    console.error("[AdminHub] Error closing PCLaw matter", error);
+    alert("Failed to close PCLaw matter. Please try again.");
+    throw error;
+  }
+}
+
+async function billMatter() {
+  try {
+    const matterId = document.getElementById(ELEMENT_IDS.billMatterId).value;
+    await window.pywebview.api.run("bill_matter.py", matterId);
+    console.log("[AdminHub] PCLaw matter billed successfully.");
+  } catch (error) {
+    console.error("[AdminHub] Error billing PCLaw matter", error);
+    alert("Failed to bill PCLaw matter. Please try again.");
     throw error;
   }
 }

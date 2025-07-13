@@ -61,7 +61,7 @@ class HubAPI:
         except Exception as e:
             return {"error": str(e)}
 
-    def run(self, script_name):
+    def run(self, script_name, *args):
         """
         Runs a script based on its extension.
         For .exe: runs the executable.
@@ -78,9 +78,9 @@ class HubAPI:
         if ext == ".exe":
             script_path = os.path.join(BIN_DIR, script_name)
             try:
-                subprocess.run([script_path], check=True)
-                self._log(f"Running EXE: {script_name}")
-                return {"message": f"Running EXE: {script_name}"}
+                subprocess.run([script_path] + list(args), check=True)
+                self._log(f"Running EXE: {script_name} with args: {args}")
+                return {"message": f"Running EXE: {script_name} with args: {args}"}
             except Exception as e:
                 self._log(f"Error running EXE '{script_name}': {e}")
                 return {"error": str(e)}
@@ -88,9 +88,9 @@ class HubAPI:
         elif ext == ".py":
             script_path = os.path.join(SRC_DIR, "py", script_name)
             try:
-                subprocess.run(["pythonw", script_path], check=True)
-                self._log(f"Running Python script: {script_name}")
-                return {"message": f"Running Python script: {script_name}"}
+                subprocess.run(["pythonw", script_path] + list(args), check=True)
+                self._log(f"Running Python script: {script_name} with args: {args}")
+                return {"message": f"Running Python script: {script_name} with args: {args}"}
             except Exception as e:
                 self._log(f"Error running Python script '{script_name}': {e}")
                 return {"error": str(e)}

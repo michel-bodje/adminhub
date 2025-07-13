@@ -43,7 +43,6 @@ export async function loadLawyers() {
   ));
 }
 
-// lawyerStore.js
 let lawyerList = [];
 
 export function setLawyers(list) {

@@ -34,7 +34,9 @@ export const ELEMENT_IDS = {
     wordReceiptMenuBtn: "word-receipt-menu-btn",
 
     // --- PCLaw Submenu Buttons ---
-    pclawMatterMenuBtn: "matter-menu-btn",
+    pclawMatterMenuBtn: "new-matter-menu-btn",
+    pclawCloseMatterMenuBtn: "close-matter-menu-btn",
+    pclawBillMatterMenuBtn: "bill-matter-menu-btn",
 
     // --- Common Buttons ---
     backBtn: "back-btn",
@@ -160,4 +162,14 @@ export const ELEMENT_IDS = {
     matterRefBarreau: "matter-ref-barreau",
     matterFirstConsultation: "matter-first-consultation",
     pclawMatterSubmitBtn: "matter-btn",
+
+    // --- PCLaw Close Matter Page ---
+    pclawCloseMatterPage: "pclaw-close-page",
+    closeMatterId: "close-matter-id",
+    pclawCloseMatterSubmitBtn: "close-matter-btn",
+
+    // --- PCLaw Bill Matter Page ---
+    pclawBillMatterPage: "pclaw-bill-page",
+    billMatterId: "bill-matter-id",
+    pclawBillMatterSubmitBtn: "bill-matter-btn",
 };
