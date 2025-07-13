@@ -10,10 +10,8 @@ class Program
     {
         try
         {
-            string jsonText = File.ReadAllText(Util.JsonPath);
-
-            // === Load JSON form state ===
-            JObject json = JObject.Parse(jsonText);
+            // === Load JSON ===
+            JObject json = JObject.Parse(File.ReadAllText(Util.JsonPath));
 
             string clientEmail = (string)json["form"]["clientEmail"];
             string clientLanguage = (string)json["form"]["clientLanguage"];
@@ -55,7 +53,8 @@ class Program
                 if (lang == "en")
                 {
                     int day = slot.Day;
-                    string suffix = (day % 10 == 1 && day != 11) ? "st"
+                    string suffix = (day % 10 == 1 && day != 11)
+                        ? "st"
                         : (day % 10 == 2 && day != 12) ? "nd"
                         : (day % 10 == 3 && day != 13) ? "rd"
                         : "th";
@@ -71,7 +70,9 @@ class Program
                     CultureInfo.CreateSpecificCulture(locale)
                 );
 
-                int baseRate = isRefBarreau ? 60 : isFirstConsult ? 125 : 350;
+                int baseRate = isRefBarreau ? 60
+                    : isFirstConsult ? 125
+                    : 350;
                 double totalRate = Util.AddTaxes(baseRate);
 
                 htmlBody = htmlBody
