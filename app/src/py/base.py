@@ -27,31 +27,31 @@ def get_dialog(parent_window, dialog_title):
 def new_matter_dialog():
     """ Opens the New Matter dialog using keyboard navigation. """
     send_keys('%f')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{DOWN}')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{RIGHT}')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{ENTER}')
 
 def close_matter_dialog():
     """ Opens the Close Matter dialog using keyboard navigation. """
     send_keys('%f')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{DOWN}')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{RIGHT}')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{DOWN}{DOWN}')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{ENTER}')
 
 def register_dialog():
     """ Opens the Register Matter dialog using keyboard navigation. """
     send_keys('%d')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{UP}')
-    sleep(0.2)
+    sleep(0.5)
     send_keys('{ENTER}')
 
 def register_matter(matter_number: str):
@@ -59,9 +59,9 @@ def register_matter(matter_number: str):
     register_dialog()
     send_keys("%m")
     send_keys(matter_number)
-    sleep(0.3)
+    sleep(0.5)
     send_keys("%s")
-    sleep(0.3)
+    sleep(0.5)
     send_keys("{ENTER}")
 
 def bill_matter(matter_number: str, date: str = None, options: bool = False):
@@ -134,7 +134,7 @@ def close_matter(matter_number: str):
     send_keys("{TAB}")
 
     # Let PCLaw load like the atrocious software it is
-    sleep(30)
+    sleep(33)
     send_keys("{ENTER}")
 
     # Fill window, assume "No physical file"
@@ -392,7 +392,7 @@ def send_ctrl_arrow(direction: str = "right"):
     """
     seq = "^({RIGHT})" if direction.lower() == "right" else "^({LEFT})"
     keyboard.send_keys(seq)
-    sleep(0.2)
+    sleep(0.5)
 
 def clear_focus(dlg):
     """
@@ -402,7 +402,7 @@ def clear_focus(dlg):
     try:
         dlg.set_focus()
         print("Focus cleared")
-        sleep(0.2)
+        sleep(0.5)
     except:
         print("Failed to clear focus")
         return False

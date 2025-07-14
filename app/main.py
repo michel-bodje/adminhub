@@ -47,6 +47,7 @@ class HubAPI:
         For .py: in development, runs the script with pythonw.
         In final version, use pyinstaller to bundle Python scripts into .exe files.
         """
+        self._log(f"run() called with script_name: {script_name}")
         # Determine extension if present, else default to .exe
         base, ext = os.path.splitext(script_name)
         if not ext:
@@ -67,7 +68,10 @@ class HubAPI:
         elif ext == ".py":
             script_path = os.path.join(SRC_DIR, "py", script_name)
             try:
-                subprocess.run(["pythonw", script_path] + list(args), check=True)
+                self._log(f"Script path: {script_path}")
+                self._log(f"Args: {args}")
+
+                subprocess.run([sys.executable, script_path] + list(args), check=True)
                 self._log(f"Running Python script: {script_name} with args: {args}")
                 return {"message": f"Running Python script: {script_name} with args: {args}"}
             except Exception as e:

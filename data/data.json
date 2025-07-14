@@ -1,16 +1,16 @@
 {
   "form": {
-    "lawyerId": "YK",
-    "location": "office",
-    "clientTitle": "Mr.",
-    "clientName": "John Doe",
-    "clientPhone": "123-456-7890",
-    "clientEmail": "john@example.com",
-    "clientLanguage": "English",
-    "caseType": "adoptions",
-    "appointmentDate": "2025-07-14",
-    "appointmentTime": "11:00",
-    "isFirstConsultation": true,
+    "lawyerId": "DH",
+    "location": "",
+    "clientTitle": "",
+    "clientName": "",
+    "clientPhone": "",
+    "clientEmail": "liberty.canada@gmail.com",
+    "clientLanguage": "Fran\u00e7ais",
+    "caseType": "",
+    "appointmentDate": null,
+    "appointmentTime": null,
+    "isFirstConsultation": false,
     "isRefBarreau": false,
     "isExistingClient": false,
     "isPaymentMade": false,
@@ -21,18 +21,20 @@
     "notes": ""
   },
   "lawyer": {
-    "id": "YK",
-    "name": "Yasmine Kone",
-    "email": "yasmine.kone@amlex.ca",
+    "id": "DH",
+    "name": "Dorin Holban",
+    "email": "dorin.holban@amlex.ca",
     "workingHours": {
-      "start": "9:00",
-      "end": "17:00"
+      "start": "09:30",
+      "end": "16:00"
     },
     "breakMinutes": 30,
     "maxDailyAppointments": 5,
     "specialties": [
-      "adoptions",
       "divorce",
+      "defamations",
+      "employment",
+      "business",
       "common"
     ]
   },
