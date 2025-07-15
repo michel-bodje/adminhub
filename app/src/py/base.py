@@ -93,8 +93,8 @@ def bill_matter(matter_number: str, date: str = None, options: bool = False):
         # Click OK
         main.child_window(title="OK", control_type="Button").click_input()
 
-    # Wait for new dialog to appear
-    sleep(10)
+    # Wait for new dialog to appear: pclaw clunky
+    sleep(15)
     # Validate default bill settings
     send_keys("%m")
     send_keys("{ENTER}")

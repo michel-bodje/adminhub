@@ -1,16 +1,16 @@
 {
   "form": {
-    "lawyerId": "DH",
-    "location": "",
-    "clientTitle": "",
-    "clientName": "",
-    "clientPhone": "",
-    "clientEmail": "liberty.canada@gmail.com",
-    "clientLanguage": "Fran\u00e7ais",
-    "caseType": "",
-    "appointmentDate": null,
-    "appointmentTime": null,
-    "isFirstConsultation": false,
+    "lawyerId": "MM",
+    "location": "teams",
+    "clientTitle": "Mrs.",
+    "clientName": "Thea Patterson",
+    "clientPhone": "514-814-4537",
+    "clientEmail": "hpatters@ualberta.ca",
+    "clientLanguage": "English",
+    "caseType": "estate",
+    "appointmentDate": "2025-07-16",
+    "appointmentTime": "10:00",
+    "isFirstConsultation": true,
     "isRefBarreau": false,
     "isExistingClient": false,
     "isPaymentMade": false,
@@ -21,22 +21,24 @@
     "notes": ""
   },
   "lawyer": {
-    "id": "DH",
-    "name": "Dorin Holban",
-    "email": "dorin.holban@amlex.ca",
+    "id": "MM",
+    "name": "Marie Madelin",
+    "email": "marie.madelin@amlex.ca",
     "workingHours": {
-      "start": "09:30",
-      "end": "16:00"
+      "start": "9:00",
+      "end": "17:00"
     },
-    "breakMinutes": 30,
+    "breakMinutes": 0,
     "maxDailyAppointments": 5,
     "specialties": [
-      "divorce",
-      "defamations",
-      "employment",
-      "business",
+      "estate",
+      "mandates",
       "common"
     ]
   },
-  "caseDetails": {}
+  "caseDetails": {
+    "deceasedName": "",
+    "executorName": "",
+    "conflictSearchDone": false
+  }
 }
