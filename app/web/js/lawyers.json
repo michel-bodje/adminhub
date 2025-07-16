@@ -43,7 +43,7 @@
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
-            "specialties": ["name_change", "estate", "common"]
+            "specialties": ["name_change", "estate", "defamations", "common"]
         },
         {
             "id": "AR",

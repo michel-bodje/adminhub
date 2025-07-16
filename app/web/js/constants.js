@@ -173,3 +173,20 @@ export const ELEMENT_IDS = {
     billMatterId: "bill-matter-id",
     pclawBillMatterSubmitBtn: "bill-matter-btn",
 };
+
+export const MENU_ROUTES = {
+  [ELEMENT_IDS.outlookMenuBtn]: ELEMENT_IDS.outlookMenuPage,
+  [ELEMENT_IDS.wordMenuBtn]: ELEMENT_IDS.wordMenuPage,
+  [ELEMENT_IDS.pclawMenuBtn]: ELEMENT_IDS.pclawMenuPage,
+  [ELEMENT_IDS.scheduleMenuBtn]: ELEMENT_IDS.schedulePage,
+  [ELEMENT_IDS.confirmMenuBtn]: ELEMENT_IDS.confirmationPage,
+  [ELEMENT_IDS.contractMenuBtn]: ELEMENT_IDS.contractPage,
+  [ELEMENT_IDS.replyMenuBtn]: ELEMENT_IDS.replyPage,
+  [ELEMENT_IDS.followupMenuBtn]: ELEMENT_IDS.followupPage,
+  [ELEMENT_IDS.reviewMenuBtn]: ELEMENT_IDS.reviewPage,
+  [ELEMENT_IDS.wordContractMenuBtn]: ELEMENT_IDS.wordContractPage,
+  [ELEMENT_IDS.wordReceiptMenuBtn]: ELEMENT_IDS.wordReceiptPage,
+  [ELEMENT_IDS.pclawMatterMenuBtn]: ELEMENT_IDS.pclawMatterPage,
+  [ELEMENT_IDS.pclawCloseMatterMenuBtn]: ELEMENT_IDS.pclawCloseMatterPage,
+  [ELEMENT_IDS.pclawBillMatterMenuBtn]: ELEMENT_IDS.pclawBillMatterPage,
+};

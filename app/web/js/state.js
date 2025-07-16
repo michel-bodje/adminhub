@@ -10,6 +10,7 @@ class FormState {
    * file and selection fields to their initial states.
    */
   reset() {
+    this.matterId = "";
     this.lawyerId = "";
     this.location = "";
     this.clientTitle = "";

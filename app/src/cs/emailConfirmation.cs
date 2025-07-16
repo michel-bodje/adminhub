@@ -11,7 +11,7 @@ class Program
         try
         {
             // === Load JSON ===
-            JObject json = JObject.Parse(File.ReadAllText(Util.JsonPath));
+            JObject json = Util.ReadJsonFromStdin();
 
             string clientEmail = (string)json["form"]["clientEmail"];
             string clientLanguage = (string)json["form"]["clientLanguage"];
@@ -23,15 +23,9 @@ class Program
             string lawyerName = (string)json["lawyer"]["name"];
             string lawyerId = (string)json["lawyer"]["id"];
 
-            // === Validate required fields ===
-            if (string.IsNullOrEmpty(clientEmail) || !Util.IsValidEmail(clientEmail))
-                throw new Exception("Missing or invalid client email.");
-            if (string.IsNullOrEmpty(location))
-                throw new Exception("Missing location (used for template).");
-
             string lang = (clientLanguage == "Français") ? "fr" : "en";
             string templateName = char.ToUpper(location[0]) + location.Substring(1).ToLower() + ".html";
-            string templatePath = Path.Combine(Util.RootDir, "app", "templates", lang, templateName);
+            string templatePath = Path.Combine(Util.TemplateDir, lang, templateName);
 
             if (!File.Exists(templatePath))
                 throw new FileNotFoundException("Template not found.", templatePath);

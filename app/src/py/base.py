@@ -27,7 +27,7 @@ def get_dialog(parent_window, dialog_title):
 def new_matter_dialog():
     """ Opens the New Matter dialog using keyboard navigation. """
     send_keys('%f')
-    sleep(0.5)
+    sleep(1)
     send_keys('{DOWN}')
     sleep(0.5)
     send_keys('{RIGHT}')
@@ -37,19 +37,21 @@ def new_matter_dialog():
 def close_matter_dialog():
     """ Opens the Close Matter dialog using keyboard navigation. """
     send_keys('%f')
-    sleep(0.5)
+    sleep(1)
     send_keys('{DOWN}')
     sleep(0.5)
     send_keys('{RIGHT}')
     sleep(0.5)
-    send_keys('{DOWN}{DOWN}')
+    send_keys('{DOWN}')
+    sleep(0.5)
+    send_keys('{DOWN}')
     sleep(0.5)
     send_keys('{ENTER}')
 
 def register_dialog():
     """ Opens the Register Matter dialog using keyboard navigation. """
     send_keys('%d')
-    sleep(0.5)
+    sleep(1)
     send_keys('{UP}')
     sleep(0.5)
     send_keys('{ENTER}')

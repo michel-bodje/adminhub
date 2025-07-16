@@ -12,11 +12,10 @@ def get_root_path():
         # temp folder with bundled files
         return getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     else:
-        # Go up one directory from the current file's directory to get the project root
+        # else get to the project root
         return os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
 
 ROOT_DIR = get_root_path()
-DATA_JSON = os.path.abspath(os.path.join(ROOT_DIR, 'data', 'data.json'))
 BIN_DIR = os.path.join(ROOT_DIR, 'app', 'bin')
 SRC_DIR = os.path.join(ROOT_DIR, 'app', 'src')
 WEB_DIR = os.path.join(ROOT_DIR, 'app', 'web')

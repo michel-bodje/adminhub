@@ -459,30 +459,24 @@ export function populateLocationDropdown() {
 
 /** Handles the case type dropdown change event. */
 export function handleCaseDetails() {
+  const caseType = formState.caseType;
+  const detailsContainer = document.getElementById(ELEMENT_IDS.caseDetails);
+
   // Hide all case details fields
   hideExtraFields();
-  
-  const caseType = formState.caseType;
-  const detailsContainers = Object.keys(ELEMENT_IDS)
-    .filter(key => key.endsWith("CaseDetails"))
-    .map(key => ELEMENT_IDS[key]); 
 
-  detailsContainers.forEach(containerId => {
-    const detailsContainer = document.getElementById(containerId);
-
-    // Dynamically show the selected case details field using the handler
-    if (caseTypeHandlers[caseType]) {
-      const handlerId = `${caseType}-details`;
-      const detailsElement = document.getElementById(handlerId);
-      if (detailsElement) {
-        detailsContainer.hidden = false;
-        detailsElement.hidden = false;
-      }
-    } else {
-      // If no valid case type is selected, hide the entire case details section
-      detailsContainer.hidden = true;
+  // Dynamically show the selected case details field using the handler
+  if (caseTypeHandlers[caseType]) {
+    const handlerId = `${caseType}-details`;
+    const detailsElement = document.getElementById(handlerId);
+    if (detailsElement) {
+      detailsContainer.hidden = false;
+      detailsElement.hidden = false;
     }
-  });
+  } else {
+    // If no valid case type is selected, hide the entire case details section
+    detailsContainer.hidden = true;
+  }
 }
 
 /**

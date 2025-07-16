@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices;
 
 public static class Util
@@ -7,83 +9,14 @@ public static class Util
     // ---- Client Utilities ----
 
     public static string RootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\");
-    public static string JsonPath = Path.Combine(RootDir, "data", "data.json");
-    /// <summary>
-    /// Utility function to validate an email address.
-    /// </summary>
-    /// <param name="email">The email address to validate.</param>
-    /// <returns>True if valid, false otherwise.</returns>
-    public static bool IsValidEmail(string email)
+    public static string TemplateDir = Path.Combine(RootDir, "app", "templates");
+
+    public static JObject ReadJsonFromStdin()
     {
-        if (string.IsNullOrWhiteSpace(email))
-            return false;
-
-        // Simple regex for email validation
-        var emailRegex = new System.Text.RegularExpressions.Regex(@"^[^\s@]+@[^\s@]+\.[^\s@]+$");
-        return emailRegex.IsMatch(email.ToLowerInvariant());
-    }
-
-    /// <summary>
-    /// Utility function to validate a phone number (with optional region).<para/>
-    /// 
-    /// Only supports Canadian/US numbers (1-10 digits) or international numbers (8-15 digits).
-    /// </summary>
-    /// <param name="number">The phone number to validate.</param>
-    /// <param name="region">The region to validate the number against (default: "CA").</param>
-    /// <returns>True if valid, false otherwise.</returns>
-    public static bool IsValidPhoneNumber(string number, string region = "CA")
-    {
-        if (string.IsNullOrWhiteSpace(number))
-            return false;
-
-        // Remove all non-digit characters
-        string digitsOnly = System.Text.RegularExpressions.Regex.Replace(number, @"\D", "");
-
-        // If the number starts with 1 and has 10+ digits, keep it
-        if (digitsOnly.Length == 10)
-        {
-            // Canadian/US numbers are usually 10 digits (without the country code)
-            digitsOnly = "1" + digitsOnly;
-        }
-
-        // Now validate: must start with non-zero and have 8–15 digits total
-        return System.Text.RegularExpressions.Regex.IsMatch(digitsOnly, @"^[1-9]\d{7,14}$");
-    }
-
-    /// <summary>
-    /// Formats a phone number for display.<para/>
-    ///
-    /// Tries to format the number intelligently based on its length and region.
-    /// </summary>
-    /// <param name="number">The phone number to format.</param>
-    /// <param name="region">The region to format the number for (default: "CA").</param>
-    /// <returns>The formatted phone number.</returns>
-    public static string FormatPhoneNumber(string number, string region = "CA")
-    {
-        if (string.IsNullOrWhiteSpace(number))
-            return number;
-
-        // Remove all non-digit characters
-        string digitsOnly = System.Text.RegularExpressions.Regex.Replace(number, @"\D", "");
-
-        // Assume Canadian if only 10 digits
-        if (digitsOnly.Length == 10)
-        {
-            return string.Format("{0}-{1}-{2}", digitsOnly.Substring(0, 3), digitsOnly.Substring(3, 3), digitsOnly.Substring(6, 4));
-        }
-        // If it starts with 1 and has 11 digits (Canadian with country code)
-        else if (digitsOnly.Length == 11 && digitsOnly.StartsWith("1"))
-        {
-            return "+1 " + digitsOnly.Substring(1, 3) + "-" + digitsOnly.Substring(4, 3) + "-" + digitsOnly.Substring(7, 4);
-        }
-        // If it starts with another country code
-        else if (digitsOnly.Length >= 11)
-        {
-            return "+" + digitsOnly;
-        }
-
-        // If invalid, return as-is
-        return number;
+        string input = Console.In.ReadToEnd();
+        if (string.IsNullOrWhiteSpace(input))
+            throw new Exception("No input received via stdin.");
+        return JObject.Parse(input);
     }
 
     // ---- Contract Utilities ----

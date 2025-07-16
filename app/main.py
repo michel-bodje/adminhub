@@ -11,23 +11,18 @@ class HubAPI:
     def _log(self, message):
         print(f"[AdminHub] {message}")
 
-    def submit_form(self, form, lwy, dets):
-        """ Saves client, lawyer and case data to a JSON file.
-        """
+    def format_form(self, form, case, lwy):
+        """ Returns structured JSON. """
         try:
-            data_path = DATA_JSON
             data = {
                 "form": form,
+                "case": case,
                 "lawyer": lwy,
-                "caseDetails": dets
             }
-            with open(data_path, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
-            self._log(f"Form data saved to: {data_path}")
-            return { "message": "Form received and saved." }
+            return { "json": json.dumps(data, indent=2) }
         except Exception as e:
-            self._log(f"Error: {str(e)}")
-            return { "message": "Failed to save form: " + str(e) }
+            self._log(f"Error formatting form data: {str(e)}")
+            return { "error": str(e) }
 
     def get_lawyers(self):
         """ Retrieves the list of lawyers from a JSON file.
@@ -40,54 +35,28 @@ class HubAPI:
         except Exception as e:
             return {"error": str(e)}
 
-    def run(self, script_name, *args):
-        """
-        Runs a script based on its extension.
-        For .exe: runs the executable.
-        For .py: in development, runs the script with pythonw.
-        In final version, use pyinstaller to bundle Python scripts into .exe files.
-        """
-        self._log(f"run() called with script_name: {script_name}")
-        # Determine extension if present, else default to .exe
-        base, ext = os.path.splitext(script_name)
-        if not ext:
-            # Default to .exe if no extension provided
-            ext = ".exe"
-            script_name = script_name + ext
-
-        if ext == ".exe":
-            script_path = os.path.join(BIN_DIR, script_name)
-            try:
-                subprocess.run([script_path] + list(args), check=True)
-                self._log(f"Running EXE: {script_name} with args: {args}")
-                return {"message": f"Running EXE: {script_name} with args: {args}"}
-            except Exception as e:
-                self._log(f"Error running EXE '{script_name}': {e}")
-                return {"error": str(e)}
-            
-        elif ext == ".py":
-            script_path = os.path.join(SRC_DIR, "py", script_name)
-            try:
-                self._log(f"Script path: {script_path}")
-                self._log(f"Args: {args}")
-
-                subprocess.run([sys.executable, script_path] + list(args), check=True)
-                self._log(f"Running Python script: {script_name} with args: {args}")
-                return {"message": f"Running Python script: {script_name} with args: {args}"}
-            except Exception as e:
-                self._log(f"Error running Python script '{script_name}': {e}")
-                return {"error": str(e)}
-            
-        else:
-            self._log(f"Unknown script extension: {ext}")
-            return {"error": f"Unknown script extension: {ext}"}
+    def run(self, exe_name, json_blob):
+        """ Runs a specified executable with the provided JSON input. """
+        self._log(f"run() called with script_name: {exe_name}")
+        try:
+            path = os.path.join(BIN_DIR, exe_name + ".exe")
+            proc = subprocess.run(
+                [path],
+                input=json_blob.encode("utf-8"),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True
+            )
+            return { "output": proc.stdout.decode() }
+        except Exception as e:
+            return { "error": str(e) }
 
 def main():
     """ Main function to start the webview application.
     """
     api = HubAPI()
     webview.create_window("Amlex Admin Hub", INDEX_HTML, js_api=api, width=425, height=650)
-    webview.start(debug=False, gui='edgechromium')
+    webview.start(debug=True, gui='edgechromium')
 
 if __name__ == '__main__':
     main()

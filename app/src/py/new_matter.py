@@ -6,18 +6,19 @@ def main():
     win.set_focus()
 
     new_matter_dialog()
-
     dlg = get_dialog(win, "New Matter")
 
+    data = read_stdin_json()
+  
     # Define the specific fields for New Matter
-    fields = load_consultation_fields()
+    fields = load_consultation_fields(data)
     label_input_map = build_label_input_map(dlg, fields)
 
     # Fill main tab
     fill_form_fields(label_input_map, fields)
 
     # Only fill billing tab if language is French
-    if get_language().startswith("fr"):
+    if get_language(data).startswith("fr"):
         go_to_billing(dlg)
         fill_billing_tab_by_override(dlg)
 
@@ -25,6 +26,7 @@ def main():
     go_to_custom(dlg)
     fill_custom_tab(dlg)
 
+    # Back to main tab
     go_to_main(dlg)
 
     # Optionally press OK

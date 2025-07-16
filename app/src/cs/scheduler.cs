@@ -1,15 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Word = Microsoft.Office.Interop.Word;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
-class Scheduler
+class Slot
+{
+    public DateTime Start;
+    public DateTime End;
+    public string Location;
+}
+
+class Program
 {
     [STAThread] // Required for clipboard
     static void Main(string[] args)
@@ -17,20 +25,73 @@ class Scheduler
         try
         {
             // 1. Load data.json
-            if (!File.Exists(Util.JsonPath))
-                throw new FileNotFoundException("data.json not found.", Util.JsonPath);
-            JObject root = JObject.Parse(File.ReadAllText(Util.JsonPath));
-            var form = ParseFormState(root);
+            JObject root = Util.ReadJsonFromStdin();
 
-            // 2. Validate minimal inputs
-            if (string.IsNullOrEmpty(form.ClientName) || string.IsNullOrEmpty(form.LawyerName))
-                throw new Exception("Missing client or lawyer info.");
-            if (string.IsNullOrEmpty(form.ClientEmail) || !Util.IsValidEmail(form.ClientEmail))
-                throw new Exception("Invalid client email.");
-            if (string.IsNullOrEmpty(form.Location))
-                throw new Exception("Missing location type.");
-            if (!Util.IsValidPhoneNumber(form.ClientPhone))
-                throw new Exception("Invalid client phone number.");
+            var f = root["form"];
+            var lwy = root["lawyer"];
+            var cd = root["case"] as JObject;
+
+            dynamic form = new ExpandoObject();
+            form.ClientTitle = (string)f["clientTitle"];
+            form.ClientName = (string)f["clientName"];
+            form.ClientEmail = (string)f["clientEmail"];
+            form.ClientPhone = (string)f["clientPhone"];
+            form.ClientLanguage = (string)f["clientLanguage"];
+            form.Location = (string)f["location"];
+            form.IsExistingClient = (bool?)f["isExistingClient"] ?? false;
+            form.IsRefBarreau = (bool?)f["isRefBarreau"] ?? false;
+            form.IsFirstConsultation = (bool?)f["isFirstConsultation"] ?? false;
+            form.IsPaymentMade = (bool?)f["isPaymentMade"] ?? false;
+            form.PaymentMethod = (string)f["paymentMethod"];
+            form.AppointmentDate = (string)f["appointmentDate"];
+            form.AppointmentTime = (string)f["appointmentTime"];
+            form.Notes = (string)f["notes"];
+            form.CaseType = (string)f["caseType"];
+
+            form.LawyerId = (string)lwy["id"];
+            form.LawyerName = (string)lwy["name"];
+            form.LawyerEmail = (string)lwy["email"];
+            var wh = lwy["workingHours"];
+            if (wh != null)
+            {
+                string startStr = (string)wh["start"];
+                string endStr = (string)wh["end"];
+                TimeSpan ws, we;
+                if (!TimeSpan.TryParse(startStr, out ws))
+                    ws = TimeSpan.FromHours(9);
+                if (!TimeSpan.TryParse(endStr, out we))
+                    we = TimeSpan.FromHours(17);
+                form.workingStart = ws;
+                form.workingEnd = we;
+            }
+            else
+            {
+                form.workingStart = TimeSpan.FromHours(9);
+                form.workingEnd = TimeSpan.FromHours(17);
+            }
+            form.BreakMinutes = (int?)lwy["breakMinutes"] ?? 0;
+            form.MaxDailyAppointments = (int?)lwy["maxDailyAppointments"] ?? int.MaxValue;
+            var specs = lwy["specialties"] as JArray;
+            if (specs != null)
+            {
+                var list = new List<string>();
+                foreach (var t in specs)
+                    list.Add((string)t);
+                form.specialties = list.ToArray();
+            }
+            else
+            {
+                form.specialties = new string[0];
+            }
+
+            var caseDetailsDict = new Dictionary<string, object>();
+            if (cd != null)
+            {
+                foreach (var prop in cd.Properties())
+                    caseDetailsDict[prop.Name] = prop.Value != null ? prop.Value.ToObject<object>() : null;
+            }
+
+            form.CaseDetails = caseDetailsDict;
 
             // 3. Determine scheduling mode
             bool hasManual = !string.IsNullOrEmpty(form.AppointmentDate)
@@ -68,129 +129,8 @@ class Scheduler
         }
     }
 
-    // ---- Data structures ----
-    class FormState
-    {
-        // From form:
-        public string ClientTitle;
-        public string ClientName;
-        public string ClientEmail;
-        public string ClientPhone;
-        public string ClientLanguage; // "Français" or other
-        public string Location;       // e.g. "office", "phone", "teams"
-        public bool IsExistingClient;
-        public bool IsRefBarreau;
-        public bool IsFirstConsultation;
-        public bool IsPaymentMade;
-        public string PaymentMethod;
-        public string AppointmentDate; // "yyyy-MM-dd"
-        public string AppointmentTime; // "HH:mm"
-        public string Notes;
-        public string CaseType;        // if present
-
-        // From lawyer object in JSON:
-        public string LawyerId;
-        public string LawyerName;
-        public string LawyerEmail;
-        public TimeSpan WorkingStart;  // parsed from workingHours.start
-        public TimeSpan WorkingEnd;    // parsed from workingHours.end
-        public int BreakMinutes;       // buffer between appointments
-        public int MaxDailyAppointments;
-        public string[] Specialties;
-
-        // From caseDetails object in JSON:
-        public Dictionary<string, object> CaseDetails;
-    }
-
-    class Slot
-    {
-        public DateTime Start;
-        public DateTime End;
-        public string Location;
-    }
-
-    // ---- Parsing JSON ----
-    static FormState ParseFormState(JObject root)
-    {
-        var f = root["form"];
-        var form = new FormState
-        {
-            ClientTitle = (string)f["clientTitle"],
-            ClientName = (string)f["clientName"],
-            ClientEmail = (string)f["clientEmail"],
-            ClientPhone = (string)f["clientPhone"],
-            ClientLanguage = (string)f["clientLanguage"],
-            Location = (string)f["location"],
-            IsExistingClient = (bool?)f["isExistingClient"] ?? false,
-            IsRefBarreau = (bool?)f["isRefBarreau"] ?? false,
-            IsFirstConsultation = (bool?)f["isFirstConsultation"] ?? false,
-            IsPaymentMade = (bool?)f["isPaymentMade"] ?? false,
-            PaymentMethod = (string)f["paymentMethod"],
-            AppointmentDate = (string)f["appointmentDate"],
-            AppointmentTime = (string)f["appointmentTime"],
-            Notes = (string)f["notes"],
-            CaseType = (string)f["caseType"]
-        };
-
-        var lawyer = root["lawyer"];
-        if (lawyer != null)
-        {
-            form.LawyerId = (string)lawyer["id"];
-            form.LawyerName = (string)lawyer["name"];
-            form.LawyerEmail = (string)lawyer["email"];
-
-            // Parse working hours "9:00" etc.
-            var wh = lawyer["workingHours"];
-            if (wh != null)
-            {
-                string startStr = (string)wh["start"];
-                string endStr = (string)wh["end"];
-                TimeSpan ws, we;
-                if (!TimeSpan.TryParse(startStr, out ws))
-                    throw new Exception("Invalid workingHours.start:" + startStr);
-                if (!TimeSpan.TryParse(endStr, out we))
-                    throw new Exception("Invalid workingHours.end:" + endStr);
-                form.WorkingStart = ws;
-                form.WorkingEnd = we;
-            }
-            else
-            {
-                // Defaults if missing
-                form.WorkingStart = TimeSpan.FromHours(9);
-                form.WorkingEnd = TimeSpan.FromHours(17);
-            }
-
-            form.BreakMinutes = (int?)lawyer["breakMinutes"] ?? 0;
-            form.MaxDailyAppointments = (int?)lawyer["maxDailyAppointments"] ?? int.MaxValue;
-
-            var specs = lawyer["specialties"] as JArray;
-            if (specs != null)
-                form.Specialties = specs.Select(t => (string)t).ToArray();
-            else
-                form.Specialties = Array.Empty<string>();
-        }
-        else
-        {
-            throw new Exception("Missing lawyer object in JSON.");
-        }
-
-        // Parse caseDetails as Dictionary<string, object> (compat version)
-        var caseDetailsDict = new Dictionary<string, object>();
-        var cd = root["caseDetails"] as JObject;
-        if (cd != null)
-        {
-            foreach (var prop in cd.Properties())
-            {
-            caseDetailsDict[prop.Name] = prop.Value != null ? prop.Value.ToObject<object>() : null;
-            }
-        }
-        form.CaseDetails = caseDetailsDict;
-
-        return form;
-    }
-
     // ---- Manual scheduling ----
-    static List<Slot> FindManualSlot(FormState form)
+    static List<Slot> FindManualSlot(dynamic form)
     {
         if (string.IsNullOrEmpty(form.AppointmentDate) || string.IsNullOrEmpty(form.AppointmentTime))
             throw new Exception("Manual date/time missing.");
@@ -208,7 +148,7 @@ class Scheduler
     }
 
     // ---- Auto scheduling ----
-    static List<Slot> FindAutoSlots(FormState form)
+    static List<Slot> FindAutoSlots(dynamic form)
     {
         var events = FetchCalendarEvents();
         // Generate raw slots for next RANGE_IN_DAYS days:
@@ -238,18 +178,19 @@ class Scheduler
     }
 
     // ---- Outlook meeting draft ----
-    static void CreateMeetingDraft(FormState form, Slot slot)
+
+    static void CreateMeetingDraft(dynamic form, Slot slot)
     {
         Outlook.Application outlookApp = null;
         Outlook.AppointmentItem appt = null;
         string tempFile = null;
-    
+
         try
         {
             // Initialize Outlook
             outlookApp = new Outlook.Application();
             appt = (Outlook.AppointmentItem)outlookApp.CreateItem(Outlook.OlItemType.olAppointmentItem);
-    
+
             // Set basic properties
             appt.Subject = form.ClientName;
             appt.Start = slot.Start;
@@ -258,27 +199,27 @@ class Scheduler
             appt.RequiredAttendees = form.LawyerEmail;
             appt.MeetingStatus = Outlook.OlMeetingStatus.olMeeting;
             appt.Body = " "; // Required placeholder for WordEditor
-    
+
             // Force name resolution
             Outlook.Recipients recipients = appt.Recipients;
             recipients.ResolveAll();
-    
+
             // Set categories
             try { appt.Categories = form.LawyerName; } catch { }
-    
+
             // Generate HTML
             string htmlBody = GenerateHtmlBody(form);
             tempFile = Path.GetTempFileName();
             File.WriteAllText(tempFile, htmlBody);
-    
+
             // Initialize Word Editor
             appt.Display(); // Must display before accessing WordEditor
-    
+
             Outlook.Inspector inspector = appt.GetInspector;
             WindowFocus.ShowWithFocus(inspector); // Force focus
-    
+
             Word.Document wordDoc = inspector.WordEditor as Word.Document;
-    
+
             if (wordDoc != null)
             {
                 Word.Range range = wordDoc.Content;
@@ -288,7 +229,7 @@ class Scheduler
             {
                 throw new Exception("Failed to initialize Word editor for appointment body.");
             }
-    
+
             // Keep the appointment visible
             Marshal.ReleaseComObject(inspector);
         }
@@ -301,7 +242,7 @@ class Scheduler
             // Cleanup
             if (tempFile != null && File.Exists(tempFile))
                 File.Delete(tempFile);
-            
+
             // Note: Don't release appt object here - we want it to remain open
             if (outlookApp != null)
                 Marshal.ReleaseComObject(outlookApp);
@@ -309,16 +250,13 @@ class Scheduler
     }
 
     // ---- HTML body generation ----
-    static string GenerateHtmlBody(FormState form)
+    static string GenerateHtmlBody(dynamic form)
     {
-        string formattedPhone = Util.FormatPhoneNumber(form.ClientPhone);
-        UpdateJsonPhone(formattedPhone);
-
         // Build body HTML
         string body = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n</head>\n<body>";
         body += "<p>" +
             "Client:&nbsp;&nbsp;&nbsp;" + form.ClientTitle + " " + form.ClientName + "<br>" +
-            "Phone:&nbsp;&nbsp;" + formattedPhone + "<br>" +
+            "Phone:&nbsp;&nbsp;" + form.ClientPhone + "<br>" +
             "Email:&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"mailto:" + form.ClientEmail + "\">" + form.ClientEmail + "</a><br>" +
             "Lang:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + form.ClientLanguage + "</p>";
 
@@ -385,7 +323,7 @@ class Scheduler
         while (enumerator.MoveNext())
         {
             Outlook.AppointmentItem item = enumerator.Current as Outlook.AppointmentItem;
-            
+
             if (item != null && !item.AllDayEvent)
             {
                 try { list.Add(item); }
@@ -398,7 +336,7 @@ class Scheduler
     }
 
     // ---- Slot generation ----
-    static List<Slot> GenerateSlots(FormState form, List<Outlook.AppointmentItem> events)
+    static List<Slot> GenerateSlots(dynamic form, List<Outlook.AppointmentItem> events)
     {
         var slots = new List<Slot>();
         DateTime now = DateTime.Now;
@@ -413,7 +351,8 @@ class Scheduler
 
         // Count existing appointments per day to enforce maxDailyAppointments
         var eventsByDay = events
-            .Select(ev => {
+            .Select(ev =>
+            {
                 DateTime s = ev.Start;
                 return new { ev, Day = s.Date };
             })
@@ -465,7 +404,7 @@ class Scheduler
     }
 
     // ---- Slot validation ----
-    static bool IsValidSlot(Slot slot, List<Outlook.AppointmentItem> events, FormState form)
+    static bool IsValidSlot(Slot slot, List<Outlook.AppointmentItem> events, dynamic form)
     {
         if (events.Any(e => e == null))
         {
@@ -479,14 +418,14 @@ class Scheduler
             );
             return false;
         }
-        
+
         // 1. Overlap check + breakMinutes buffer
         foreach (var ev in events.Where(ev => ev != null && !string.IsNullOrEmpty(ev.Categories) && ev.Categories.Contains(form.LawyerName)))
         {
             DateTime s, e;
             try { s = ev.Start; e = ev.End; }
             catch { continue; }
-            
+
             // apply break buffer
             DateTime bufStart = s.AddMinutes(-form.BreakMinutes);
             DateTime bufEnd = e.AddMinutes(form.BreakMinutes);
@@ -496,14 +435,14 @@ class Scheduler
         // 2. Enforce maxDailyAppointments: already done in generation by skipping days with >= limit
 
         // 3. Other refined rules: e.g. shared office, proximity rules—port here if needed
-        
+
         // TODO
 
         return true;
     }
 
     // Example unavailability check per lawyer
-    static bool IsLocationUnavailableOnDay(FormState form, DateTime day)
+    static bool IsLocationUnavailableOnDay(dynamic form, DateTime day)
     {
         if (form.LawyerId == "DH" && form.Location.Equals("office", StringComparison.OrdinalIgnoreCase)
             && day.DayOfWeek == DayOfWeek.Monday)
@@ -520,35 +459,13 @@ class Scheduler
     static DateTime RoundUpToNextHalfHour(DateTime dt)
     {
         int minutes = dt.Minute;
-        int add = (minutes % 30 == 0 && dt.Second == 0 && dt.Millisecond == 0) 
-                  ? 0 
+        int add = (minutes % 30 == 0 && dt.Second == 0 && dt.Millisecond == 0)
+                  ? 0
                   : (30 - minutes % 30);
         var res = dt.AddMinutes(add);
         return new DateTime(res.Year, res.Month, res.Day, res.Hour, res.Minute / 30 * 30, 0);
     }
 
-    static void UpdateJsonPhone(string phoneNumber)
-    {
-        // Update the JSON file with the formatted phone number
-        try
-        {
-            if (File.Exists(Util.JsonPath))
-            {
-                var json = JObject.Parse(File.ReadAllText(Util.JsonPath));
-                if (json["form"] != null)
-                {
-                    json["form"]["clientPhone"] = phoneNumber;
-                    File.WriteAllText(Util.JsonPath, json.ToString());
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            // Log or ignore, but don't block meeting creation
-            Console.WriteLine("Warning: Failed to update data.json with formatted phone: " + ex.Message);
-        }
-    }
-    
     // ---- Case details logic ----
     static string GetCaseDetails(string caseType, Dictionary<string, object> caseDetails)
     {

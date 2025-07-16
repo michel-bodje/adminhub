@@ -182,3 +182,62 @@ export function collectCaseDetails() {
   }
   return details;
 }
+
+/**
+ * Formats a phone number for display.
+ * Tries to format the number intelligently based on its length and region.
+ * @param {string} number - The phone number to format.
+ * @param {string} [region="CA"] - The region to format the number for (default: "CA").
+ * @returns {string} The formatted phone number.
+ */
+export function formatPhoneNumber(number, region = "CA") {
+  if (!number || typeof number !== "string") return number;
+
+  const digitsOnly = number.replace(/\D/g, "");
+
+  if (digitsOnly.length === 10) {
+    return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3, 6)}-${digitsOnly.slice(6)}`;
+  } else if (digitsOnly.length === 11 && digitsOnly.startsWith("1")) {
+    return `+1 ${digitsOnly.slice(1, 4)}-${digitsOnly.slice(4, 7)}-${digitsOnly.slice(7)}`;
+  } else if (digitsOnly.length >= 11) {
+    return `+${digitsOnly}`;
+  }
+
+  return number;
+}
+
+/**
+ * Utility function to validate a phone number (with optional region).
+ * 
+ * Only supports Canadian/US numbers (1-10 digits) or international numbers (8-15 digits).
+ * @param {string} number - The phone number to validate.
+ * @param {string} [region="CA"] - The region to validate the number against (default: "CA").
+ * @returns {boolean} True if valid, false otherwise.
+ */
+export function isValidPhoneNumber(number, region = "CA") {
+  if (!number || typeof number !== "string" || number.trim() === "") return false;
+
+  const digitsOnly = number.replace(/\D/g, "");
+
+  let normalized = digitsOnly;
+  if (digitsOnly.length === 10) {
+    // Add leading '1' for North America
+    normalized = "1" + digitsOnly;
+  }
+
+  // Must start with non-zero and be 8–15 digits
+  return /^[1-9]\d{7,14}$/.test(normalized);
+}
+
+/**
+ * Utility function to validate an email address.
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} True if valid, false otherwise.
+ */
+export function isValidEmail(email) {
+  if (!email || typeof email !== "string" || email.trim() === "") return false;
+
+  const lowerEmail = email.toLowerCase();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(lowerEmail);
+}

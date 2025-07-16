@@ -1,21 +1,28 @@
+import sys
 import json
-from config import DATA_JSON
 
-if __name__ == "__main__":
-    print("DATA_JSON path:", DATA_JSON)
+def read_stdin_json():
+    """Reads JSON data from standard input."""
+    raw = sys.stdin.read()
+    return json.loads(raw)
 
-def load_json(json_path=DATA_JSON):
-    with open(json_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
+def split_data(data):
     form = data["form"]
-    case = data.get("caseDetails", {})
+    case = data.get("case", {})
     lawyer = data.get("lawyer", {})
-
     return form, case, lawyer
 
-def load_consultation_fields():
-    form, _, _ = load_json()
+def get_matter(data):
+    """ Returns the matter ID from the JSON data. """
+    form, _, _ = split_data(data)
+    matter = form.get("matterId", "")
+    if not matter:
+        print("No matter ID provided.")
+        raise ValueError("Matter ID is required but was not provided.")
+    return matter
+
+def load_consultation_fields(data):
+    form, _, _ = split_data(data)
 
     # Convert values from frontend to what the PCLaw form expects
     name_parts = form["clientName"].strip().split()
@@ -24,7 +31,7 @@ def load_consultation_fields():
     middle_name = " ".join(name_parts[1:-1]) if len(name_parts) > 2 else ""
 
     # Determine language prefix
-    lang = get_language()
+    lang = get_language(form)
     if lang.startswith("en"):
         desc_prefix = "Consultation in"
     else:
@@ -73,21 +80,21 @@ def load_consultation_fields():
 
     return fields
 
-def get_language():
-    """ Returns the client language from the JSON data.
-    Defaults to "english" if not found.
-    """
-    form, _, _ = load_json()
+def get_language(data):
+    """ Returns the client language from the JSON data. """
+    form, _, _ = split_data(data)
     return form.get("clientLanguage", "English").lower()
 
-def get_case_details():
+def get_case_details(data):
     """
     Returns a string with details for the current case type,
     in English or French depending on client language.
     """
-    form, case_details, _ = load_json()
+    form, case_details, _ = split_data(data)
+    
+    lang = form.get("clientLanguage", "English").lower()
     case_type = form.get("caseType", "").lower()
-    lang = get_language()
+    
     if not case_type:
         return ""
     def get(key):
@@ -123,4 +130,5 @@ def get_case_details():
             "assermentation": "Assermentation",
             "common": str(get("commonField")),
         }
+    
     return mapping.get(case_type, "")
