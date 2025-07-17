@@ -1,5 +1,3 @@
 app/build/
-app/build/main/
-data/data.json
-# dist/
+app/dist/
 *.pyc

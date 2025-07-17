@@ -56,7 +56,7 @@ def main():
     """
     api = HubAPI()
     webview.create_window("Amlex Admin Hub", INDEX_HTML, js_api=api, width=425, height=650)
-    webview.start(debug=True, gui='edgechromium')
+    webview.start(debug=False, gui='edgechromium')
 
 if __name__ == '__main__':
     main()
