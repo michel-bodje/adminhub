@@ -31,13 +31,13 @@ def load_consultation_fields(data):
     middle_name = " ".join(name_parts[1:-1]) if len(name_parts) > 2 else ""
 
     # Determine language prefix
-    lang = get_language(form)
+    lang = get_language(data)
     if lang.startswith("en"):
         desc_prefix = "Consultation in"
     else:
         desc_prefix = "Consultation en"
 
-    description = f"{desc_prefix} {get_case_details().lower()}".strip()
+    description = f"{desc_prefix} {get_case_details(data).lower()}".strip()
 
     if form.get("isRefBarreau", False):
         default_rate = "J"
@@ -65,18 +65,18 @@ def load_consultation_fields(data):
         else:
             type_of_law = ""
 
-    fields = {
-        "Type of Law": type_of_law,
-        "Description": description,
-        "Responsible Lawyer": responsible_lawyer,
-        "Default Rate": default_rate,
-        "Title": form.get("clientTitle", ""),
-        "First": first_name,
-        "Middle": middle_name,
-        "Last": last_name,
-        "Cell": form.get("clientPhone", ""),
-        "E-mail 1": form.get("clientEmail", ""),
-    }
+    fields = [
+        (2, type_of_law), # Type of Law
+        (3, default_rate), # Default Rate
+        (5, responsible_lawyer), # Responsible Lawyer
+        (6, description), # Description
+        (7, form.get("clientTitle", "")), # Title
+        (8, first_name), # First
+        (9, middle_name), # Middle
+        (10, last_name), # Last
+        (25, form.get("clientPhone", "")), # Cell
+        (29, form.get("clientEmail", "")), # E-mail 1
+    ]
 
     return fields
 

@@ -60,7 +60,7 @@ function attachEventListeners() {
       handleCaseDetails();
     },
     ClientName: (value) => formState.update("clientName", value),
-    ClientPhone: (value) => formState.update("clientPhone", formatPhoneNumber(formState.clientPhone)),
+    ClientPhone: (value) => formState.update("clientPhone", value),
     ClientEmail: (value) => formState.update("clientEmail", value),
     ClientTitle: (value) => formState.update("clientTitle", value),
     ClientLanguage: (value) => formState.update("clientLanguage", value),

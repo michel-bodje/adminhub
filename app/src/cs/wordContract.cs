@@ -17,7 +17,7 @@ class Program
         try
         {
             // === Load JSON ===
-            JObject json = JObject.Parse(File.ReadAllText(Util.JsonPath));
+            JObject json = Util.ReadJsonFromStdin();
 
             string clientName = (string)json["form"]["clientName"];
             string clientEmail = (string)json["form"]["clientEmail"];
@@ -27,7 +27,7 @@ class Program
 
             string lang = clientLanguage == "Français" ? "fr" : "en";
             string locale = lang == "fr" ? "fr-CA" : "en-US";
-            string templatePath = Path.Combine(Util.RootDir, "app", "templates", lang, "Contract.docx");
+            string templatePath = Path.Combine(Util.TemplateDir, lang, "Contract.docx");
 
             if (!File.Exists(templatePath))
                 throw new FileNotFoundException("Contract template not found.", templatePath);

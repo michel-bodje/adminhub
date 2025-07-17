@@ -12,7 +12,7 @@ class Program
         try
         {
             // === Load JSON ===
-            JObject json = JObject.Parse(File.ReadAllText(Util.JsonPath));
+            JObject json = Util.ReadJsonFromStdin();
 
             // === Extract form values ===
             string clientName = (string)json["form"]["clientName"];
@@ -27,7 +27,7 @@ class Program
 
             string lang = clientLanguage == "Français" ? "fr" : "en";
             string locale = lang == "fr" ? "fr-CA" : "en-US";
-            string templatePath = Path.Combine(Util.RootDir, "app", "templates", lang, "Receipt.docx");
+            string templatePath = Path.Combine(Util.TemplateDir, lang, "Receipt.docx");
 
             if (!File.Exists(templatePath))
                 throw new FileNotFoundException("Receipt template not found.", templatePath);

@@ -92,8 +92,15 @@ if /i "%BASENAME%"=="wordReceipt" (
 
 REM Compile
 echo Compiling %SOURCE% to %OUTPUT%...
-"%CSC_PATH%" /nologo /platform:x64 /target:winexe /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
-REM "%CSC_PATH%" /nologo /platform:x64 /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
+
+set "NO_CONSOLE=true"
+
+if /i "%NO_CONSOLE%"=="true" (
+    "%CSC_PATH%" /nologo /platform:x64 /target:winexe /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
+) else (
+    "%CSC_PATH%" /nologo /platform:x64 /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"
+)
+
 if errorlevel 1 (
     echo Compilation failed for %SOURCE%.
     exit /b 1

@@ -1,6 +1,5 @@
 from pywinauto.application import Application
 from pywinauto.findwindows import find_windows
-from pywinauto.base_wrapper import BaseWrapper
 from pywinauto.controls.uiawrapper import UIAWrapper
 from pywinauto import keyboard
 from pywinauto.keyboard import send_keys
@@ -27,11 +26,11 @@ def get_dialog(parent_window, dialog_title):
 def new_matter_dialog():
     """ Opens the New Matter dialog using keyboard navigation. """
     send_keys('%f')
-    sleep(1)
+    sleep(0.5)
     send_keys('{DOWN}')
-    sleep(0.5)
+    sleep(0.2)
     send_keys('{RIGHT}')
-    sleep(0.5)
+    sleep(0.2)
     send_keys('{ENTER}')
 
 def close_matter_dialog():
@@ -69,7 +68,7 @@ def register_matter(matter_number: str):
 def bill_matter(matter_number: str, date: str = None, options: bool = False):
     """ Opens the Bill Matter dialog and fill with matter number and date. """
     if date is None:
-        print("⚠️ No date provided for billing. Aborting.")
+        print("[Error] No date provided for billing. Aborting.")
         return
 
     main = connect_to_pclaw()
@@ -160,8 +159,8 @@ def close_matter(matter_number: str):
         sleep(0.5)
         send_keys("{ENTER}")
     else:
-        print("⚠️ Remaining balance is not zero. Matter should not be closed.")
-        #ctypes.windll.user32.MessageBoxW(0, "⚠️ Remaining balance is not zero. Matter should not be closed until all balances are cleared.", "Warning", 0x30)
+        print("[Error] Remaining balance is not zero. Matter should not be closed.")
+        #ctypes.windll.user32.MessageBoxW(0, "[Error] Remaining balance is not zero. Matter should not be closed until all balances are cleared.", "Warning", 0x30)
 
 def ocr_get_balance():
     """ Uses OCR to extract financial data from the Close Matter dialog."""
@@ -174,7 +173,7 @@ def ocr_get_balance():
         close_win = get_dialog(connect_to_pclaw(), "Close Matter")
         close_win.set_focus()
     except Exception as e:
-        print("❌ Failed to locate Close Matter window:", e)
+        print("[Error] Failed to locate Close Matter window:", e)
         return False
 
     # Get window bounds
@@ -259,7 +258,7 @@ def ocr_get_latest_date():
         register_win = get_dialog(connect_to_pclaw(), "Register...")
         register_win.set_focus()
     except Exception as e:
-        print("❌ Failed to locate Register window:", e)
+        print("[Error] Failed to locate Register window:", e)
         return None
 
     # === Screenshot bottom-left where "Trust" balance appears ===
@@ -297,11 +296,11 @@ def ocr_get_latest_date():
     print("Gen Rtnr :", retainer_val)
 
     if trust_val is None or trust_val > 0:
-        print("❌ Trust balance is not zero. Abort.")
+        print("[Error] Trust balance is not zero. Abort.")
         return None
     
     if retainer_val is None or retainer_val not in (143.72, 402.41):
-        print(f"❌ Gen Rtnr is {retainer_val}, requiring manual verification. Abort.")
+        print(f"[Error] Gen Rtnr is {retainer_val}, requiring manual verification. Abort.")
         return None
 
     # === Screenshot top half (table rows) ===
@@ -329,63 +328,12 @@ def ocr_get_latest_date():
             continue
 
     if not dates:
-        print("❌ No valid dates found.")
+        print("[Error] No valid dates found.")
         return None
 
     latest = max(dates)
     print("✅ Latest Date:", latest.strftime("%Y/%m/%d"))
     return latest.strftime("%Y/%m/%d")
-
-def find_nearest_input(label: BaseWrapper, inputs: list[BaseWrapper]):
-    label_rect = label.rectangle()
-    label_mid_y = (label_rect.top + label_rect.bottom) // 2
-    best_ctrl = None
-    min_dist = float("inf")
-
-    for ctrl in inputs:
-        rect = ctrl.rectangle()
-        mid_y = (rect.top + rect.bottom) // 2
-        dx = abs(rect.left - label_rect.right)
-        dy = abs(mid_y - label_mid_y)
-        if dx < 300 and dy < 20:
-            dist = dx + dy
-            if dist < min_dist:
-                min_dist = dist
-                best_ctrl = ctrl
-
-    return best_ctrl
-
-def get_label_controls(parent_window, needed_labels: set[str]):
-    return [
-        ctrl for ctrl in parent_window.descendants(control_type="Text")
-        if ctrl.window_text().strip() in needed_labels
-    ]
-
-def get_input_controls(parent_window):
-    return parent_window.descendants(control_type="Edit") + parent_window.descendants(control_type="Document")
-
-def build_label_input_map(parent_window, fields: dict[str, str]):
-    needed_labels = set(fields.keys())
-    labels = get_label_controls(parent_window, needed_labels)
-    inputs = get_input_controls(parent_window)
-
-    label_input_map = {}
-    for label in labels:
-        label_text = label.window_text().strip()
-        input_field = find_nearest_input(label, inputs)
-        if input_field:
-            label_input_map[label_text] = input_field
-
-    return label_input_map
-
-def fill_form_fields(label_input_map: dict[str, BaseWrapper], fields: dict[str, str]):
-    for label, value in fields.items():
-        input_field = label_input_map.get(label)
-        if input_field:
-            input_field.set_edit_text(value)
-            print(f"✓ Filled '{label}' with '{value}'")
-        else:
-            print(f"⚠️ Could not find input for '{label}'")
 
 def send_ctrl_arrow(direction: str = "right"):
     """
@@ -415,20 +363,18 @@ def focus_first_edit(dlg):
     Focuses the first editable input in the dialog so that Ctrl+Arrow works.
     """
     try:
-        edits = dlg.descendants(control_type="Edit")
-        if edits:
-            # Use set_focus() if available; else click_input to focus
+        for ctrl in dlg.descendants(control_type="Edit"):
             try:
-                edits[0].set_focus()
-            except:
-                edits[0].click_input()
-            sleep(0.1)
-            return True
-    except Exception:
-        pass
+                ctrl.set_focus()
+                sleep(0.1)
+                return True
+            except Exception:
+                continue
+    except Exception as e:
+        print(f"[Error] Couldn't focus any edit: {e}")
     return False
 
-def move_tab(direction="right", repeat=1, dlg=None):
+def move_tab(dlg, repeat=1, direction="right"):
     """
     Moves tab left or right a number of times, focusing the first edit each time.
     direction: "left" or "right"
@@ -439,101 +385,27 @@ def move_tab(direction="right", repeat=1, dlg=None):
         raise ValueError("dlg parameter is required")
     for _ in range(repeat):
         focus_first_edit(dlg)
+        # clear_focus(dlg)
         send_ctrl_arrow(direction)
-
-def detect_active_tab(dlg):
-    """
-    Returns "main", "billing", or "custom" by checking for a unique label in each pane.
-    Must be called right after a switch so contents are loaded.
-    """
-    panes = dlg.descendants(control_type="Pane")
-    # For each pane matching the main-content geometry, check for unique texts:
-    for pane in panes:
-        # Check boundingRect matches content area if needed, or just try:
-        texts = [t.window_text().strip() for t in pane.descendants(control_type="Text") if t.window_text().strip()]
-        # Look for Billing-unique:
-        if any("Billing Template" in txt for txt in texts):
-            return "billing"
-        # Look for Custom-unique:
-        if any("BARREAU-" in txt for txt in texts):
-            return "custom"
-        # Look for Main-unique: e.g. “Type of Law” and “Responsible Lawyer” appear in Main
-        if "Type of Law" in texts and "Responsible Lawyer" in texts:
-            return "main"
-    return None
 
 def go_to_main(dlg):
     """
     Navigates to Main tab from wherever.
     """
-    move_tab("left", 2, dlg)
+    move_tab(dlg, 2, "left")
 
 def go_to_billing(dlg):
     """
     From Main, goes to Billing.
     Call go_to_main first to ensure starting at Main.
     """
-    move_tab("right", 1, dlg)  # Main -> Billing
+    move_tab(dlg)  # Main -> Billing
 
 def go_to_custom(dlg):
     """
     From Main, goes to Custom via two rights.
     """
-    move_tab("right", 2, dlg)  # Main -> Custom
-
-def click_billing_checkbox(dlg):
-    """
-    Finds and clicks the 'Allow Bill Setting Overrides' checkbox in the Billing pane.
-    """
-    checkbox = dlg.child_window(auto_id="1105", control_type="CheckBox")
-    try:
-        checkbox.click_input()
-        print("✓ Clicked 'Allow Bill Setting Overrides' checkbox")
-        return True
-    except Exception as e:
-        print(f"❌ Failed to click checkbox: {e}")
-        return False
-    """
-    # Alternative method using label search:
-    # 1. Find the label element for “Allow Bill Setting Overrides”
-    try:
-        label = dlg.child_window(title="Allow Bill Setting Overrides", control_type="DataItem")
-    except ElementNotFoundError:
-        print("❌ Label DataItem not found")
-        return False
-
-    parent_info = label.element_info.parent
-    if not parent_info:
-        print("❌ Label has no parent")
-        return False
-
-    try:
-        parent_wrapper = UIAWrapper(parent_info)
-    except Exception:
-        print("❌ Cannot wrap parent")
-        return False
-
-    # 3. Among parent.children(), inspect nameless DataItem nodes for a CheckBox child
-    checkbox = None
-    for child in parent_wrapper.children():
-        # We only inspect DataItem children (the nameless row container)
-        # and skip those whose title is non-empty (to target the unnamed container)
-        try:
-            ctrl_type = child.element_info.control_type
-            title = child.window_text().strip()
-        except Exception:
-            continue
-        if ctrl_type.lower() == "dataitem" and title == "":
-            # Look for a CheckBox descendant under this nameless DataItem
-            try:
-                cbs = child.descendants(control_type="CheckBox")
-            except Exception:
-                cbs = []
-            if cbs:
-                # Take the first CheckBox found
-                checkbox = cbs[0]
-                break
-    """
+    move_tab(dlg, 2)  # Main -> Custom
 
 def find_edit_by_value(dlg, target_value):
     """
@@ -541,12 +413,12 @@ def find_edit_by_value(dlg, target_value):
     """
     for edit in dlg.descendants(control_type="Edit"):
         try:
-            val = edit.get_value()  # requires UIA backend
+            val = edit.get_value()
         except Exception:
-            print(f"⚠️ Failed to get value for Edit control: {edit}")
+            print(f"[Error] Failed to get value for Edit control: {edit}")
             continue
         if val == target_value:
-            print(f"✓ Found Edit with value '{target_value}': {edit}")
+            print(f"[OK] Found Edit with value '{target_value}': {edit}")
             return edit
     return None
 
@@ -554,7 +426,7 @@ def find_edit_by_label(dlg, target_value):
     """Search for an Edit control under a nameless DataItem that has the target_value.
     If the main search fails, it falls back to searching by label.
     """
-    print("⚠️ Falling back to label-based search")
+    print("[Error] Falling back to label-based search")
     billing_pane = dlg.child_window(auto_id="cmainpage", control_type="Pane")
     parent = billing_pane.element_info.parent
     parent_wrapper = UIAWrapper(parent)
@@ -569,71 +441,55 @@ def find_edit_by_label(dlg, target_value):
             try:
                 edits = child.descendants(control_type="Edit")
             except Exception:
-                print(f"⚠️ Failed to get descendants for {child}")
+                print(f"[Error] Failed to get descendants for {child}")
                 edits = []
             for edit in edits:
                 try:
                     val = edit.get_value()
                 except Exception:
-                    print(f"⚠️ Failed to get value for Edit control: {edit}")
+                    print(f"[Error] Failed to get value for Edit control: {edit}")
                     continue
                 if val == target_value:
-                    print(f"✓ Found Edit with value '{target_value}': {edit}")
+                    print(f"[OK] Found Edit with value '{target_value}': {edit}")
                     return edit
-    print(f"⚠️ No Edit found with value '{target_value}'")
+    print(f"[Error] No Edit found with value '{target_value}'")
     return None
 
-def fill_billing_tab_by_override(dlg):
-    """ Fills the Billing tab with the required values.
-    This function assumes the Billing tab is already active.
-    """
-    # Use the robust checkbox clicker
-    if not click_billing_checkbox(dlg):
-        print("⚠️ Could not check 'Allow Bill Setting Overrides' via label/parent search")
-        return
+def fill_main_tab(fields):
+    current_index = 0
+    for target_index, value in fields:
+        tabs_needed = target_index - current_index
+        for _ in range(tabs_needed):
+            send_keys('{TAB}')
+            sleep(0.2)  # small delay between each tab
+        send_keys(value, with_spaces=True)
+        sleep(0.1)  # small delay after typing each field
+        current_index = target_index
 
-    old_value = "RABILEN5"
-    new_value = "RABILFR5"
-
-    edit = find_edit_by_value(dlg, old_value)
-    if not edit:
-        print(f"⚠️ No Edit found with value '{old_value}', trying label search")
-        edit = find_edit_by_label(dlg, old_value)
-    if edit:
-        edit.set_edit_text(new_value)
-        keyboard.send_keys("{TAB}")
-        print("✓ Replaced Billing Template value")
-        return True
-    else:
-        print(f"⚠️ Could not find Edit with value '{old_value}'")
-        print("❌ Failed to fill Billing tab")
-        return False
-
-def fill_billing_tab_by_value(dlg):
+def fill_billing_tab(dlg):
     """
     Fills the Billing tab by finding the Edit with value 'Default' and replacing it with 'Facture francais'.
     """
     edit = find_edit_by_value(dlg, "Default")
     if edit:
-        edit.set_edit_text("Facture francais")
-        keyboard.send_keys(" ")
-        keyboard.send_keys("{BACKSPACE}")
-        print("✓ Replaced 'Default' with 'Facture francais' in Billing tab")
+        edit.set_edit_text("")  # Clear previous contents before typing new value
+        edit.set_focus()
+        send_keys("Facture francais", with_spaces=True)
+        print("[OK] Replaced 'Default' with 'Facture francais' in Billing tab")
         return True
     else:
-        print("⚠️ Could not find Edit with value 'Default'")
+        print("[Error] Could not find Edit with value 'Default'")
         return False
 
 def fill_custom_tab(dlg):
     """ Fills all editable fields in the Custom tab with 'n/a'.
     """
-    edits = dlg.descendants(control_type="Edit")
     filled = 0
-    for ctrl in edits:
+    for ctrl in dlg.descendants(control_type="Edit"):
         try:
             if ctrl.is_enabled():
                 ctrl.set_edit_text("n/a")
                 filled += 1
         except:
             continue
-    print(f"✓ Filled {filled} editable fields in Custom tab with 'n/a'")
+    print(f"[OK] Filled {filled} editable fields in Custom tab with 'n/a'")

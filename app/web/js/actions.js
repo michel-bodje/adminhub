@@ -4,6 +4,7 @@ import {
     collectCaseDetails,
     isValidEmail,
     isValidPhoneNumber,
+    formatPhoneNumber,
     ELEMENT_IDS,
 } from "./index.js";
 
@@ -30,6 +31,9 @@ async function getForm() {
     console.error("[AdminHub] Invalid client email address:", formState.clientEmail);
     throw new Error("Invalid client email address.");
   }
+  
+  formState.clientPhone = formatPhoneNumber(formState.clientPhone);
+
   if (formState.clientPhone && !isValidPhoneNumber(formState.clientPhone)) {
     console.error("[AdminHub] Invalid client phone number:", formState.clientPhone);
     throw new Error("Invalid client phone number.");

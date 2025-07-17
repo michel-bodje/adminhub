@@ -2,8 +2,8 @@ from base import *
 from parse_json import *
 
 def main():
-    win = connect_to_pclaw()
-    win.set_focus()
+    app = connect_to_pclaw()
+    app.set_focus()
 
     data = read_stdin_json()
     matter = get_matter(data)

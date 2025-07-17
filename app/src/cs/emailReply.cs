@@ -10,7 +10,7 @@ class Program
         try
         {
             // === Load JSON  ===
-            JObject json = JObject.Parse(File.ReadAllText(Util.JsonPath));
+            JObject json = Util.ReadJsonFromStdin();
 
             string clientEmail = (string)json["form"]["clientEmail"];
             string clientLanguage = (string)json["form"]["clientLanguage"];
@@ -19,7 +19,7 @@ class Program
 
             // === Load the appropriate HTML template ===
             string lang = clientLanguage == "Français" ? "fr" : "en";
-            string templatePath = Path.Combine(Util.RootDir, "app", "templates", lang, "Reply.html");
+            string templatePath = Path.Combine(Util.TemplateDir, lang, "Reply.html");
 
             string htmlBody = File.ReadAllText(templatePath);
 

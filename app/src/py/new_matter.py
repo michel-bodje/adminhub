@@ -2,25 +2,23 @@ from base import *
 from parse_json import *
 
 def main():
-    win = connect_to_pclaw()
-    win.set_focus()
+    app = connect_to_pclaw()
+    app.set_focus()
 
     new_matter_dialog()
-    dlg = get_dialog(win, "New Matter")
+    dlg = get_dialog(app, "New Matter")
 
     data = read_stdin_json()
   
     # Define the specific fields for New Matter
     fields = load_consultation_fields(data)
-    label_input_map = build_label_input_map(dlg, fields)
-
-    # Fill main tab
-    fill_form_fields(label_input_map, fields)
+    
+    fill_main_tab(fields)
 
     # Only fill billing tab if language is French
     if get_language(data).startswith("fr"):
         go_to_billing(dlg)
-        fill_billing_tab_by_override(dlg)
+        fill_billing_tab(dlg)
 
     # Fill all n/a in Custom tab
     go_to_custom(dlg)
