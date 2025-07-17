@@ -93,7 +93,7 @@ if /i "%BASENAME%"=="wordReceipt" (
 REM Compile
 echo Compiling %SOURCE% to %OUTPUT%...
 
-set "NO_CONSOLE=true"
+set "NO_CONSOLE=false"
 
 if /i "%NO_CONSOLE%"=="true" (
     "%CSC_PATH%" /nologo /platform:x64 /target:winexe /out:%OUTPUT% %REFS% "%SOURCE%" "%UTIL%"

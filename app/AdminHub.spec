@@ -4,8 +4,8 @@
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[],
-    datas=[('web', 'app/web'), ('bin', 'app/bin'), ('src', 'app/src'), ('templates', 'templates')],
+    binaries=[('bin/*', 'app/bin')],
+    datas=[('src', 'app/src'), ('web', 'app/web'), ('templates', 'templates')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
