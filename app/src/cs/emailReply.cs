@@ -5,6 +5,7 @@ using Outlook = Microsoft.Office.Interop.Outlook;
 
 class Program
 {
+    [STAThread]
     static void Main(string[] args)
     {
         try

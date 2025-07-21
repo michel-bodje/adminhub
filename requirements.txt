@@ -5,6 +5,8 @@ pywinauto
 pyautogui
 pytesseract
 pillow
+openpyxl
+pandas
 
 # Windows requirements (manual installation required)
 # - Newtonsoft.Json.dll (included in app/bin/)

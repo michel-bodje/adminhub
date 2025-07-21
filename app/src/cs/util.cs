@@ -13,7 +13,9 @@ public static class Util
 
     public static JObject ReadJsonFromStdin()
     {
+        Console.WriteLine("Util: Waiting for stdin...");
         string input = Console.In.ReadToEnd();
+        Console.WriteLine("Util: Read stdin: " + input.Length + " chars");
         if (string.IsNullOrWhiteSpace(input))
             throw new Exception("No input received via stdin.");
         return JObject.Parse(input);

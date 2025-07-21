@@ -332,7 +332,7 @@ def ocr_get_latest_date():
         return None
 
     latest = max(dates)
-    print("✅ Latest Date:", latest.strftime("%Y/%m/%d"))
+    print("[OK] Latest Date:", latest.strftime("%Y/%m/%d"))
     return latest.strftime("%Y/%m/%d")
 
 def send_ctrl_arrow(direction: str = "right"):

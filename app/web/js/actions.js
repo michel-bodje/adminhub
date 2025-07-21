@@ -1,11 +1,11 @@
 import {
-    formState,
-    getLawyerById,
-    collectCaseDetails,
-    isValidEmail,
-    isValidPhoneNumber,
-    formatPhoneNumber,
-    ELEMENT_IDS,
+  formState,
+  getLawyerById,
+  collectCaseDetails,
+  isValidEmail,
+  isValidPhoneNumber,
+  formatPhoneNumber,
+  ELEMENT_IDS,
 } from "./index.js";
 
 /** Action handlers for various form submissions. */
@@ -40,6 +40,7 @@ async function getForm() {
   }
 
   let response = await window.pywebview.api.format_form(formState, details, lawyer);
+  console.log("[AdminHub] Form data prepared for submission:", response.json);
   return response.json;
 }
 
@@ -72,7 +73,7 @@ export async function scheduleAppointment() {
 /** Prepares a confirmation email. */
 export async function sendConfirmation() {
   try {
-    const json_blob = getForm();
+    const json_blob = await getForm();
     await window.pywebview.api.run("emailConfirmation", json_blob);
     console.log("[AdminHub] Confirmation email prepared and submitted.");
   } catch (error) {
@@ -85,7 +86,7 @@ export async function sendConfirmation() {
 /** Prepares a reply email. */
 export async function sendReply() {
   try {
-    const json_blob = getForm();
+    const json_blob = await getForm();
     await window.pywebview.api.run("emailReply", json_blob);
     console.log("[AdminHub] Reply email prepared and submitted.");
   } catch (error) {
@@ -98,7 +99,7 @@ export async function sendReply() {
 /** Prepares a review request email. */
 export async function sendReview() {
   try {
-    const json_blob = getForm();
+    const json_blob = await getForm();
     await window.pywebview.api.run("emailReview", json_blob);
     console.log("[AdminHub] Review request email prepared and submitted.");
   } catch (error) {
@@ -111,7 +112,7 @@ export async function sendReview() {
 /** Prepares a follow-up email. */
 export async function sendFollowup() {
   try {
-    const json_blob = getForm();
+    const json_blob = await getForm();
     await window.pywebview.api.run("emailSuivi", json_blob);
     console.log("[AdminHub] Follow-up email prepared and submitted.");
   } catch (error) {
@@ -167,7 +168,7 @@ export async function createReceipt() {
   }
 }
 
-// Create PCLaw matter based on the form state
+/* Create PCLaw matter based on the form state */
 export async function newMatter() {
   try {
     const json_blob = await getForm();
@@ -180,6 +181,7 @@ export async function newMatter() {
   }
 }
 
+/** Close the specified PCLaw matter */
 export async function closeMatter() {
   try {
     const json_blob = await getForm();
@@ -192,6 +194,7 @@ export async function closeMatter() {
   }
 }
 
+/** Bill the specified PCLaw matter */
 export async function billMatter() {
   try {
     const json_blob = await getForm();

@@ -1,0 +1,2 @@
+All C# operations can actually be done in Python.
+TODO: convert exes to Python scripts.

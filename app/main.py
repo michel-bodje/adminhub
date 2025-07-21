@@ -38,6 +38,7 @@ class HubAPI:
     def run(self, exe_name, json_blob):
         """ Runs a specified executable with the provided JSON input. """
         self._log(f"run() called with script_name: {exe_name}")
+        self._log(f"run() called with json_blob: {json_blob}")
         try:
             path = os.path.join(BIN_DIR, exe_name + ".exe")
             proc = subprocess.run(
