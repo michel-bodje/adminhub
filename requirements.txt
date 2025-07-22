@@ -3,6 +3,7 @@ pyinstaller
 pywebview
 pywinauto
 pyautogui
+pyperclip
 pytesseract
 pillow
 openpyxl

@@ -56,7 +56,14 @@ def main():
     """ Main function to start the webview application.
     """
     api = HubAPI()
-    webview.create_window("Amlex Admin Hub", INDEX_HTML, js_api=api, width=425, height=650)
+    webview.create_window(
+        "Amlex Admin Hub",
+        INDEX_HTML,
+        js_api=api,
+        width=425,
+        height=750,
+        x = 875,
+        y = 0)
     webview.start(debug=True, gui='edgechromium')
 
 if __name__ == '__main__':

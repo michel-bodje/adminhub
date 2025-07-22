@@ -1,7 +1,6 @@
 from pywinauto.application import Application
 from pywinauto.findwindows import find_windows
 from pywinauto.controls.uiawrapper import UIAWrapper
-from pywinauto import keyboard
 from pywinauto.keyboard import send_keys
 from time import sleep
 from datetime import datetime
@@ -9,6 +8,7 @@ import os
 import re
 import pytesseract
 import pyautogui
+from pyperclip import copy
 
 def connect_to_pclaw():
     """ Connects to the PCLaw Enterprise application and returns the main window. """
@@ -25,6 +25,8 @@ def get_dialog(parent_window, dialog_title):
 
 def new_matter_dialog():
     """ Opens the New Matter dialog using keyboard navigation. """
+    # send_keys('^n')  # Ctrl+N is often used for new entries, but not all computers might have this shortcut
+
     send_keys('%f')
     sleep(0.5)
     send_keys('{DOWN}')
@@ -36,23 +38,35 @@ def new_matter_dialog():
 def close_matter_dialog():
     """ Opens the Close Matter dialog using keyboard navigation. """
     send_keys('%f')
-    sleep(1)
-    send_keys('{DOWN}')
     sleep(0.5)
+    send_keys('{DOWN}')
+    sleep(0.2)
     send_keys('{RIGHT}')
+    sleep(0.2)
+    for _ in range(2):
+        send_keys('{DOWN}')
+        sleep(0.2)
+    send_keys('{ENTER}')
+
+def time_entry_dialog():
+    """ Opens the Time Entry dialog using keyboard navigation. """
+    # send_keys('^s') # Ctrl+S is often used for saving entries, but not all computers might have this shortcut
+    
+    send_keys('%d')
     sleep(0.5)
-    send_keys('{DOWN}')
-    sleep(0.5)
-    send_keys('{DOWN}')
-    sleep(0.5)
+    for _ in range(3):
+        send_keys('{DOWN}')
+        sleep(0.2)
     send_keys('{ENTER}')
 
 def register_dialog():
     """ Opens the Register Matter dialog using keyboard navigation. """
+    # send_keys('^r')  # Ctrl+R is often used for opening the register, but not all computers might have this shortcut
+
     send_keys('%d')
-    sleep(1)
-    send_keys('{UP}')
     sleep(0.5)
+    send_keys('{UP}')
+    sleep(0.2)
     send_keys('{ENTER}')
 
 def register_matter(matter_number: str):
@@ -341,22 +355,8 @@ def send_ctrl_arrow(direction: str = "right"):
     direction: "right" or "left".
     """
     seq = "^({RIGHT})" if direction.lower() == "right" else "^({LEFT})"
-    keyboard.send_keys(seq)
-    sleep(0.5)
-
-def clear_focus(dlg):
-    """
-    Clear focus so that Ctrl+Arrow works.
-    Seems to break navigation?
-    """
-    try:
-        dlg.set_focus()
-        print("Focus cleared")
-        sleep(0.5)
-    except:
-        print("Failed to clear focus")
-        return False
-    return True
+    send_keys(seq)
+    sleep(0.1)  # small delay to ensure the key press is registered
 
 def focus_first_edit(dlg):
     """
@@ -373,39 +373,6 @@ def focus_first_edit(dlg):
     except Exception as e:
         print(f"[Error] Couldn't focus any edit: {e}")
     return False
-
-def move_tab(dlg, repeat=1, direction="right"):
-    """
-    Moves tab left or right a number of times, focusing the first edit each time.
-    direction: "left" or "right"
-    repeat: number of times to move
-    dlg: dialog window to operate on (required)
-    """
-    if dlg is None:
-        raise ValueError("dlg parameter is required")
-    for _ in range(repeat):
-        focus_first_edit(dlg)
-        # clear_focus(dlg)
-        send_ctrl_arrow(direction)
-
-def go_to_main(dlg):
-    """
-    Navigates to Main tab from wherever.
-    """
-    move_tab(dlg, 2, "left")
-
-def go_to_billing(dlg):
-    """
-    From Main, goes to Billing.
-    Call go_to_main first to ensure starting at Main.
-    """
-    move_tab(dlg)  # Main -> Billing
-
-def go_to_custom(dlg):
-    """
-    From Main, goes to Custom via two rights.
-    """
-    move_tab(dlg, 2)  # Main -> Custom
 
 def find_edit_by_value(dlg, target_value):
     """
@@ -455,6 +422,38 @@ def find_edit_by_label(dlg, target_value):
     print(f"[Error] No Edit found with value '{target_value}'")
     return None
 
+def move_tab(dlg, repeat=1, direction="right"):
+    """
+    Moves tab left or right a number of times, focusing the first edit each time.
+    direction: "left" or "right"
+    repeat: number of times to move
+    dlg: dialog window to operate on (required)
+    """
+    if dlg is None:
+        raise ValueError("dlg parameter is required")
+    for _ in range(repeat):
+        focus_first_edit(dlg)
+        send_ctrl_arrow(direction)
+
+def go_to_main(dlg):
+    """
+    Navigates to Main tab from wherever.
+    """
+    move_tab(dlg, 2, "left")
+
+def go_to_billing(dlg):
+    """
+    From Main, goes to Billing.
+    Call go_to_main first to ensure starting at Main.
+    """
+    move_tab(dlg)  # Main -> Billing
+
+def go_to_custom(dlg):
+    """
+    From Main, goes to Custom via two rights.
+    """
+    move_tab(dlg, 2)  # Main -> Custom
+
 def fill_main_tab(fields):
     current_index = 0
     for target_index, value in fields:
@@ -493,3 +492,92 @@ def fill_custom_tab(dlg):
         except:
             continue
     print(f"[OK] Filled {filled} editable fields in Custom tab with 'n/a'")
+
+def fill_DH_time_entry(
+    date: str,
+    client: str,
+    description: str,
+    time_spent: str,
+    confirm_before_saving=True
+):
+    """ Fills the Time Entry dialog with the provided values."""
+    time_entry_dialog()
+    sleep(2)  # Wait for dialog to open
+
+    # -- Fill fields using entry attributes --
+
+    # Date
+    copy(date)
+    send_keys('+{TAB}')
+    send_keys('{BACKSPACE}')
+    sleep(0.2)
+    send_keys('^v')
+    sleep(0.2)
+    send_keys('{TAB}')
+    sleep(0.2)
+
+    # Matter
+    find_matter_from_name(client)
+    sleep(2.5)
+    
+    # Hours
+    for _ in range(4):
+        send_keys('{TAB}')
+        sleep(0.2)
+
+    copy(time_spent)
+    send_keys('^v')
+    sleep(0.2)
+
+    # Rate
+    send_keys('{TAB}')
+    sleep(0.2)
+    # Set Rate based on description keywords
+    desc_lower = description.lower()
+    if (
+        "initial consultation" in desc_lower
+        or "consultation initiale" in desc_lower
+        or "premiere consultation" in desc_lower
+        or "first consultation" in desc_lower
+    ):
+        rate = "125"
+    else:
+        rate = "350"
+
+    copy(rate)
+    send_keys('^v')
+    sleep(0.2)
+
+    # Explanation
+    for _ in range(3):
+        send_keys('{TAB}')
+        sleep(0.2)
+    copy(description)
+    send_keys('^v')
+
+    # Save
+    if not confirm_before_saving:
+        # TODO
+        pass
+
+def find_matter_from_name(name: str):
+    """ Searches for a matter by name, assuming a matter edit is focused."""
+    
+    # Separate the name into first and last
+    parts = name.split()
+    # Format as "Last, First [Middle]" if possible
+    if len(parts) > 1:
+        search_string = f"{parts[-1]}, {' '.join(parts[:-1])}"
+    else:
+        search_string = parts[0]
+    
+    # Open Pop-Up Help
+    send_keys('^({F1})')
+    sleep(2)
+
+    send_keys(search_string, with_spaces=True)
+    sleep(5)
+    # How to check if the matter is found? OCR?
+    # Press Enter to select result
+    send_keys('{ENTER}')
+    sleep(5)

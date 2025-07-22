@@ -1,4 +1,4 @@
-from base import *
+from pclaw import *
 import sys
 
 win = connect_to_pclaw()

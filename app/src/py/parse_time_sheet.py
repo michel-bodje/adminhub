@@ -1,30 +1,39 @@
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
-from datetime import datetime
+from datetime import datetime, date
+from dataclasses import dataclass
+from typing import List
+from pclaw import fill_DH_time_entry
 
-GREEN_HEX = "92D050"  # Excel green used to mark "recorded"
+@dataclass
+class TimeEntry:
+    date: date
+    client: str
+    description: str
+    time_spent: str # in hours
+    recorded: bool = False
+    row_index: int = -1  # 1-based row number in Excel
+
+GREEN_HEX = "92D050" # Excel green used to mark "recorded"
+GREEN_FILL = PatternFill(start_color=GREEN_HEX, end_color=GREEN_HEX, fill_type="solid")
 
 def is_green(cell):
-    """Returns True if the cell has the 'recorded' green fill."""
+    """Returns True if the cell is filled with green (meaning: already recorded)."""
     try:
         fill = cell.fill
         fg = fill.fgColor
-        if not fg or not hasattr(fg, "rgb"):
-            return False
-        color = str(fg.rgb)  # force to string in case it's not
-        return color.upper().endswith(GREEN_HEX)
+        color = str(fg.rgb).upper() if fg and hasattr(fg, "rgb") else ""
+        return color.endswith(GREEN_HEX)
     except:
         return False
 
-def parse_DH_time_sheet(filepath):
+def parse_DH_time_sheet(filepath: str) -> List[TimeEntry]:
     wb = load_workbook(filepath, data_only=True)
     ws = wb.active
 
-    # Get headers from row 1
     headers = [cell.value.strip().lower() if cell.value else "" for cell in ws[1]]
     col_index = {name: idx for idx, name in enumerate(headers)}
 
-    # Ensure required columns are present
     required = ["date", "client", "description", "time (hours)"]
     for r in required:
         if r not in col_index:
@@ -33,19 +42,15 @@ def parse_DH_time_sheet(filepath):
     entries = []
     current_date = None
 
-    for row in ws.iter_rows(min_row=4):
+    for i, row in enumerate(ws.iter_rows(min_row=4), start=4):  # start=4 to match Excel row numbers
         try:
-            # Cells
+            # Extract all relevant cells
             date_cell = row[col_index["date"]]
             client_cell = row[col_index["client"]]
             description_cell = row[col_index["description"]]
             time_cell = row[col_index["time (hours)"]]
 
-            # Skip if client cell is green
-            if is_green(client_cell):
-                continue  # Skip recorded entry
-
-            # Handle date
+            # --- Handle date first (always update current_date if there's a new one) ---
             date_raw = date_cell.value
             if isinstance(date_raw, datetime):
                 current_date = date_raw.date()
@@ -53,28 +58,75 @@ def parse_DH_time_sheet(filepath):
                 try:
                     current_date = datetime.strptime(date_raw.strip(), "%Y-%m-%d").date()
                 except ValueError:
-                    pass  # ignore bad string, don't override current_date
+                    pass  # bad format = ignore
 
+            # --- Skip row if no valid date has ever been set ---
             if not current_date:
-                continue  # Can't process row without any known date
+                continue
 
+            # --- Skip if marked recorded (green) ---
+            if is_green(client_cell):
+                continue
+
+            # --- Extract rest of values ---
             client = str(client_cell.value).strip() if client_cell.value else ""
+            if client.lower() == "administration":
+                continue
+
             description = str(description_cell.value).strip() if description_cell.value else ""
             time_spent = float(time_cell.value) if time_cell.value else 0.0
 
             if not client or not description or not time_spent:
                 continue
 
-            entries.append({
-                "date": current_date,
-                "client": client,
-                "description": description,
-                "time_spent": time_spent,
-                "recorded": False
-            })
+            entries.append(TimeEntry(
+                date=current_date,
+                client=client,
+                description=description,
+                time_spent=time_spent,
+                row_index=i
+            ))
 
         except Exception as e:
             print(f"Skipping row due to error: {e}")
             continue
 
+    # Sort by date (just in case)
+    entries.sort(key=lambda x: x.date)
+
     return entries
+
+def record_time_entry(entry: TimeEntry, filepath: str, confirm_before_saving=True):
+    """Takes a TimeEntry object and initiates UI automation into PCLaw."""
+
+    print(f"Recording time entry for {entry.client} on {entry.date} - {entry.time_spent}h")
+
+    # Automation logic
+    fill_DH_time_entry(
+        date=entry.date.strftime("%Y-%m-%d"),
+        client=entry.client,
+        description=entry.description.replace("’", "'").replace("œ", "oe"),
+        time_spent=entry.time_spent,
+        confirm_before_saving=confirm_before_saving
+    )
+
+    entry.recorded = True
+    mark_entry_as_recorded(filepath, entry)
+
+def mark_entry_as_recorded(filepath: str, entry: TimeEntry):
+    """Applies green fill to the 'client' cell of a recorded entry."""
+    wb = load_workbook(filepath)
+    ws = wb.active
+
+    headers = [cell.value.strip().lower() if cell.value else "" for cell in ws[1]]
+    col_index = {name: idx for idx, name in enumerate(headers)}
+    client_col = col_index.get("client")
+
+    if client_col is None:
+        raise ValueError("Couldn't find 'client' column in Excel")
+
+    cell = ws.cell(row=entry.row_index, column=client_col + 1)  # Excel is 1-based
+    cell.fill = GREEN_FILL
+
+    wb.save(filepath)
+    print(f"Marked row {entry.row_index} as recorded.")
