@@ -73,7 +73,8 @@ def register_matter(matter_number: str):
     """ Opens the chosen matter in the Register. """
     register_dialog()
     send_keys("%m")
-    send_keys(matter_number)
+    copy(matter_number)
+    send_keys('^v')
     sleep(0.5)
     send_keys("%s")
     sleep(0.5)
@@ -91,13 +92,15 @@ def bill_matter(matter_number: str, date: str = None, options: bool = False):
     send_keys('^b')
     send_keys("%m")
     sleep(0.3)
-    send_keys(matter_number)
+    copy(matter_number)
+    send_keys('^v')
     sleep(0.3)
     send_keys("%b")
-    send_keys(date)
+    copy(date)
+    send_keys('^v')
     sleep(0.3)
     send_keys("%a")
-    send_keys(date)
+    send_keys('^v')
     sleep(0.3)
 
     # Potential extra logic here: what if they want to use options?
@@ -145,7 +148,8 @@ def close_matter(matter_number: str):
 
     # Fill matter number
     send_keys("%m")
-    send_keys(matter_number)
+    copy(matter_number)
+    send_keys('^v')
     send_keys("{TAB}")
 
     # Let PCLaw load like the atrocious software it is
@@ -156,7 +160,8 @@ def close_matter(matter_number: str):
     send_keys("d")
     send_keys("f")
     sleep(0.5)
-    send_keys("No physical file", with_spaces=True)
+    copy("No physical file")
+    send_keys('^v')
     sleep(0.5)
     send_keys("{TAB}")
     send_keys("v")
@@ -461,7 +466,8 @@ def fill_main_tab(fields):
         for _ in range(tabs_needed):
             send_keys('{TAB}')
             sleep(0.2)  # small delay between each tab
-        send_keys(value, with_spaces=True)
+        copy(value)  # Copy the value to clipboard
+        send_keys('^v')  # Paste the value
         sleep(0.1)  # small delay after typing each field
         current_index = target_index
 
@@ -473,7 +479,8 @@ def fill_billing_tab(dlg):
     if edit:
         edit.set_edit_text("")  # Clear previous contents before typing new value
         edit.set_focus()
-        send_keys("Facture francais", with_spaces=True)
+        copy("Facture francais")
+        send_keys('^v')  # Paste the new value
         print("[OK] Replaced 'Default' with 'Facture francais' in Billing tab")
         return True
     else:
@@ -507,10 +514,9 @@ def fill_DH_time_entry(
     # -- Fill fields using entry attributes --
 
     # Date
-    copy(date)
     send_keys('+{TAB}')
     send_keys('{BACKSPACE}')
-    sleep(0.2)
+    copy(date)
     send_keys('^v')
     sleep(0.2)
     send_keys('{TAB}')
@@ -575,7 +581,8 @@ def find_matter_from_name(name: str):
     send_keys('^({F1})')
     sleep(2)
 
-    send_keys(search_string, with_spaces=True)
+    copy(search_string)
+    send_keys('^v')
     sleep(5)
     # How to check if the matter is found? OCR?
     # Press Enter to select result
