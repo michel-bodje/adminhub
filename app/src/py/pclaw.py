@@ -262,9 +262,10 @@ def ocr_has_balance():
                 all_zero = False
 
     if all_zero:
-        print("\n✅ All values are zero. Proceed.")
+        print("\n[OK] All values are zero. Proceed.")
     else:
-        print("\n❌ Not all values are zero. Abort.")
+        print("\n[ERROR] Not all values are zero. Abort.")
+
     balance = not all_zero
     return balance
         
