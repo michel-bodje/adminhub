@@ -1,20 +1,18 @@
 from pclaw import *
 from parse_json import *
 
-def main():
+def startup():
+    """ Connects to PCLaw and sets focus. """
     app = connect_to_pclaw()
     app.set_focus()
-
     data = read_stdin_json()
+    return app, data
+
+def main():
+    app, data = startup()
     matter = get_matter(data)
 
-    register_matter(matter)
-    sleep(3)
-
-    date = ocr_get_latest_date()
-
-    if date:
-        bill_matter(matter, date)
+    bill_matter(app, matter)
 
 if __name__ == "__main__":
     main()

@@ -1,14 +1,17 @@
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
-from datetime import datetime, date
-from dataclasses import dataclass
+from openpyxl.utils.datetime import from_excel
 from typing import List
-from pclaw import fill_DH_time_entry
+from dataclasses import dataclass
+from datetime import datetime, date, timedelta
+from pclaw import DH_fill_time_entry
+from config import *
 
 @dataclass
 class TimeEntry:
     date: date
     client: str
+    matter: str
     description: str
     time_spent: str # in hours
     recorded: bool = False
@@ -27,14 +30,14 @@ def is_green(cell):
     except:
         return False
 
-def parse_DH_time_sheet(filepath: str) -> List[TimeEntry]:
-    wb = load_workbook(filepath, data_only=True)
+def DH_parse_timesheet(filepath: str) -> List[TimeEntry]:
+    wb = load_workbook(filepath, data_only=False)
     ws = wb.active
 
     headers = [cell.value.strip().lower() if cell.value else "" for cell in ws[1]]
     col_index = {name: idx for idx, name in enumerate(headers)}
 
-    required = ["date", "client", "description", "time (hours)"]
+    required = ["date", "client", "matter", "description", "time (hours)"]
     for r in required:
         if r not in col_index:
             raise ValueError(f"Missing required column: '{r}'")
@@ -44,25 +47,33 @@ def parse_DH_time_sheet(filepath: str) -> List[TimeEntry]:
 
     for i, row in enumerate(ws.iter_rows(min_row=4), start=4):  # start=4 to match Excel row numbers
         try:
-            # Extract all relevant cells
             date_cell = row[col_index["date"]]
+            date_val = date_cell.value
+
+            if isinstance(date_val, datetime):
+                current_date = date_val
+            elif isinstance(date_val, str) and date_val.startswith("="):
+                # formula cell, increment date
+                if current_date is not None:
+                    current_date = current_date + timedelta(days=1)
+                else:
+                    print(f"Skipping row {i} — no valid current_date to increment")
+                    continue
+            elif date_val is None:
+                # blank cell, keep current_date as is
+                if current_date is None:
+                    print(f"Skipping row {i} — no current_date yet")
+                    continue
+            else:
+                print(f"Skipping row {i} — unexpected date cell content: {date_val}")
+                continue
+
+            print(f"Row {i} — date resolved to: {current_date}")
+
             client_cell = row[col_index["client"]]
+            matter_cell = row[col_index["matter"]]
             description_cell = row[col_index["description"]]
             time_cell = row[col_index["time (hours)"]]
-
-            # --- Handle date first (always update current_date if there's a new one) ---
-            date_raw = date_cell.value
-            if isinstance(date_raw, datetime):
-                current_date = date_raw.date()
-            elif isinstance(date_raw, str):
-                try:
-                    current_date = datetime.strptime(date_raw.strip(), "%Y-%m-%d").date()
-                except ValueError:
-                    pass  # bad format = ignore
-
-            # --- Skip row if no valid date has ever been set ---
-            if not current_date:
-                continue
 
             # --- Skip if marked recorded (green) ---
             if is_green(client_cell):
@@ -72,16 +83,18 @@ def parse_DH_time_sheet(filepath: str) -> List[TimeEntry]:
             client = str(client_cell.value).strip() if client_cell.value else ""
             if client.lower() == "administration":
                 continue
-
+            matter = str(matter_cell.value).strip() if matter_cell.value else ""
             description = str(description_cell.value).strip() if description_cell.value else ""
-            time_spent = float(time_cell.value) if time_cell.value else 0.0
+            time_spent = str(time_cell.value) if time_cell.value else ""
 
-            if not client or not description or not time_spent:
+            if not client or not matter or not description or not time_spent:
+                print(f"Skipping row {i} — missing required data.")
                 continue
 
             entries.append(TimeEntry(
                 date=current_date,
                 client=client,
+                matter=matter,
                 description=description,
                 time_spent=time_spent,
                 row_index=i
@@ -93,27 +106,28 @@ def parse_DH_time_sheet(filepath: str) -> List[TimeEntry]:
 
     # Sort by date (just in case)
     entries.sort(key=lambda x: x.date)
-
     return entries
 
-def record_time_entry(entry: TimeEntry, filepath: str, confirm_before_saving=True):
+def DH_record_time_entry(entry: TimeEntry, filepath: str, confirm_before_saving=True):
     """Takes a TimeEntry object and initiates UI automation into PCLaw."""
 
-    print(f"Recording time entry for {entry.client} on {entry.date} - {entry.time_spent}h")
+    print(f"Recording time entry for {entry.matter}: {entry.client} on {entry.date} - {entry.time_spent}h")
 
     # Automation logic
-    fill_DH_time_entry(
+    saved = DH_fill_time_entry(
         date=entry.date.strftime("%Y-%m-%d"),
         client=entry.client,
+        matter=entry.matter,
         description=entry.description.replace("’", "'").replace("œ", "oe"),
         time_spent=entry.time_spent,
         confirm_before_saving=confirm_before_saving
     )
 
-    entry.recorded = True
-    mark_entry_as_recorded(filepath, entry)
+    if saved:
+        entry.recorded = True
+        DH_mark_entry_as_recorded(filepath, entry)
 
-def mark_entry_as_recorded(filepath: str, entry: TimeEntry):
+def DH_mark_entry_as_recorded(filepath: str, entry: TimeEntry):
     """Applies green fill to the 'client' cell of a recorded entry."""
     wb = load_workbook(filepath)
     ws = wb.active
@@ -129,4 +143,5 @@ def mark_entry_as_recorded(filepath: str, entry: TimeEntry):
     cell.fill = GREEN_FILL
 
     wb.save(filepath)
+    alert_info(f"Marked entry for {entry.client} on {entry.date} as recorded.")
     print(f"Marked row {entry.row_index} as recorded.")

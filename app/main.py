@@ -1,8 +1,7 @@
-import os
+from src.py.config import *
 import json
 import subprocess
 import webview
-from src.py.config import *
 
 class HubAPI:
     """ API for the Amlex Admin Hub.
@@ -35,21 +34,35 @@ class HubAPI:
         except Exception as e:
             return {"error": str(e)}
 
-    def run(self, exe_name, json_blob):
-        """ Runs a specified executable with the provided JSON input. """
-        self._log(f"run() called with script_name: {exe_name}")
-        self._log(f"run() called with json_blob: {json_blob}")
+    def run(self, script_name, json_blob):
+        """ Runs a specified script with the provided JSON input. """
+        self._log(f"run() called with script_name: {script_name}")
+        # self._log(f"run() called with json_blob: {json_blob}")
+
         try:
-            path = os.path.join(BIN_DIR, exe_name + ".exe")
+            path = os.path.join(SRC_DIR, "py", script_name + ".py")
+            if not os.path.exists(path):
+                return { "error": f"Script not found: {path}" }
+            
+            # Call it via the Python interpreter
             proc = subprocess.run(
-                [path],
+                [sys.executable, path],
                 input=json_blob.encode("utf-8"),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 check=True
             )
-            return { "output": proc.stdout.decode() }
+
+            output = proc.stdout.decode("utf-8").strip()
+            return { "output": output }
+
+        except subprocess.CalledProcessError as e:
+            # Subprocess ran but returned non-zero (e.g., raised exception)
+            error_output = e.stderr.decode("utf-8").strip()
+            return { "error": f"Subprocess error:\n{error_output}" }
+
         except Exception as e:
+            # Anything else (path issue, bad encoding, etc.)
             return { "error": str(e) }
 
 def main():
@@ -61,7 +74,7 @@ def main():
         INDEX_HTML,
         js_api=api,
         width=425,
-        height=750,
+        height=700,
         x = 875,
         y = 0)
     webview.start(debug=True, gui='edgechromium')

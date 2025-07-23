@@ -1,15 +1,17 @@
 from pclaw import *
 from parse_json import *
 
-def main():
+def startup():
+    """ Connects to PCLaw and sets focus. """
     app = connect_to_pclaw()
     app.set_focus()
-
-    new_matter_dialog()
-    dlg = get_dialog(app, "New Matter")
-
     data = read_stdin_json()
-  
+    return app, data
+
+def open_matter(dlg, data):
+    """ Opens the New Matter dialog in PCLaw. """
+    new_matter_dialog()
+
     # Define the specific fields for New Matter
     fields = load_consultation_fields(data)
     
@@ -29,6 +31,16 @@ def main():
 
     # Optionally press OK
     # dlg.child_window(title="OK", control_type="Button").click_input()
+
+    # Final confirmation
+    sleep(4)
+    alert_info("New matter created successfully in PCLaw.")
+
+def main():
+    app, data = startup()
+    dlg = get_dialog(app, "New Matter")
+
+    open_matter(dlg, data)
 
 if __name__ == "__main__":
     main()

@@ -1,14 +1,14 @@
-from pywinauto.application import Application
-from pywinauto.findwindows import find_windows
-from pywinauto.controls.uiawrapper import UIAWrapper
-from pywinauto.keyboard import send_keys
-from time import sleep
+from config import *
 from datetime import datetime
-import os
+from time import sleep
 import re
 import pytesseract
-import pyautogui
 from pyperclip import copy
+from pyautogui import screenshot
+from pywinauto.application import Application
+from pywinauto.controls.uiawrapper import UIAWrapper
+from pywinauto.findwindows import find_windows
+from pywinauto.keyboard import send_keys
 
 def connect_to_pclaw():
     """ Connects to the PCLaw Enterprise application and returns the main window. """
@@ -40,12 +40,12 @@ def close_matter_dialog():
     send_keys('%f')
     sleep(0.5)
     send_keys('{DOWN}')
-    sleep(0.2)
+    sleep(0.1)
     send_keys('{RIGHT}')
-    sleep(0.2)
+    sleep(0.1)
     for _ in range(2):
         send_keys('{DOWN}')
-        sleep(0.2)
+        sleep(0.1)
     send_keys('{ENTER}')
 
 def time_entry_dialog():
@@ -80,28 +80,31 @@ def register_matter(matter_number: str):
     sleep(0.5)
     send_keys("{ENTER}")
 
-def bill_matter(matter_number: str, date: str = None, options: bool = False):
+def bill_matter(app, matter_number: str, options: bool = False):
     """ Opens the Bill Matter dialog and fill with matter number and date. """
-    if date is None:
-        print("[Error] No date provided for billing. Aborting.")
+    register_matter(matter_number)
+    sleep(3)
+
+    date = ocr_get_latest_date()
+    if not date:
+        print("[Error] No date found for billing. Aborting.")
+        alert_error("No date found for billing. Aborting.")
         return
 
-    main = connect_to_pclaw()
-
     # Fill basic fields
-    send_keys('^b')
+    send_keys('^b') # Open Bill Matter dialog
     send_keys("%m")
-    sleep(0.3)
+    sleep(0.2)
     copy(matter_number)
     send_keys('^v')
-    sleep(0.3)
+    sleep(0.2)
     send_keys("%b")
     copy(date)
     send_keys('^v')
-    sleep(0.3)
+    sleep(0.2)
     send_keys("%a")
     send_keys('^v')
-    sleep(0.3)
+    sleep(0.2)
 
     # Potential extra logic here: what if they want to use options?
     # If the dialog has options, we can handle them here.
@@ -109,9 +112,9 @@ def bill_matter(matter_number: str, date: str = None, options: bool = False):
         pass
     else:
         # Click OK
-        main.child_window(title="OK", control_type="Button").click_input()
+        app.child_window(title="OK", control_type="Button").click_input()
 
-    # Wait for new dialog to appear: pclaw clunky
+    # Wait for new dialog to appear: pclaw piece of junk
     sleep(15)
     # Validate default bill settings
     send_keys("%m")
@@ -120,30 +123,29 @@ def bill_matter(matter_number: str, date: str = None, options: bool = False):
     # Wait for the preview dialog to appear
     sleep(6)
     # print: send that shortcut enough times to trigger
-    send_keys("%p")
-    send_keys("%p")
-    send_keys("%p")
-    send_keys("%p")
-    send_keys("%p")
+    for _ in range(5):
+        send_keys("%p")
 
     # Wait for the print to complete
     sleep(2)
-    send_keys("{ENTER}")
+
     # Refresh
+    send_keys("{ENTER}")
     sleep(0.3)
     send_keys("%m")
     send_keys("%s")
     sleep(0.3)
     send_keys("{ENTER}")
+    
+    # Final confirmation
+    sleep(4)
+    alert_info(f"Successfully billed matter {matter_number} in PCLaw.")
 
 def close_matter(matter_number: str):
     """
     Opens the Close Matter dialog for the chosen matter.
     Also checks visually if closable or not
     """
-    main = connect_to_pclaw()
-    main.set_focus()
-
     close_matter_dialog()
 
     # Fill matter number
@@ -153,37 +155,39 @@ def close_matter(matter_number: str):
     send_keys("{TAB}")
 
     # Let PCLaw load like the atrocious software it is
-    sleep(33)
+    sleep(36)
     send_keys("{ENTER}")
 
     # Fill window, assume "No physical file"
     send_keys("d")
     send_keys("f")
-    sleep(0.5)
+    sleep(0.2)
     copy("No physical file")
     send_keys('^v')
-    sleep(0.5)
+    sleep(0.2)
     send_keys("{TAB}")
     send_keys("v")
 
-    # Run the OCR script to check balances
-    # before closing, we need to confirm balances are zero
-    no_balance = ocr_get_balance()
+    # Run OCR to check balances
+    # Before closing, we need to confirm balances are zero
+    balance = ocr_has_balance()
 
-    if no_balance:
+    if not balance:
         sleep(0.5)
         send_keys("{ENTER}")
         sleep(0.5)
         send_keys("{ENTER}")
         sleep(0.5)
         send_keys("{ENTER}")
+        sleep(1.5)
+        alert_info(f"Successfully closed matter {matter_number} in PCLaw.")
     else:
         print("[Error] Remaining balance is not zero. Matter should not be closed.")
-        #ctypes.windll.user32.MessageBoxW(0, "[Error] Remaining balance is not zero. Matter should not be closed until all balances are cleared.", "Warning", 0x30)
+        alert_warning("[Error] Remaining balance is not zero. Matter should not be closed until all balances are cleared.")
 
-def ocr_get_balance():
-    """ Uses OCR to extract financial data from the Close Matter dialog."""
-    pytesseract.pytesseract.tesseract_cmd = os.path.join(os.path.dirname(__file__), "tesseract", "tesseract.exe")
+def ocr_has_balance():
+    """ Uses OCR to determine financial data from the Close Matter dialog."""
+    pytesseract.pytesseract.tesseract_cmd = os.path.join(SRC_DIR, "py", "tesseract", "tesseract.exe")
 
     LABELS = ["Unbd D", "A/R", "Gen Rtnr", "Trust"]
 
@@ -209,14 +213,14 @@ def ocr_get_balance():
     crop_height = crop_bottom - crop_top
 
     # Take screenshot of the cropped region
-    screenshot = pyautogui.screenshot(region=(crop_left, crop_top, crop_width, crop_height))
+    sc = screenshot(region=(crop_left, crop_top, crop_width, crop_height))
 
     # (Optional) Save image to inspect
-    # screenshot.save("debug_crop.png")
+    # sc.save("debug_crop.png")
 
     # === OCR ===
     custom_config = r'--oem 3 --psm 6'
-    text = pytesseract.image_to_string(screenshot, config=custom_config)
+    text = pytesseract.image_to_string(sc, config=custom_config)
     # print("==== OCR Text ====")
     # print(text)
 
@@ -259,10 +263,10 @@ def ocr_get_balance():
 
     if all_zero:
         print("\n✅ All values are zero. Proceed.")
-        return True
+        return False
     else:
         print("\n❌ Not all values are zero. Abort.")
-        return False
+        return True
 
 def ocr_get_latest_date():
     """
@@ -270,7 +274,7 @@ def ocr_get_latest_date():
     aborting if there is a trust balance.
     You need manual user checking when it comes to trusts.
     """
-    pytesseract.pytesseract.tesseract_cmd = os.path.join(os.path.dirname(__file__), "tesseract", "tesseract.exe")
+    pytesseract.pytesseract.tesseract_cmd = os.path.join(SRC_DIR, "py", "tesseract", "tesseract.exe")
 
     # === Locate Register window ===
     try:
@@ -286,7 +290,7 @@ def ocr_get_latest_date():
     width, height = right - left, bottom - top
 
     # Take full Register window screenshot
-    full_screenshot = pyautogui.screenshot(region=(left, top, width, height))
+    full_screenshot = screenshot(region=(left, top, width, height))
 
     # Crop
     trust_crop = full_screenshot.crop((
@@ -427,6 +431,29 @@ def find_edit_by_label(dlg, target_value):
     print(f"[Error] No Edit found with value '{target_value}'")
     return None
 
+def find_matter_from_name(name: str):
+    """ Searches for a matter by name, assuming a matter edit is focused."""
+    
+    # Separate the name into first and last
+    parts = name.split()
+    # Format as "Last, First [Middle]" if possible
+    if len(parts) > 1:
+        search_string = f"{parts[-1]}, {' '.join(parts[:-1])}"
+    else:
+        search_string = parts[0]
+    
+    # Open Pop-Up Help
+    send_keys('^({F1})')
+    sleep(2)
+
+    copy(search_string)
+    send_keys('^v')
+    sleep(5)
+    # How to check if the matter is found? OCR?
+    # Press Enter to select result
+    send_keys('{ENTER}')
+    sleep(5)
+
 def move_tab(dlg, repeat=1, direction="right"):
     """
     Moves tab left or right a number of times, focusing the first edit each time.
@@ -500,13 +527,14 @@ def fill_custom_tab(dlg):
             continue
     print(f"[OK] Filled {filled} editable fields in Custom tab with 'n/a'")
 
-def fill_DH_time_entry(
+def DH_fill_time_entry(
     date: str,
     client: str,
+    matter: str,
     description: str,
     time_spent: str,
     confirm_before_saving=True
-):
+) -> bool:
     """ Fills the Time Entry dialog with the provided values."""
     time_entry_dialog()
     sleep(2)  # Wait for dialog to open
@@ -523,8 +551,10 @@ def fill_DH_time_entry(
     sleep(0.2)
 
     # Matter
-    find_matter_from_name(client)
-    sleep(2.5)
+    # find_matter_from_name(client)
+    copy(matter)
+    send_keys('^v')
+    sleep(3)
     
     # Hours
     for _ in range(4):
@@ -562,29 +592,23 @@ def fill_DH_time_entry(
     send_keys('^v')
 
     # Save
+    app = connect_to_pclaw()
+
     if not confirm_before_saving:
-        # TODO
-        pass
-
-def find_matter_from_name(name: str):
-    """ Searches for a matter by name, assuming a matter edit is focused."""
-    
-    # Separate the name into first and last
-    parts = name.split()
-    # Format as "Last, First [Middle]" if possible
-    if len(parts) > 1:
-        search_string = f"{parts[-1]}, {' '.join(parts[:-1])}"
+        # Click OK
+        app.child_window(title="OK", control_type="Button").click_input()
+        alert_info(f"Time entry for {client} on {date} recorded successfully.")
+        print(f"Time entry for {client} on {date} recorded successfully.")
+        return True
     else:
-        search_string = parts[0]
-    
-    # Open Pop-Up Help
-    send_keys('^({F1})')
-    sleep(2)
-
-    copy(search_string)
-    send_keys('^v')
-    sleep(5)
-    # How to check if the matter is found? OCR?
-    # Press Enter to select result
-    send_keys('{ENTER}')
-    sleep(5)
+        # Confirm before saving
+        confirm = confirm_continue(f"Confirm time entry for {client} on {date} - {time_spent}h?")
+        if confirm:
+            app.child_window(title="OK", control_type="Button").click_input()
+            alert_info(f"Time entry for {client} on {date} recorded successfully.")
+            return True
+        else:
+            app.child_window(title="Cancel", control_type="Button").click_input()
+            alert_warning("Time entry recording cancelled by user.")
+            print("Time entry recording cancelled by user.")
+            return False
