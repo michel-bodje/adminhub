@@ -263,10 +263,11 @@ def ocr_has_balance():
 
     if all_zero:
         print("\n✅ All values are zero. Proceed.")
-        return False
     else:
         print("\n❌ Not all values are zero. Abort.")
-        return True
+    balance = not all_zero
+    return balance
+        
 
 def ocr_get_latest_date():
     """
