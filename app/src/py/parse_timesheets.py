@@ -1,6 +1,5 @@
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
-from openpyxl.utils.datetime import from_excel
 from typing import List
 from dataclasses import dataclass
 from datetime import datetime, date, timedelta
