@@ -6,24 +6,11 @@ import {
   resetPage,
   loadLawyers,
   setLawyers,
-  formatPhoneNumber,
   populateLawyerDropdown,
   handleCaseDetails,
   handlePaymentOptions,
 } from "./index.js";
-import {
-  ACTIONS_BY_ID, 
-  scheduleAppointment,
-  sendConfirmation,
-  sendReply,
-  sendReview,
-  sendFollowup,
-  createContract,
-  createReceipt,
-  newMatter,
-  closeMatter,
-  billMatter,
-} from "./actions.js";
+import { ACTIONS_BY_ID } from "./actions.js";
 
 window.addEventListener('pywebviewready', () => {
   console.log("[AdminHub] pywebview is ready.");

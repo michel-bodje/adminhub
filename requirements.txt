@@ -1,13 +1,19 @@
 # Python requirements
-pyinstaller
-pywebview
-pywinauto
-pyautogui
-pyperclip
-pytesseract
-pillow
-openpyxl
 pandas
+
+pillow
+pytesseract
+
+pyclip
+pyperclip
+
+pyautogui
+pywinauto
+pywin32
+
+openpyxl
+pywebview
+
 
 # Windows requirements (manual installation required)
 # - Newtonsoft.Json.dll (included in app/bin/)

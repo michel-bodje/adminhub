@@ -113,7 +113,7 @@ export async function sendReview() {
 export async function sendFollowup() {
   try {
     const json_blob = await getForm();
-    await window.pywebview.api.run("emailSuivi", json_blob);
+    await window.pywebview.api.run("emailFollowup", json_blob);
     console.log("[AdminHub] Follow-up email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing follow-up email:", error);

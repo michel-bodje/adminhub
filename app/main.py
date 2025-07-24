@@ -1,4 +1,4 @@
-from src.py.config import *
+from src.config import *
 import json
 import subprocess
 import webview
@@ -7,9 +7,6 @@ class HubAPI:
     """ API for the Amlex Admin Hub.
     This class provides methods to interact with the hub from JavaScript.
     """
-    def _log(self, message):
-        print(f"[AdminHub] {message}")
-
     def format_form(self, form, case, lwy):
         """ Returns structured JSON. """
         try:
@@ -20,7 +17,7 @@ class HubAPI:
             }
             return { "json": json.dumps(data, indent=2) }
         except Exception as e:
-            self._log(f"Error formatting form data: {str(e)}")
+            log(f"Error formatting form data: {str(e)}")
             return { "error": str(e) }
 
     def get_lawyers(self):
@@ -36,11 +33,11 @@ class HubAPI:
 
     def run(self, script_name, json_blob):
         """ Runs a specified script with the provided JSON input. """
-        self._log(f"run() called with script_name: {script_name}")
-        # self._log(f"run() called with json_blob: {json_blob}")
+        log(f"run() called with script_name: {script_name}")
+        # log(f"run() called with json_blob: {json_blob}")
 
         try:
-            path = os.path.join(SRC_DIR, "py", script_name + ".py")
+            path = os.path.join(SRC_DIR, script_name + ".py")
             if not os.path.exists(path):
                 return { "error": f"Script not found: {path}" }
             
