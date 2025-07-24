@@ -27,25 +27,23 @@ def open_contract_draft():
         temp_doc_path = os.path.join(os.environ.get("TEMP", "/tmp"), f"Contract_{os.urandom(4).hex()}.docx")
         shutil.copy(template_path, temp_doc_path)
 
-        # Initialize Word COM
-        pythoncom.CoInitialize()
-        word = COM.DispatchEx("Word.Application")
-        doc = word.Documents.Open(temp_doc_path)
-
         # Compute replacements
         total_amount = add_taxes(deposit_amount, add_fof=True)
         formatted_deposit = f"{deposit_amount:.0f}"
         formatted_amount = f"{total_amount:.2f}"
         today = format_date(datetime.today(), lang)
 
-        title_text = {
+        title_map = {
             "divorce": ("Représentation en divorce", "Representation in Divorce"),
             "estate": ("Représentation en droit des successions", "Representation in Estate Law"),
             "limited": ("Mandat Limité", "Limited Mandate")
-        }.get(contract_title, (
-            f"Représentation en {contract_title}",
-            f"Representation in {contract_title}"
-        ))[0 if lang == "fr" else 1]
+        }
+        if contract_title in title_map:
+            title_text = title_map[contract_title][0 if lang == "fr" else 1]
+        elif contract_title:
+            title_text = contract_title  # raw, untranslated
+        else:
+            title_text = ""  # or raise an error if this should never happen
 
         replacements = {
             "{clientName}": client_name,
@@ -54,13 +52,19 @@ def open_contract_draft():
             "{totalAmount}": formatted_amount,
             "{date}": today
         }
+
+        # Initialize Word COM
+        pythoncom.CoInitialize()
+        word = COM.DispatchEx("Word.Application")
+        doc = word.Documents.Open(temp_doc_path)
+
         for placeholder, replacement in replacements.items():
             word_replace_text(doc, placeholder, replacement)
         word_hyperlink_email(doc, "{clientEmail}", client_email)
 
         # Show Word
         word.Visible = True
-        focus_outlook_mail_window(doc.ActiveWindow)
+        focus_office_window(doc.ActiveWindow)
 
         # Save PDF dialog
         Tk().withdraw()
@@ -81,11 +85,9 @@ def open_contract_draft():
             os.remove(temp_doc_path)
         else:
             call_cleaner_async(temp_doc_path)
-
     except Exception as e:
         alert_error(f"Error: {e}")
         raise
-    
     finally:
         try:
             pythoncom.CoUninitialize()

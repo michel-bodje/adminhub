@@ -8,9 +8,11 @@ def startup():
     data = read_json()
     return app, data
 
-def open_matter(dlg, data):
+def open_matter(app, data):
     """ Opens the New Matter dialog in PCLaw. """
     new_matter_dialog()
+
+    dlg = get_dialog(app, "New Matter")
 
     # Define the specific fields for New Matter
     fields = load_consultation_fields(data)
@@ -33,14 +35,12 @@ def open_matter(dlg, data):
     # dlg.child_window(title="OK", control_type="Button").click_input()
 
     # Final confirmation
-    sleep(4)
+    sleep(2)
     alert_info("New matter created successfully in PCLaw.")
 
 def main():
     app, data = startup()
-    dlg = get_dialog(app, "New Matter")
-
-    open_matter(dlg, data)
+    open_matter(app, data)
 
 if __name__ == "__main__":
     main()

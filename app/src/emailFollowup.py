@@ -23,7 +23,7 @@ def open_followup_email():
         mail.HTMLBody = html_body
         mail.Display()
 
-        focus_outlook_mail_window(mail)
+        focus_office_window(mail)
         print("Follow-up email draft opened in Outlook.")
 
     except Exception as e:

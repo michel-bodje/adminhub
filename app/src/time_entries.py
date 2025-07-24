@@ -22,7 +22,7 @@ def DH_enter_time():
     """
     for entry in entries:
         if not entry.recorded:
-            record_time_entry(entry, path)
+            DH_record_time_entry(entry, path)
             print(f"Recorded: {entry.client} - {entry.description} on {entry.date} for {entry.time_spent} hours")
     """
     # For testing, let's just record the first entry

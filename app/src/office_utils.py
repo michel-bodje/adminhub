@@ -2,21 +2,6 @@ import locale
 from config import *
 
 # ----------------------------
-# Window Focus
-# ----------------------------
-
-def focus_outlook_mail_window(mail_item):
-    """Brings the Outlook mail window to the foreground."""
-    try:
-        inspector = mail_item.GetInspector
-        inspector.Activate()  # This opens and focuses the mail window
-        return True
-    except Exception as e:
-        print(f"Failed to activate Inspector: {e}")
-        return False
-
-
-# ----------------------------
 # Various Utilities
 # ----------------------------
 
@@ -27,7 +12,6 @@ def add_taxes(amount, add_fof=False):
     if add_fof:
         total += 100
     return total
-
 
 def get_ordinal_suffix(n):
     if 11 <= n % 100 <= 13:
@@ -57,10 +41,26 @@ def format_time(slot, lang):
     """ Format time based on language: 12-hour for English, 24-hour for French. """
     return slot.strftime("%I:%M %p" if lang == "en" else "%H:%M").lstrip("0").replace(" 0", " ")
 
-def get_lawyer_string(name, lawyer_id):
+def get_lawyer_string(name, lawyer_id) -> str:
+    """ Format lawyer name with prefix if applicable. """
     if lawyer_id not in ("AR", "MG", "PM"):
         return f"Me {name}"
     return name
+
+
+# ----------------------------
+# Window Focus
+# ----------------------------
+
+def focus_office_window(item):
+    """Brings the created Office window to the foreground."""
+    try:
+        inspector = item.GetInspector
+        inspector.Activate()  # This opens and focuses the window
+        return True
+    except Exception as e:
+        print(f"Failed to activate Inspector: {e}")
+        return False
 
 
 # ----------------------------
@@ -68,13 +68,15 @@ def get_lawyer_string(name, lawyer_id):
 # ----------------------------
 
 def word_replace_text(doc, placeholder, replacement):
-    # Only operate in the main story (not headers/footers/footnotes)
-    range_obj = doc.StoryRanges(1)  # wdMainTextStory = 1
-    find = range_obj.Find
+    """Replace all occurrences of a placeholder in the Word document using Word COM."""
+    find = doc.Content.Find
+
     find.ClearFormatting()
-    find.Text = placeholder
     find.Replacement.ClearFormatting()
+
+    find.Text = placeholder
     find.Replacement.Text = replacement
+
     find.Forward = True
     find.Wrap = 1  # wdFindContinue
     find.Format = False
@@ -84,9 +86,23 @@ def word_replace_text(doc, placeholder, replacement):
     find.MatchSoundsLike = False
     find.MatchAllWordForms = False
 
-    find.Execute(Replace=2)  # wdReplaceAll
+    # THIS is the crucial part: explicit parameters
+    find.Execute(
+        FindText=placeholder,
+        MatchCase=False,
+        MatchWholeWord=False,
+        MatchWildcards=False,
+        MatchSoundsLike=False,
+        MatchAllWordForms=False,
+        Forward=True,
+        Wrap=1,
+        Format=False,
+        ReplaceWith=replacement,
+        Replace=2  # wdReplaceAll
+    )
 
 def word_hyperlink_email(doc, placeholder: str, email: str):
+    """Replace email placeholder with a hyperlink to an email address."""
     range_obj = doc.Content
     find = range_obj.Find
 
@@ -102,7 +118,7 @@ def word_hyperlink_email(doc, placeholder: str, email: str):
             TextToDisplay=email
         )
     else:
-        print(f"[warn] Could not find placeholder for email: {placeholder}")
+        log(f"[Error] Could not find placeholder for email: {placeholder}")
 
 
 # ----------------------------

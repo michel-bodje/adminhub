@@ -14,6 +14,8 @@ pywin32
 openpyxl
 pywebview
 
+python-docx
+
 
 # Windows requirements (manual installation required)
 # - Newtonsoft.Json.dll (included in app/bin/)

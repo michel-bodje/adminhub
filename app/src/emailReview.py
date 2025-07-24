@@ -22,7 +22,7 @@ def open_review_email():
         mail.HTMLBody = html_body
         mail.Display()
 
-        focus_outlook_mail_window(mail)
+        focus_office_window(mail)
         log("Review email draft opened in Outlook.")
 
     except Exception as e:

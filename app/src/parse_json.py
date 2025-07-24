@@ -22,10 +22,11 @@ def read_json(file_path=None):
         raise ValueError(f"Error reading JSON: {str(e)}") from e
 
 def split_data(data):
+    """Splits JSON data into form, case, and lawyer sections."""
     try:
         form = data["form"]
-        case = data.get("case", {})
-        lawyer = data.get("lawyer", {})
+        case = data["case"]
+        lawyer = data["lawyer"]
         return form, case, lawyer
     except KeyError as e:
         alert_error(f"Missing key in JSON data: {str(e)}")

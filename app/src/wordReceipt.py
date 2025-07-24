@@ -10,13 +10,14 @@ from parse_json import *
 def open_receipt():
     try:
         data = read_json()
-        form, lawyer, _ = split_data(data)
+        form, _, lawyer = split_data(data)
 
         client_name = form.get("clientName", "")
         client_language = get_language(data)
         payment_method = form.get("paymentMethod", "")
         deposit_amount = float(form.get("depositAmount", 0))
         receipt_reason = form.get("receiptReason", "")
+        lawyer_id = lawyer.get("id", "")
         lawyer_name = lawyer.get("name", "")
 
         lang = "fr" if client_language.startswith("Français") else "en"
@@ -28,14 +29,10 @@ def open_receipt():
         temp_doc_path = os.path.join(os.environ.get("TEMP", "/tmp"), f"Receipt_{os.urandom(4).hex()}.docx")
         shutil.copy(template_path, temp_doc_path)
 
-        # Init Word COM
-        pythoncom.CoInitialize()
-        word = COM.DispatchEx("Word.Application")
-        doc = word.Documents.Open(temp_doc_path)
-
-        # Format date & amount
-        formatted_date = datetime.today().strftime("%A, %B %d, %Y") if lang == "en" else datetime.today().strftime("%A %d %B %Y")
+        # Formating
+        formatted_date = format_date(datetime.today(), lang)
         formatted_amount = f"{deposit_amount:.2f}"
+        lawyer_string = get_lawyer_string(lawyer_name, lawyer_id)
 
         # Prepare reason text
         reason_text = {
@@ -49,16 +46,21 @@ def open_receipt():
             "{clientName}": client_name,
             "{paymentMethod}": payment_method,
             "{depositAmount}": formatted_amount,
-            "{lawyerName}": lawyer_name,
+            "{lawyerName}": lawyer_string,
             "{date}": formatted_date
         }
+        
+        # Init Word COM
+        pythoncom.CoInitialize()
+        word = COM.DispatchEx("Word.Application")
+        doc = word.Documents.Open(temp_doc_path)
 
         for placeholder, replacement in replacements.items():
             word_replace_text(doc, placeholder, replacement)
 
         # Show Word window and focus
         word.Visible = True
-        focus_outlook_mail_window(doc.ActiveWindow)
+        focus_office_window(doc.ActiveWindow)
 
         # Print dialog (File > Print)
         word.Dialogs(88).Show()  # 88 = wdDialogFilePrint

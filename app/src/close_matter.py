@@ -9,7 +9,7 @@ def startup():
     return app, data
 
 def main():
-    app, data = startup()
+    _, data = startup()
     matter = get_matter(data)
 
     close_matter(matter)
