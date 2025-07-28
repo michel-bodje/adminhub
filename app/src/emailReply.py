@@ -18,8 +18,7 @@ def open_reply_email():
         with open(template_path, "r", encoding="utf-8") as f:
             html_body = f.read()
 
-        lawyer_display = f"{lawyer_name} ({lawyer_id})" if lawyer_id else lawyer_name
-        html_body = html_body.replace("{{lawyerName}}", lawyer_display)
+        html_body = html_body.replace("{{lawyerName}}", get_lawyer_string(lawyer_name, lawyer_id))
 
         outlook = COM.Dispatch("Outlook.Application")
         mail = outlook.CreateItem(0)  # 0 = olMailItem

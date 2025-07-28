@@ -9,7 +9,7 @@ def open_confirmation_email():
         form, _, lawyer = split_data(data)
 
         client_email = form["clientEmail"]
-        client_language = get_language(data)
+        client_language = form.get("clientLanguage", "English").lower()
         location = form.get("location", "")
         is_ref_barreau = form.get("isRefBarreau", False)
         is_first_consult = form.get("isFirstConsultation", False)

@@ -54,9 +54,9 @@ function attachEventListeners() {
     Date: (value) => formState.update("appointmentDate", value),
     Time: (value) => formState.update("appointmentTime", value),
     FirstConsultation: (value, el) => formState.update("isFirstConsultation", el.checked),
-    refBarreau: (value, el) => formState.update("isRefBarreau", el.checked),
-    existingClient: (value, el) => formState.update("isExistingClient", el.checked),
-    paymentMade: (value, el) => {
+    RefBarreau: (value, el) => formState.update("isRefBarreau", el.checked),
+    ExistingClient: (value, el) => formState.update("isExistingClient", el.checked),
+    PaymentMade: (value, el) => {
       formState.update("isPaymentMade", el.checked);
       handlePaymentOptions();
     },
