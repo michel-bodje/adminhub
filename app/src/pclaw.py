@@ -556,7 +556,7 @@ def DH_fill_time_entry(
     # find_matter_from_name(client)
     copy(matter)
     send_keys('^v')
-    sleep(3)
+    sleep(1.5)
     
     # Hours
     for _ in range(4):

@@ -15,6 +15,7 @@ openpyxl
 pywebview
 
 python-docx
+language-tool-python
 
 
 # Windows requirements (manual installation required)

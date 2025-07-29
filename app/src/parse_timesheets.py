@@ -3,6 +3,7 @@ from openpyxl.styles import PatternFill
 from typing import List
 from dataclasses import dataclass
 from datetime import datetime, date, timedelta
+import language_tool_python
 from pclaw import DH_fill_time_entry
 from config import *
 
@@ -56,18 +57,18 @@ def DH_parse_timesheet(filepath: str) -> List[TimeEntry]:
                 if current_date is not None:
                     current_date = current_date + timedelta(days=1)
                 else:
-                    print(f"Skipping row {i} — no valid current_date to increment")
+                    # print(f"Skipping row {i} — no valid current_date to increment")
                     continue
             elif date_val is None:
                 # blank cell, keep current_date as is
                 if current_date is None:
-                    print(f"Skipping row {i} — no current_date yet")
+                    # print(f"Skipping row {i} — no current_date yet")
                     continue
             else:
-                print(f"Skipping row {i} — unexpected date cell content: {date_val}")
+                # print(f"Skipping row {i} — unexpected date cell content: {date_val}")
                 continue
 
-            print(f"Row {i} — date resolved to: {current_date}")
+            # print(f"Row {i} — date resolved to: {current_date}")
 
             client_cell = row[col_index["client"]]
             matter_cell = row[col_index["matter"]]
@@ -87,7 +88,7 @@ def DH_parse_timesheet(filepath: str) -> List[TimeEntry]:
             time_spent = str(time_cell.value) if time_cell.value else ""
 
             if not client or not matter or not description or not time_spent:
-                print(f"Skipping row {i} — missing required data.")
+                # print(f"Skipping row {i} — missing required data.")
                 continue
 
             entries.append(TimeEntry(
@@ -107,7 +108,7 @@ def DH_parse_timesheet(filepath: str) -> List[TimeEntry]:
     entries.sort(key=lambda x: x.date)
     return entries
 
-def DH_record_time_entry(entry: TimeEntry, filepath: str, confirm_before_saving=True):
+def DH_record_time_entry(entry: TimeEntry, filepath: str, confirm_before_saving=True) -> bool:
     """Takes a TimeEntry object and initiates UI automation into PCLaw."""
 
     print(f"Recording time entry for {entry.matter}: {entry.client} on {entry.date} - {entry.time_spent}h")
@@ -125,6 +126,8 @@ def DH_record_time_entry(entry: TimeEntry, filepath: str, confirm_before_saving=
     if saved:
         entry.recorded = True
         DH_mark_entry_as_recorded(filepath, entry)
+    
+    return saved
 
 def DH_mark_entry_as_recorded(filepath: str, entry: TimeEntry):
     """Applies green fill to the 'client' cell of a recorded entry."""
@@ -144,3 +147,18 @@ def DH_mark_entry_as_recorded(filepath: str, entry: TimeEntry):
     wb.save(filepath)
     alert_info(f"Marked entry for {entry.client} on {entry.date} as recorded.")
     print(f"Marked row {entry.row_index} as recorded.")
+
+def safe_correct(text: str, lang='auto') -> str:
+    # 'auto' will detect language, or set to 'fr' / 'en-US' / 'en-CA' etc.
+    tool = language_tool_python.LanguageToolPublicAPI(lang)
+    matches = tool.check(text)
+    corrected = language_tool_python.utils.correct(text, matches)
+    
+    # Log corrections
+    for match in matches:
+        print(f"- {match.ruleId}: {match.message}")
+        print(f"  Suggestion: {match.replacements}")
+        print(f"  Context: {text[match.offset:match.offset + match.errorLength]}")
+        print()
+
+    return corrected

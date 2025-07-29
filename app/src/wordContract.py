@@ -60,6 +60,7 @@ def open_contract_draft():
 
         for placeholder, replacement in replacements.items():
             word_replace_text(doc, placeholder, replacement)
+            
         word_hyperlink_email(doc, "{clientEmail}", client_email)
 
         # Show Word
@@ -79,10 +80,13 @@ def open_contract_draft():
 
         if pdf_path:
             doc.ExportAsFixedFormat(pdf_path, 17)  # 17 = wdExportFormatPDF
-            print("Contract saved to PDF:", pdf_path)
+            print(f"Contract saved to PDF: {pdf_path}")
             doc.Close(False)
             word.Quit()
             os.remove(temp_doc_path)
+            
+            # Return path for frontend to capture
+            return pdf_path
         else:
             call_cleaner_async(temp_doc_path)
     except Exception as e:
