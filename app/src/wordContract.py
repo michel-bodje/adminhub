@@ -6,8 +6,7 @@ import win32com.client as COM
 from office_utils import *
 from parse_json import *
 
-
-def open_contract_draft():
+def create_contract():
     try:
         data = read_json()
         form, _, _ = split_data(data)
@@ -99,4 +98,4 @@ def open_contract_draft():
             pass
 
 if __name__ == "__main__":
-    open_contract_draft()
+    create_contract()

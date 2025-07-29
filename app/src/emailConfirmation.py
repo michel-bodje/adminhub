@@ -3,7 +3,7 @@ from parse_json import *
 import win32com.client as COM
 from datetime import datetime
 
-def open_confirmation_email():
+def draft_confirmation():
     try:
         data = read_json()
         form, _, lawyer = split_data(data)
@@ -63,4 +63,4 @@ def open_confirmation_email():
         raise
 
 if __name__ == "__main__":
-    open_confirmation_email()
+    draft_confirmation()

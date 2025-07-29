@@ -9,7 +9,7 @@ def is_file_unlocked(path):
     except OSError:
         return False
 
-def main():
+def cleanup():
     if len(sys.argv) != 2:
         print("Usage: cleanTempDoc.py <path>")
         return
@@ -40,4 +40,4 @@ def main():
     print("Timeout reached. File still in use or deletion failed.")
 
 if __name__ == "__main__":
-    main()
+    cleanup()

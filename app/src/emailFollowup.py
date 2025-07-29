@@ -3,7 +3,7 @@ from parse_json import *
 import win32com.client as COM
 import os
 
-def open_followup_email():
+def draft_followup():
     try:
         data = read_json("test.json")
         form, _, _ = split_data(data)
@@ -31,4 +31,4 @@ def open_followup_email():
         raise
 
 if __name__ == "__main__":
-    open_followup_email()
+    draft_followup()

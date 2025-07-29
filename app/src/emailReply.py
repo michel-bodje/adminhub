@@ -2,7 +2,7 @@ from office_utils import *
 from parse_json import *
 import win32com.client as COM
 
-def open_reply_email():
+def draft_reply():
     try:
         data = read_json()
         form, _, lawyer = split_data(data)
@@ -35,4 +35,4 @@ def open_reply_email():
         raise
 
 if __name__ == "__main__":
-    open_reply_email()
+    draft_reply()

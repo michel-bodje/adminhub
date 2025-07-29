@@ -2,7 +2,7 @@ import win32com.client as COM
 from office_utils import *
 from parse_json import *
 
-def emailContract():
+def draft_contract():
     try:
         # === Load JSON ===
         data = read_json()
@@ -83,4 +83,4 @@ def emailContract():
         raise
 
 if __name__ == "__main__":
-    emailContract()
+    draft_contract()

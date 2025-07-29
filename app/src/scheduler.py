@@ -5,7 +5,7 @@ import os
 from office_utils import *
 from parse_json import *
 
-def scheduler():
+def schedule_appointment():
     try:
         # Load data from stdin
         data = read_json()
@@ -317,4 +317,4 @@ def get_case_details_html(case_type, case_details):
     return ""
 
 if __name__ == "__main__":
-    scheduler()
+    schedule_appointment()

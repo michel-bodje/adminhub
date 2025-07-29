@@ -2,7 +2,7 @@ from office_utils import *
 from parse_json import *
 import win32com.client as COM
 
-def open_review_email():
+def draft_review():
     try:
         data = read_json("test.json")
         form, _, _ = split_data(data)
@@ -30,4 +30,4 @@ def open_review_email():
         raise
 
 if __name__ == "__main__":
-    open_review_email()
+    draft_review()
