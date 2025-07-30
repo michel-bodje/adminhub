@@ -6,6 +6,7 @@ def startup():
     app = connect_to_pclaw()
     app.set_focus()
     data = read_json()
+    sleep(3)  # Allow time for PCLaw to set focus
     return app, data
 
 def main():

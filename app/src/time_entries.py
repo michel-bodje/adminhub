@@ -1,16 +1,26 @@
 from parse_timesheets import DH_parse_timesheet, DH_record_time_entry, safe_correct
 from pclaw import *
+from parse_json import read_json
 
 def startup():
     """ Connects to PCLaw and sets focus. """
     app = connect_to_pclaw()
     app.set_focus()
+    sleep(3)  # Allow time for PCLaw to set focus
     return app
 
-def DH_enter_time():
+def enter_time():
     """ Main function to parse and record time entries from the time sheet. """
-    # TODO: file picker
-    path = r"\\AMNAS\amlex\Admin\Dorin Holban\DHO Time\DHO Time 2025\DHO Time - 2025-07.xlsx"
+    data = read_json()
+    
+    form = data["form"]
+    path = form.get("filePath", "")
+    
+    if not path:
+        alert_error("File path not provided in the JSON data.")
+        print("File path not provided in the JSON data.")
+        return
+
     entries = DH_parse_timesheet(path)
 
     if not entries:
@@ -38,7 +48,7 @@ def DH_enter_time():
 
 def main():
     startup()
-    DH_enter_time()
+    enter_time()
 
 if __name__ == "__main__":
     main()

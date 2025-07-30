@@ -9,6 +9,7 @@ import {
   populateLawyerDropdown,
   handleCaseDetails,
   handlePaymentOptions,
+  selectedFilePath,
 } from "./index.js";
 import { ACTIONS_BY_ID } from "./actions.js";
 
@@ -158,6 +159,33 @@ function attachEventListeners() {
       }
     });
   });
+
+  // Select file button event listener
+  const selectFileBtn = document.getElementById(ELEMENT_IDS.selectFileBtn);
+  if (selectFileBtn) {
+    selectFileBtn.addEventListener('click', async () => {
+      try {
+        const filePath = await window.pywebview.api.select_timesheet_file();
+        if (filePath) {
+          selectedFilePath = filePath;
+          const pathDisplay = document.getElementById(ELEMENT_IDS.selectedFilePath);
+          if (pathDisplay) {
+            pathDisplay.textContent = filePath;
+            pathDisplay.style.color = "#333"; // Change color to indicate selection
+          }
+          
+          // Enable the submit button
+          const submitBtn = document.getElementById(ELEMENT_IDS.timeEntriesSubmitBtn);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+          }
+        }
+      } catch (error) {
+        console.error("[AdminHub] Error selecting file:", error);
+        alert("Failed to select file.");
+      }
+    });
+  }
 
   /** Initialize form state with pre-checked checkbox values */
   function initializeFormState() {

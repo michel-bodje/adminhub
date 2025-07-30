@@ -172,6 +172,15 @@ export const ELEMENT_IDS = {
     pclawBillMatterPage: "pclaw-bill-page",
     billMatterId: "bill-matter-id",
     pclawBillMatterSubmitBtn: "bill-matter-btn",
+
+    // --- PCLaw Time Entry Page ---
+    timeEntriesMenuBtn: "time-entries-menu-btn",
+    timeEntriesPage: "pclaw-time-entries-page",
+    timeEntriesSubmitBtn: "time-entries-btn",
+    timeEntriesLawyer: "time-entries-lawyer-id",
+    timeEntriesFile: "time-entries-file",
+    selectFileBtn: "select-file-btn",
+    selectedFilePath: "selected-file-path",
 };
 
 export const MENU_ROUTES = {
@@ -189,4 +198,5 @@ export const MENU_ROUTES = {
   [ELEMENT_IDS.pclawMatterMenuBtn]: ELEMENT_IDS.pclawMatterPage,
   [ELEMENT_IDS.pclawCloseMatterMenuBtn]: ELEMENT_IDS.pclawCloseMatterPage,
   [ELEMENT_IDS.pclawBillMatterMenuBtn]: ELEMENT_IDS.pclawBillMatterPage,
+  [ELEMENT_IDS.timeEntriesMenuBtn]: ELEMENT_IDS.timeEntriesPage
 };

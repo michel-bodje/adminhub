@@ -5,6 +5,7 @@ import {
   isValidEmail,
   isValidPhoneNumber,
   formatPhoneNumber,
+  selectedFilePath,
   ELEMENT_IDS,
 } from "./index.js";
 
@@ -21,6 +22,7 @@ export const ACTIONS_BY_ID = {
   [ELEMENT_IDS.pclawMatterSubmitBtn]: newMatter,
   [ELEMENT_IDS.pclawCloseMatterSubmitBtn]: closeMatter,
   [ELEMENT_IDS.pclawBillMatterSubmitBtn]: billMatter,
+  [ELEMENT_IDS.timeEntriesSubmitBtn]: processTimeEntries,
 };
 
 /** Submits the current formState to the Python backend. */
@@ -220,6 +222,37 @@ export async function billMatter() {
   } catch (error) {
     console.error("[AdminHub] Error billing PCLaw matter", error);
     alert("Failed to bill PCLaw matter. Please try again.");
+    throw error;
+  }
+}
+
+export async function processTimeEntries() {
+  try {
+    const lawyerId = document.getElementById(ELEMENT_IDS.timeEntriesLawyer).value;
+    
+    if (!lawyerId) {
+      throw new Error("Please select a lawyer.");
+    }
+    
+    if (!selectedFilePath) {
+      throw new Error("Please select a timesheet file.");
+    }
+    
+    const formData = {
+      lawyerId: lawyerId,
+      filePath: selectedFilePath
+    };
+    
+    const json_data = JSON.stringify(formData);
+    
+    await window.pywebview.api.run("time_entries", json_data);
+    console.log("[AdminHub] Time entries processed successfully.");
+    
+    alert("Time entries processed successfully!");
+    
+  } catch (error) {
+    console.error("[AdminHub] Error processing time entries:", error);
+    alert(`Failed to process time entries: ${error.message}`);
     throw error;
   }
 }

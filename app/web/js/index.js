@@ -4,3 +4,5 @@ export * from "./state.js";
 export * from "./lawyer.js";
 export * from "./constants.js";
 export * from "./actions.js";
+
+export let selectedFilePath = null;

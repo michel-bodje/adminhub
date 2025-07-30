@@ -30,7 +30,33 @@ class HubAPI:
                 return data["lawyers"]
         except Exception as e:
             return {"error": str(e)}
-
+        
+    def select_timesheet_file(self):
+        """Open a file dialog to select timesheet file and return the full path."""
+        try:
+            import tkinter as tk
+            from tkinter import filedialog
+            
+            root = tk.Tk()
+            root.withdraw()  # Hide the main window
+            root.attributes('-topmost', True)  # Bring dialog to front
+            
+            file_path = filedialog.askopenfilename(
+                title="Select Timesheet File",
+                filetypes=[
+                    ("Excel files", "*.xlsx *.xls"),
+                    ("All files", "*.*")
+                ],
+                initialdir=r"\\AMNAS\amlex\Admin"  # Start in your admin directory
+            )
+            
+            root.destroy()
+            return file_path if file_path else None
+            
+        except Exception as e:
+            print(f"Error in file selection: {e}")
+            return None    
+    
     def run(self, script_name, json_blob):
         """ Runs a specified script with the provided JSON input. 
         Returns parsed JSON if the script outputs JSON, otherwise returns text output.

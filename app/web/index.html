@@ -80,6 +80,7 @@
                 <button type="button" id="new-matter-menu-btn" class="menu-btn">New Matter</button>
                 <button type="button" id="close-matter-menu-btn" class="menu-btn">Close Matter</button>
                 <button type="button" id="bill-matter-menu-btn" class="menu-btn">Bill Matter</button>
+                <button type="button" id="time-entries-menu-btn" class="menu-btn">Time Entries</button>
             </div>
             <button type="button" class="back-btn" id="back-to-main-from-pclaw">Back</button>
         </div>
@@ -533,6 +534,25 @@
                 <label for="bill-matter-id">Matter ID:</label>
                 <input type="text" id="bill-matter-id" required placeholder="ex: 9999-001">
                 <button type="submit" id="bill-matter-btn" class="submit-btn">Write</button>
+                <button type="button" class="back-btn">Back</button>
+            </form>
+        </div>
+
+        <!-- PCLaw Time Entries -->
+        <div id="pclaw-time-entries-page" class="page">
+            <h1>Time Entries</h1>
+            <form>
+                <label for="time-entries-lawyer-id">Lawyer ID:</label>
+                <select id="time-entries-lawyer-id" required>
+                    <option value="" disabled selected hidden>Select lawyer</option>
+                    <option value="DH">Dorin Holban (DH)</option>
+                    <option value="TG">Tim Gagin (TG)</option>
+                </select>
+
+                <button type="button" id="select-file-btn">Select Timesheet File</button>
+                <p id="selected-file-path" style="font-style: italic; color: #666;">No file selected</p>
+            
+                <button type="submit" id="time-entries-btn" class="submit-btn" disabled>Write</button>
                 <button type="button" class="back-btn">Back</button>
             </form>
         </div>
