@@ -1,4 +1,8 @@
 import shutil
+import json
+import sys
+import os
+import tempfile
 from datetime import datetime
 from tkinter import Tk, filedialog
 import pythoncom
@@ -22,9 +26,17 @@ def create_contract():
         if not os.path.exists(template_path):
             raise FileNotFoundError(f"Template not found: {template_path}")
 
-        # Create temp file
-        temp_doc_path = os.path.join(os.environ.get("TEMP", "/tmp"), f"Contract_{os.urandom(4).hex()}.docx")
+        # Create temp file in a reliable location
+        temp_dir = tempfile.gettempdir()
+        temp_doc_path = os.path.join(temp_dir, f"Contract_{os.urandom(4).hex()}.docx")
+        
+        # Ensure temp directory exists
+        os.makedirs(temp_dir, exist_ok=True)
         shutil.copy(template_path, temp_doc_path)
+        
+        # Verify the temp file was created
+        if not os.path.exists(temp_doc_path):
+            raise FileNotFoundError(f"Failed to create temporary file: {temp_doc_path}")
 
         # Compute replacements
         total_amount = add_taxes(deposit_amount, add_fof=True)
@@ -40,9 +52,9 @@ def create_contract():
         if contract_title in title_map:
             title_text = title_map[contract_title][0 if lang == "fr" else 1]
         elif contract_title:
-            title_text = contract_title  # raw, untranslated
+            title_text = contract_title
         else:
-            title_text = ""  # or raise an error if this should never happen
+            title_text = ""
 
         replacements = {
             "{clientName}": client_name,
@@ -52,43 +64,110 @@ def create_contract():
             "{date}": today
         }
 
-        # Initialize Word COM
+        # Initialize Word COM with better error handling
         pythoncom.CoInitialize()
-        word = COM.DispatchEx("Word.Application")
-        doc = word.Documents.Open(temp_doc_path)
+        try:
+            word = COM.DispatchEx("Word.Application")
+            word.Visible = False  # Keep hidden initially to avoid display issues
+            doc = word.Documents.Open(temp_doc_path)
+        except Exception as word_error:
+            raise Exception(f"Failed to open Word document: {str(word_error)}")
 
-        for placeholder, replacement in replacements.items():
-            word_replace_text(doc, placeholder, replacement)
-            
-        word_hyperlink_email(doc, "{clientEmail}", client_email)
+        # Process replacements
+        try:
+            for placeholder, replacement in replacements.items():
+                word_replace_text(doc, placeholder, replacement)
+                
+            word_hyperlink_email(doc, "{clientEmail}", client_email)
+        except Exception as replace_error:
+            raise Exception(f"Failed to process document replacements: {str(replace_error)}")
 
-        # Show Word
+        # Show Word after processing
         word.Visible = True
         focus_office_window(doc.ActiveWindow)
 
-        # Save PDF dialog
-        Tk().withdraw()
-        default_filename = f"{'Contrat de services' if lang == 'fr' else 'Contract of services'}_{client_name.replace(' ', '-')}_{datetime.today().strftime('%Y-%m-%d')}.pdf"
+        # Save PDF dialog with better error handling
+        try:
+            root = Tk()
+            root.withdraw()
+            root.lift()  # Bring to front
+            root.attributes('-topmost', True)  # Keep on top
+            
+            default_filename = f"{'Contrat de services' if lang == 'fr' else 'Contract of services'}_{client_name.replace(' ', '-')}_{datetime.today().strftime('%Y-%m-%d')}.pdf"
 
-        pdf_path = filedialog.asksaveasfilename(
-            defaultextension=".pdf",
-            filetypes=[("PDF files", "*.pdf")],
-            title="Save Contract as PDF",
-            initialfile=default_filename
-        )
+            pdf_path = filedialog.asksaveasfilename(
+                defaultextension=".pdf",
+                filetypes=[("PDF files", "*.pdf")],
+                title="Save Contract as PDF",
+                initialfile=default_filename
+            )
+            root.destroy()
+        except Exception as dialog_error:
+            raise Exception(f"Failed to show save dialog: {str(dialog_error)}")
 
         if pdf_path:
-            doc.ExportAsFixedFormat(pdf_path, 17)  # 17 = wdExportFormatPDF
-            print(f"Contract saved to PDF: {pdf_path}")
-            doc.Close(False)
-            word.Quit()
-            os.remove(temp_doc_path)
-            
-            # Return path for frontend to capture
-            return pdf_path
+            try:
+                # Validate and sanitize the PDF path
+                pdf_path = os.path.normpath(pdf_path)  # Normalize path separators
+                pdf_dir = os.path.dirname(pdf_path)
+                
+                # Check if directory exists, create if it doesn't
+                if not os.path.exists(pdf_dir):
+                    os.makedirs(pdf_dir, exist_ok=True)
+                
+                # Check if we can write to the directory
+                if not os.access(pdf_dir, os.W_OK):
+                    raise Exception(f"No write permission to directory: {pdf_dir}")
+                
+                # Ensure the filename doesn't have invalid characters
+                filename = os.path.basename(pdf_path)
+                invalid_chars = '<>:"/\\|?*'
+                for char in invalid_chars:
+                    if char in filename:
+                        filename = filename.replace(char, '_')
+                
+                # Reconstruct the full path with sanitized filename
+                pdf_path = os.path.join(pdf_dir, filename)
+                
+                print(f"Attempting to export PDF to: {pdf_path}", file=sys.stderr)
+                
+                doc.ExportAsFixedFormat(pdf_path, 17)  # 17 = wdExportFormatPDF
+                print(json.dumps({"pdf_path": pdf_path}))
+            except Exception as export_error:
+                # If export fails, try a fallback location
+                try:
+                    fallback_filename = f"Contract_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+                    fallback_path = os.path.join(os.path.expanduser("~/Desktop"), fallback_filename)
+                    print(f"Export failed, trying fallback location: {fallback_path}", file=sys.stderr)
+                    doc.ExportAsFixedFormat(fallback_path, 17)
+                    print(json.dumps({"pdf_path": fallback_path}))
+                except Exception as fallback_error:
+                    raise Exception(f"PDF export failed. Original error: {str(export_error)}. Fallback error: {str(fallback_error)}")
+            finally:
+                # Always clean up Word
+                try:
+                    doc.Close(False)
+                    word.Quit()
+                except:
+                    pass
+                # Clean up temp file
+                try:
+                    if os.path.exists(temp_doc_path):
+                        os.remove(temp_doc_path)
+                except:
+                    pass
         else:
+            # User cancelled - clean up
+            try:
+                doc.Close(False)
+                word.Quit()
+            except:
+                pass
             call_cleaner_async(temp_doc_path)
+            print(json.dumps({"pdf_path": None}))
+            
     except Exception as e:
+        print(json.dumps({"error": str(e)}), file=sys.stderr)
         alert_error(f"Error: {e}")
         raise
     finally:

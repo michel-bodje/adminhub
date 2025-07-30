@@ -15,6 +15,7 @@ export const ACTIONS_BY_ID = {
   [ELEMENT_IDS.replySubmitBtn]: sendReply,
   [ELEMENT_IDS.reviewSubmitBtn]: sendReview,
   [ELEMENT_IDS.followupSubmitBtn]: sendFollowup,
+  [ELEMENT_IDS.contractSubmitBtn]: sendContract,
   [ELEMENT_IDS.wordContractSubmitBtn]: createContract,
   [ELEMENT_IDS.wordReceiptSubmitBtn]: createReceipt,
   [ELEMENT_IDS.pclawMatterSubmitBtn]: newMatter,
@@ -47,8 +48,8 @@ async function getForm() {
 /** Schedules an appointment based on the form state. */
 export async function scheduleAppointment() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("scheduler", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("scheduler", json_data);
     console.log("[AdminHub] Appointment scheduled successfully.");
 
     // Chain actions without re-submitting the form
@@ -56,11 +57,11 @@ export async function scheduleAppointment() {
     const alsoPclaw = document.getElementById("also-pclaw").checked;
 
     if (alsoEmail) {
-      await window.pywebview.api.run("emailConfirmation", json_blob);
+      await window.pywebview.api.run("emailConfirmation", json_data);
       console.log("[AdminHub] Confirmation email prepared and submitted.");
     }
     if (alsoPclaw) {
-      await window.pywebview.api.run("new_matter", json_blob);
+      await window.pywebview.api.run("new_matter", json_data);
       console.log("[AdminHub] PCLaw matter created successfully.");
     }
   } catch (error) {
@@ -73,8 +74,8 @@ export async function scheduleAppointment() {
 /** Prepares a confirmation email. */
 export async function sendConfirmation() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("emailConfirmation", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("emailConfirmation", json_data);
     console.log("[AdminHub] Confirmation email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing confirmation email:", error);
@@ -86,8 +87,8 @@ export async function sendConfirmation() {
 /** Prepares a reply email. */
 export async function sendReply() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("emailReply", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("emailReply", json_data);
     console.log("[AdminHub] Reply email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing reply email:", error);
@@ -99,8 +100,8 @@ export async function sendReply() {
 /** Prepares a review request email. */
 export async function sendReview() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("emailReview", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("emailReview", json_data);
     console.log("[AdminHub] Review request email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing review request email:", error);
@@ -112,8 +113,8 @@ export async function sendReview() {
 /** Prepares a follow-up email. */
 export async function sendFollowup() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("emailFollowup", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("emailFollowup", json_data);
     console.log("[AdminHub] Follow-up email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing follow-up email:", error);
@@ -125,8 +126,8 @@ export async function sendFollowup() {
 /** Prepares a contract email. */
 export async function sendContract() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("emailContract", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("emailContract", json_data);
     console.log("[AdminHub] Contract email prepared and submitted.");
   } catch (error) {
     console.error("[AdminHub] Error preparing contract email:", error);
@@ -138,19 +139,35 @@ export async function sendContract() {
 /** Create a word contract based on the form state. */
 export async function createContract() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("wordContract", json_blob);
-    console.log("[AdminHub] Word contract created successfully.");
+    const json_data = await getForm();
     
-    const alsoContract = document.getElementById("also-contract").checked;
-    if (alsoContract) {
-      // Automatically prepare and submit the contract email
-      await window.pywebview.api.run("emailContract", json_blob);
-      console.log("[AdminHub] Contract email prepared and submitted.");
+    // Create the Word contract
+    const result = await window.pywebview.api.run("wordContract", json_data);
+    
+    if (result.error) {
+      throw new Error(result.error);
     }
+    
+    console.log("[AdminHub] Word contract created successfully.");
+    console.log("[AdminHub] Result:", result);
+    
+    // Check if user wants to also create email
+    const alsoContract = document.getElementById("also-contract").checked;
+    if (alsoContract && result.pdf_path) {
+      
+      // Add PDF path to form data for email
+      const formData = JSON.parse(json_data);
+      formData.form.pdfPath = result.pdf_path;
+      const emailJsonBlob = JSON.stringify(formData, null, 2);
+      
+      // Create contract email with PDF attachment
+      await window.pywebview.api.run("emailContract", emailJsonBlob);
+      console.log("[AdminHub] Contract email created with PDF attachment.");
+    }
+    
   } catch (error) {
     console.error("[AdminHub] Error creating word contract:", error);
-    alert("Failed to create contract doc or email. Please try again.");
+    alert("Failed to create contract. Please try again.");
     throw error;
   }
 }
@@ -158,8 +175,8 @@ export async function createContract() {
 /** Create a word receipt based on the form state. */
 export async function createReceipt() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("wordReceipt", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("wordReceipt", json_data);
     console.log("[AdminHub] Word receipt created successfully.");
   } catch (error) {
     console.error("[AdminHub] Error creating word receipt:", error);
@@ -171,8 +188,8 @@ export async function createReceipt() {
 /* Create PCLaw matter based on the form state */
 export async function newMatter() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("new_matter", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("new_matter", json_data);
     console.log("[AdminHub] PCLaw matter created successfully.");
   } catch (error) {
     console.error("[AdminHub] Error writing PCLaw matter", error);
@@ -184,8 +201,8 @@ export async function newMatter() {
 /** Close the specified PCLaw matter */
 export async function closeMatter() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("close_matter", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("close_matter", json_data);
     console.log("[AdminHub] PCLaw matter closed successfully.");
   } catch (error) {
     console.error("[AdminHub] Error closing PCLaw matter", error);
@@ -197,8 +214,8 @@ export async function closeMatter() {
 /** Bill the specified PCLaw matter */
 export async function billMatter() {
   try {
-    const json_blob = await getForm();
-    await window.pywebview.api.run("bill_matter", json_blob);
+    const json_data = await getForm();
+    await window.pywebview.api.run("bill_matter", json_data);
     console.log("[AdminHub] PCLaw matter billed successfully.");
   } catch (error) {
     console.error("[AdminHub] Error billing PCLaw matter", error);

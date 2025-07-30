@@ -32,16 +32,16 @@ class HubAPI:
             return {"error": str(e)}
 
     def run(self, script_name, json_blob):
-        """ Runs a specified script with the provided JSON input. """
+        """ Runs a specified script with the provided JSON input. 
+        Returns parsed JSON if the script outputs JSON, otherwise returns text output.
+        """
         log(f"run() called with script_name: {script_name}")
-        # log(f"run() called with json_blob: {json_blob}")
-
+    
         try:
             path = os.path.join(SRC_DIR, script_name + ".py")
             if not os.path.exists(path):
                 return { "error": f"Script not found: {path}" }
             
-            # Call it via the Python interpreter
             proc = subprocess.run(
                 [sys.executable, path],
                 input=json_blob.encode("utf-8"),
@@ -49,17 +49,36 @@ class HubAPI:
                 stderr=subprocess.PIPE,
                 check=True
             )
-
+    
             output = proc.stdout.decode("utf-8").strip()
-            return { "output": output }
-
+            
+            # Try to parse as JSON - look for the last complete JSON object in output
+            try:
+                # If there are multiple lines, try to find the JSON line
+                lines = output.split('\n')
+                json_line = None
+                
+                # Look for a line that starts with { or [
+                for line in reversed(lines):  # Start from the end
+                    line = line.strip()
+                    if line.startswith('{') or line.startswith('['):
+                        json_line = line
+                        break
+                    
+                if json_line:
+                    return json.loads(json_line)
+                else:
+                    # Try parsing the whole output
+                    return json.loads(output)
+                    
+            except json.JSONDecodeError:
+                # Not JSON, return as text
+                return { "output": output }
+    
         except subprocess.CalledProcessError as e:
-            # Subprocess ran but returned non-zero (e.g., raised exception)
             error_output = e.stderr.decode("utf-8").strip()
-            return { "error": f"Subprocess error:\n{error_output}" }
-
+            return { "error": f"Script failed: {error_output}" }
         except Exception as e:
-            # Anything else (path issue, bad encoding, etc.)
             return { "error": str(e) }
 
 def main():
