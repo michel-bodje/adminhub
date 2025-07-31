@@ -342,6 +342,14 @@ function populateDropdown(elementId, options, placeholder = "Select an option") 
     opt.textContent = option.label;
     dropdown.appendChild(opt);
   });
+
+  // Automatically select the first (and only) option if there's exactly one option
+  if (options.length === 1) {
+    dropdown.value = options[0].value;
+    // Trigger a change event to notify any listeners that the selection has changed
+    const changeEvent = new Event('change', { bubbles: true });
+    dropdown.dispatchEvent(changeEvent);
+  }
 }
 
 /** Dynamically loads the client language options. */

@@ -6,9 +6,9 @@ pyinstaller ^
   --noconsole ^
   --name AdminHub ^
   --distpath dist ^
-  --add-data "src;app/src" ^
-  --add-data "web;app/web" ^
+  --add-data "src;src" ^
+  --add-data "web;web" ^
   --add-data "templates;templates" ^
-  main.py
+  app/src/main.py
 
 pause

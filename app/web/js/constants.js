@@ -51,7 +51,7 @@ export const ELEMENT_IDS = {
     scheduleCaseType: "case-type",
     scheduleLawyerId: "schedule-lawyer-id",
     scheduleLocation: "schedule-location",
-    caseDetails: "case-details",
+    scheduleCaseDetails: "case-details",
     spouseName: "spouse-name",
     conflictSearchDoneDivorce: "conflict-search-done-divorce",
     deceasedName: "deceased-name",

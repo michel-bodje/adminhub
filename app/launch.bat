@@ -1,4 +1,4 @@
 @echo off
 pushd %~dp0
-start "" /b python main.py
+start "" /b python src/main.py
 popd

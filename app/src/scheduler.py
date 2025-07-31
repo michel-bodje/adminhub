@@ -1,7 +1,5 @@
 import win32com.client as COM
 import pywintypes
-import tempfile
-from time import sleep
 from datetime import datetime, timedelta
 from office_utils import *
 from parse_json import *
@@ -121,14 +119,14 @@ def create_meeting_draft(form_data, lawyer_data, start_time, end_time):
             if word_doc:
                 content_range = word_doc.Content
                 content_range.Delete()
-                build_appointment_content(word_doc, form_data)       
+                build_appointment_content(word_doc, form_data)
+                focus_office_window(appt)       
             else:
                 raise Exception("Failed to initialize Word editor - document remained locked")
         except:
             pass
         
-        # Force focus on the appointment window
-        focus_office_window(appt)
+
             
     except Exception as e:
         raise Exception(f"Failed to create meeting draft: {str(e)}")
@@ -172,32 +170,44 @@ def build_appointment_content(word_doc, form_data):
         existing_range = word_doc.Content
         existing_range.Find.Text = "Existing Client"
         if existing_range.Find.Execute():
-            existing_range.Font.Color = 0x00FF00  # Green in BGR format
+            existing_range.Font.Color = 0x008000  # Green in BGR format
             existing_range.Font.Bold = True
     else:
         # Add pricing information with appropriate highlighting
         if form_data['is_ref_barreau']:
             price_text = "Ref. Barreau ($60+tax)"
-            # needs to be underlined, not highlighted
+            format_type = "underline"
         elif form_data['is_first_consultation']:
             price_text = "First Consultation ($125+tax)" 
-            highlight_color = 7  # Yellow highlighting
+            format_type = "yellow_highlight"
         else:
             price_text = "Follow-up ($350+tax)"
-            # highlight_color = 0xD3D3D3  # Light gray highlighting
-            # needs the integer literal for highlighting, similar to 7 = Yellow
+            format_type = "gray_highlight"
             
-        # Get case details
-        case_details = get_case_details_text(form_data['case_type'], form_data['case_details'])
-        pricing_text = f"{price_text}: {case_details}\n\n"
+        case_details = get_case_details(
+            case_type=form_data['case_type'],
+            case_details_dict=form_data['case_details'],
+            client_language=form_data['client_language'],
+            format_type="detailed_text",
+            include_details=True
+        )
         
+        pricing_text = f"{price_text}: {case_details}\n\n"
         doc_range.InsertAfter(pricing_text)
         
         # Apply highlighting to the price portion
         price_range = word_doc.Content
         price_range.Find.Text = price_text
         if price_range.Find.Execute():
-            price_range.HighlightColorIndex = highlight_color
+            if format_type == "underline":
+                # Word constant for single underline
+                price_range.Font.Underline = 1  # wdUnderlineSingle
+            elif format_type == "yellow_highlight":
+                # Word constant for yellow highlighting
+                price_range.HighlightColorIndex = 7  # Yellow
+            elif format_type == "gray_highlight":
+                # Word constant for gray highlighting  
+                price_range.HighlightColorIndex = 16  # Gray 25%
             
         # Add payment status
         payment_check = "✔️" if form_data['is_payment_made'] else "❌"
@@ -288,90 +298,6 @@ def is_valid_time_slot(start_time, end_time, events, lawyer_data):
             continue
             
     return True
-
-def get_case_details_html(case_type, case_details):
-    """Generate HTML for case details based on case type."""
-    if not case_type or not case_details:
-        return ""
-        
-    def get_detail(key):
-        return case_details.get(key, "")
-        
-    def conflict_check(done):
-        return "✔️" if done else "❌"
-    
-    case_type = case_type.lower()
-    
-    if case_type == "divorce":
-        conflict_done = case_details.get("conflictSearchDone", False)
-        return (f"Divorce / Family Law<br><br>"
-                f"<strong>Spouse Name:</strong> {get_detail('spouseName')}<br>"
-                f"Conflict Search Done? {conflict_check(conflict_done)}")
-                
-    elif case_type == "estate":
-        conflict_done = case_details.get("conflictSearchDone", False)
-        return (f"Successions / Estate Law<br><br>"
-                f"<strong>Deceased Name:</strong> {get_detail('deceasedName')}<br>"
-                f"<strong>Executor Name:</strong> {get_detail('executorName')}<br>"
-                f"Conflict Search Done? {conflict_check(conflict_done)}")
-                
-    elif case_type == "employment":
-        return (f"Employment Law<br><br>"
-                f"<strong>Employer Name:</strong> {get_detail('employerName')}")
-                
-    elif case_type == "contract":
-        return (f"Contract Law<br><br>"
-                f"<strong>Other Party:</strong> {get_detail('otherPartyName')}")
-                
-    elif case_type == "mandates":
-        return (f"Regimes de Protection / Mandates<br><br>"
-                f"<strong>Mandate Details:</strong> {get_detail('mandateDetails')}")
-                
-    elif case_type == "business":
-        return (f"Business Law<br><br>"
-                f"<strong>Business Name:</strong> {get_detail('businessName')}")
-                
-    elif case_type == "common":
-        return get_detail("commonField")
-        
-    elif case_type in ["defamations", "real_estate", "name_change", 
-                       "adoptions", "assermentation"]:
-        case_names = {
-            "defamations": "Defamations",
-            "real_estate": "Real Estate", 
-            "name_change": "Name Change",
-            "adoptions": "Adoptions",
-            "assermentation": "Assermentation"
-        }
-        return case_names.get(case_type, "")
-        
-    return ""
-
-def get_case_details_text(case_type, case_details):
-    """Convert case details to plain text format suitable for Word insertion."""
-    if not case_type or not case_details:
-        return ""
-        
-    def get_detail(key):
-        return case_details.get(key, "")
-        
-    def conflict_check(done):
-        return "✔️" if done else "❌"
-    
-    case_type = case_type.lower()
-    
-    if case_type == "divorce":
-        conflict_done = case_details.get("conflictSearchDone", False)
-        return (f"Divorce / Family Law\n\n"
-                f"Spouse Name: {get_detail('spouseName')}\n"
-                f"Conflict Search Done? {conflict_check(conflict_done)}")
-                
-    elif case_type == "estate":
-        conflict_done = case_details.get("conflictSearchDone", False)
-        return (f"Successions / Estate Law\n\n"
-                f"Deceased Name: {get_detail('deceasedName')}\n"
-                f"Executor Name: {get_detail('executorName')}\n"
-                f"Conflict Search Done? {conflict_check(conflict_done)}")
 
 if __name__ == "__main__":
     schedule_appointment()
