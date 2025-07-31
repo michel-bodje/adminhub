@@ -478,28 +478,69 @@ export function populateLocationDropdown() {
 /** Handles the case type dropdown change event. */
 export function handleCaseDetails() {
   const caseType = formState.caseType;
-  const elements = Object.keys(ELEMENT_IDS)
-    .filter(key => key.endsWith("CaseDetails"))
-    .map(key => ELEMENT_IDS[key]);
-
-  // Hide all case details fields
+  
+  // Get the main case details containers for both scheduler and matter pages
+  const scheduleCaseDetails = document.getElementById(ELEMENT_IDS.scheduleCaseDetails); // "case-details"
+  const matterCaseDetails = document.getElementById(ELEMENT_IDS.matterCaseDetails);     // "matter-case-details"
+  
+  // Hide all specific case detail sections first
   hideExtraFields();
-
-  elements.forEach(element => {
-    const detailsContainer = document.getElementById(element);
-    // Dynamically show the selected case details field using the handler
-    if (caseTypeHandlers[caseType]) {
-      const handlerId = `${caseType}-details`;
-      const detailsElement = document.getElementById(handlerId);
-      if (detailsElement) {
-        detailsContainer.hidden = false;
-        detailsElement.hidden = false;
-      }
-    } else {
-      // If no valid case type is selected, hide the entire case details section
-      detailsContainer.hidden = true;
+  
+  // If no case type is selected, hide everything and return
+  if (!caseType) {
+    if (scheduleCaseDetails) scheduleCaseDetails.hidden = true;
+    if (matterCaseDetails) matterCaseDetails.hidden = true;
+    return;
+  }
+  
+  // Determine which page we're on based on which container exists and is visible
+  const isSchedulerPage = scheduleCaseDetails && scheduleCaseDetails.closest('.page').classList.contains('active');
+  const isMatterPage = matterCaseDetails && matterCaseDetails.closest('.page').classList.contains('active');
+  
+  // Check if this case type has specific details to show
+  const hasSpecificDetails = caseTypeHandlers[caseType] && caseType !== 'common';
+  
+  if (hasSpecificDetails) {
+    // Show the appropriate main container based on which page is active
+    if (isSchedulerPage && scheduleCaseDetails) {
+      scheduleCaseDetails.hidden = false;
     }
-  });
+    if (isMatterPage && matterCaseDetails) {
+      matterCaseDetails.hidden = false;
+    }
+    
+    // Show the specific detail section for this case type
+    const detailSectionId = `${caseType}-details`;
+    const detailSection = document.getElementById(detailSectionId);
+    
+    if (detailSection) {
+      detailSection.hidden = false;
+      console.log(`Showing case details for: ${caseType}`);
+    }
+  } else if (caseType === 'common') {
+    // For "Other (Specify)" case type, show the appropriate common details section
+    if (isSchedulerPage && scheduleCaseDetails) {
+      scheduleCaseDetails.hidden = false;
+      const scheduleCommonSection = document.getElementById(ELEMENT_IDS.scheduleCommonDetails);
+      if (scheduleCommonSection) {
+        scheduleCommonSection.hidden = false;
+        console.log('Showing scheduler common details for "Other" case type');
+      }
+    }
+    if (isMatterPage && matterCaseDetails) {
+      matterCaseDetails.hidden = false;
+      const matterCommonSection = document.getElementById(ELEMENT_IDS.matterCommonDetails);
+      if (matterCommonSection) {
+        matterCommonSection.hidden = false;
+        console.log('Showing matter common details for "Other" case type');
+      }
+    }
+  } else {
+    // Case type exists but has no specific details - hide containers
+    if (scheduleCaseDetails) scheduleCaseDetails.hidden = true;
+    if (matterCaseDetails) matterCaseDetails.hidden = true;
+    console.log(`Case type ${caseType} has no specific details to show`);
+  }
 }
 
 /**

@@ -174,7 +174,23 @@ export function collectCaseDetails() {
       details.businessName = document.getElementById(ELEMENT_IDS.businessName)?.value || "";
       break;
     case "common":
-      details.commonField = document.getElementById(ELEMENT_IDS.commonField)?.value || "";
+    case "common":
+      // Determine which page we're on to get the correct common field
+      const schedulePage = document.getElementById(ELEMENT_IDS.schedulePage);
+      const matterPage = document.getElementById(ELEMENT_IDS.pclawMatterPage);
+      
+      if (schedulePage && schedulePage.classList.contains('active')) {
+        // We're on the scheduler page
+        details.commonField = document.getElementById(ELEMENT_IDS.scheduleCommonField)?.value || "";
+      } else if (matterPage && matterPage.classList.contains('active')) {
+        // We're on the new matter page
+        details.commonField = document.getElementById(ELEMENT_IDS.matterCommonField)?.value || "";
+      } else {
+        // Fallback: try both and use whichever has a value
+        const scheduleField = document.getElementById(ELEMENT_IDS.scheduleCommonField)?.value || "";
+        const matterField = document.getElementById(ELEMENT_IDS.matterCommonField)?.value || "";
+        details.commonField = scheduleField || matterField;
+      }
       break;
     // Add more case types as needed
     default:
