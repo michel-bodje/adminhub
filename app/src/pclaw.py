@@ -156,6 +156,7 @@ def close_matter(matter_number: str):
     Also checks visually if closable or not
     """
     close_matter_dialog()
+    sleep(0.5)
 
     # Fill matter number
     send_keys("%m")
@@ -167,21 +168,22 @@ def close_matter(matter_number: str):
     sleep(36)
     send_keys("{ENTER}")
 
-    # Fill window, assume "No physical file"
-    send_keys("d")
-    send_keys("f")
-    sleep(0.2)
-    copy("No physical file")
-    send_keys('^v')
-    sleep(0.2)
-    send_keys("{TAB}")
-    send_keys("v")
-
     # Run OCR to check balances
     # Before closing, we need to confirm balances are zero
     balance = ocr_has_balance()
 
     if not balance:
+        # Fill window, assume "No physical file"
+        send_keys("d")
+        send_keys("f")
+        sleep(0.2)
+        copy("No physical file")
+        send_keys('^v')
+        sleep(0.2)
+        send_keys("{TAB}")
+        send_keys("v")
+        
+        # Confirm deactivation
         sleep(0.5)
         send_keys("{ENTER}")
         sleep(0.5)
@@ -191,7 +193,6 @@ def close_matter(matter_number: str):
         sleep(1.5)
         alert_info(f"Successfully closed matter {matter_number} in PCLaw.")
     else:
-        print("[Error] Remaining balance is not zero. Matter should not be closed.")
         alert_warning("[Error] Remaining balance is not zero. Matter should not be closed until all balances are cleared.")
 
 def ocr_has_balance():

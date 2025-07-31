@@ -5,40 +5,6 @@ import ctypes
 def log(message):
     print(f"[AdminHub] {message}")
 
-"""
-# --------------------------------------------
-# MessageBoxW Flag Reference
-# --------------------------------------------
-# Icons:
-#   0x10 - Stop (❌)
-#   0x20 - Question (❓)
-#   0x30 - Warning (⚠️)
-#   0x40 - Information (ℹ️)
-
-# Buttons:
-#   0x00 - OK
-#   0x01 - OK / Cancel
-#   0x03 - Yes / No / Cancel
-#   0x04 - Yes / No
-#   0x05 - Retry / Cancel
-
-# Return Values:
-#   1 - OK
-#   2 - Cancel
-#   3 - Abort
-#   4 - Retry
-#   5 - Ignore
-#   6 - Yes
-#   7 - No
-
-# Examples:
-#   0x21 = Question icon + OK/Cancel
-#   0x30 = Warning icon + OK
-#   0x34 = Warning icon + Yes/No
-#   0x40 = Info icon + OK
-#   0x53 = Stop icon + Yes/No/Cancel
-# --------------------------------------------
-"""
 # Function to display a message box
 # This function can be used to show different types of message boxes
 def message_box(message, title="AdminHub", flags=0x40):
@@ -77,3 +43,39 @@ SRC_DIR = os.path.join(ROOT_DIR, 'app', 'src')
 WEB_DIR = os.path.join(ROOT_DIR, 'app', 'web')
 TEMPLATES_DIR = os.path.join(ROOT_DIR, 'app', 'templates')
 INDEX_HTML = os.path.join(WEB_DIR, 'index.html')
+
+
+"""
+# --------------------------------------------
+# MessageBoxW Flag Reference
+# --------------------------------------------
+# Icons:
+#   0x10 - Stop (❌)
+#   0x20 - Question (❓)
+#   0x30 - Warning (⚠️)
+#   0x40 - Information (ℹ️)
+
+# Buttons:
+#   0x00 - OK
+#   0x01 - OK / Cancel
+#   0x03 - Yes / No / Cancel
+#   0x04 - Yes / No
+#   0x05 - Retry / Cancel
+
+# Return Values:
+#   1 - OK
+#   2 - Cancel
+#   3 - Abort
+#   4 - Retry
+#   5 - Ignore
+#   6 - Yes
+#   7 - No
+
+# Examples:
+#   0x21 = Question icon + OK/Cancel
+#   0x30 = Warning icon + OK
+#   0x34 = Warning icon + Yes/No
+#   0x40 = Info icon + OK
+#   0x53 = Stop icon + Yes/No/Cancel
+# --------------------------------------------
+"""

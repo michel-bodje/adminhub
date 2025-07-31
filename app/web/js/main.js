@@ -186,26 +186,5 @@ function attachEventListeners() {
     });
   }
 
-  /** Initialize form state with pre-checked checkbox values */
-  function initializeFormState() {
-    // Get all checkboxes and initialize their state
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-
-    checkboxes.forEach((checkbox) => {
-      if (checkbox.checked) {
-        const { id } = checkbox;
-        const matchingKey = Object.keys(ELEMENT_IDS).find((key) => ELEMENT_IDS[key] === id);
-        const handlerEntry = Object.entries(FIELD_HANDLERS).find(([suffix]) => matchingKey && matchingKey.endsWith(suffix));
-
-        if (handlerEntry) {
-          const [, handler] = handlerEntry;
-          handler(checkbox.value, checkbox);
-          console.log(`[AdminHub] Initialized ${id} to checked state`);
-        }
-      }
-    });
-  }
-
-  initializeFormState();
   console.log("[AdminHub] Event listeners attached.");
 }
