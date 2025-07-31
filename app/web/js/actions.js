@@ -5,7 +5,7 @@ import {
   isValidEmail,
   isValidPhoneNumber,
   formatPhoneNumber,
-  selectedFilePath,
+  fileState,
   ELEMENT_IDS,
 } from "./index.js";
 
@@ -233,26 +233,24 @@ export async function processTimeEntries() {
     if (!lawyerId) {
       throw new Error("Please select a lawyer.");
     }
-    
-    if (!selectedFilePath) {
+    if (!fileState.selectedFilePath) {
       throw new Error("Please select a timesheet file.");
     }
     
     const formData = {
       lawyerId: lawyerId,
-      filePath: selectedFilePath
+      filePath: fileState.selectedFilePath,
     };
     
     const json_data = JSON.stringify(formData);
+
+    console.log("[AdminHub] Processing time entries with data:", json_data);
     
     await window.pywebview.api.run("time_entries", json_data);
     console.log("[AdminHub] Time entries processed successfully.");
     
-    alert("Time entries processed successfully!");
-    
   } catch (error) {
     console.error("[AdminHub] Error processing time entries:", error);
-    alert(`Failed to process time entries: ${error.message}`);
     throw error;
   }
 }

@@ -1,14 +1,6 @@
 from pclaw import *
 from parse_json import *
 
-def startup():
-    """ Connects to PCLaw and sets focus. """
-    app = connect_to_pclaw()
-    app.set_focus()
-    data = read_json()
-    sleep(3)  # Allow time for PCLaw to set focus
-    return app, data
-
 def open_matter(app, data):
     """ Opens the New Matter dialog in PCLaw. """
     new_matter_dialog()

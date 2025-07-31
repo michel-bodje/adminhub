@@ -40,6 +40,16 @@ export function resetPage() {
   // Clear state
   formState.reset();
 
+  // Clear file selection
+  const pathDisplay = document.getElementById(ELEMENT_IDS.selectedFilePath);
+  if (pathDisplay) {
+    pathDisplay.textContent = "No file selected";
+  }
+  const fileSubmitBtn = document.getElementById(ELEMENT_IDS.timeEntriesSubmitBtn);
+  if (fileSubmitBtn) {
+    fileSubmitBtn.disabled = true;
+  }
+
   // Hide extra case details fields
   hideExtraFields();
 

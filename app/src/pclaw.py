@@ -1,4 +1,5 @@
 from config import *
+from parse_json import read_json
 from datetime import datetime
 from time import sleep
 import re
@@ -16,6 +17,14 @@ def connect_to_pclaw():
     app = Application(backend="uia").connect(handle=hwnds[0])
     main_win = app.window(handle=hwnds[0])
     return main_win
+
+def startup():
+    """ Connects to PCLaw and sets focus. """
+    app = connect_to_pclaw()
+    app.set_focus()
+    data = read_json()
+    sleep(2)  # Allow time for PCLaw to set focus
+    return app, data
 
 def get_dialog(parent_window, dialog_title):
     """ Returns a dialog window by title."""
@@ -268,7 +277,6 @@ def ocr_has_balance():
 
     balance = not all_zero
     return balance
-        
 
 def ocr_get_latest_date():
     """
@@ -562,7 +570,6 @@ def DH_fill_time_entry(
     for _ in range(4):
         send_keys('{TAB}')
         sleep(0.2)
-
     copy(time_spent)
     send_keys('^v')
     sleep(0.2)
