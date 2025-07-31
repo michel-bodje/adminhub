@@ -1,5 +1,4 @@
 import win32com.client as COM
-import pywintypes
 from datetime import datetime, timedelta
 from office_utils import *
 from parse_json import *
@@ -42,26 +41,24 @@ def schedule_appointment():
         if not form_data['appointment_date'] or not form_data['appointment_time']:
             raise Exception("Appointment date and time are required.")
             
-        # Parse date and time separately to ensure proper datetime object
-        appointment_date = datetime.strptime(form_data['appointment_date'], "%Y-%m-%d").date()
-        appointment_time = datetime.strptime(form_data['appointment_time'], "%H:%M").time()
-
-        # Create the datetime as normal
-        python_start_time = datetime.combine(appointment_date, appointment_time)
-        python_end_time = python_start_time + timedelta(hours=1)
-
-        # Convert to COM-compatible time objects
-        # This is the critical step that prevents the timezone confusion
-        start_time = pywintypes.Time(python_start_time)
-        end_time = pywintypes.Time(python_end_time)
+        # SIMPLIFIED APPROACH: Create datetime strings that COM can parse directly
+        # This avoids all the timezone conversion issues
+        start_datetime_str = f"{form_data['appointment_date']} {form_data['appointment_time']}"
+        
+        # Calculate end time (1 hour later)
+        temp_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M")
+        end_datetime = temp_datetime + timedelta(hours=1)
+        end_datetime_str = end_datetime.strftime("%Y-%m-%d %H:%M")
+        
+        print(f"Scheduling appointment from {start_datetime_str} to {end_datetime_str}")
         
         # Fetch calendar events and validate the slot
         events = fetch_calendar_events()
-        if not is_valid_time_slot(start_time, end_time, events, lawyer_data):
+        if not is_valid_time_slot(temp_datetime, end_datetime, events, lawyer_data):
             raise Exception("The selected time slot conflicts with existing appointments.")
         
         # 3. Create meeting draft
-        create_meeting_draft(form_data, lawyer_data, start_time, end_time)
+        create_meeting_draft(form_data, lawyer_data, start_datetime_str, end_datetime_str)
         
         print("Meeting draft created in Outlook.")
         
