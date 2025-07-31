@@ -119,7 +119,7 @@ def main():
         height=700,
         x = 875,
         y = 0)
-    webview.start(debug=True, gui='edgechromium')
+    webview.start(debug=False, gui='edgechromium')
 
 if __name__ == '__main__':
     main()
