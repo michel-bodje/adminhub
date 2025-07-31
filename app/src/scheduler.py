@@ -1,7 +1,8 @@
 import win32com.client as COM
-from datetime import datetime, timedelta
+import pywintypes
 import tempfile
-import os
+from time import sleep
+from datetime import datetime, timedelta
 from office_utils import *
 from parse_json import *
 
@@ -39,15 +40,22 @@ def schedule_appointment():
             'break_minutes': lawyer.get("breakMinutes", 0)
         }
         
-        # 2. Validate the manual time slot
+        # Validate the manual time slot
         if not form_data['appointment_date'] or not form_data['appointment_time']:
             raise Exception("Appointment date and time are required.")
             
         # Parse date and time separately to ensure proper datetime object
         appointment_date = datetime.strptime(form_data['appointment_date'], "%Y-%m-%d").date()
         appointment_time = datetime.strptime(form_data['appointment_time'], "%H:%M").time()
-        start_time = datetime.combine(appointment_date, appointment_time)
-        end_time = start_time + timedelta(hours=1)  # Default 1-hour duration
+
+        # Create the datetime as normal
+        python_start_time = datetime.combine(appointment_date, appointment_time)
+        python_end_time = python_start_time + timedelta(hours=1)
+
+        # Convert to COM-compatible time objects
+        # This is the critical step that prevents the timezone confusion
+        start_time = pywintypes.Time(python_start_time)
+        end_time = pywintypes.Time(python_end_time)
         
         # Fetch calendar events and validate the slot
         events = fetch_calendar_events()
@@ -100,93 +108,116 @@ def create_meeting_draft(form_data, lawyer_data, start_time, end_time):
             appt.Categories = lawyer_data['name']
         except:
             pass
-            
-        # Generate HTML body
-        html_body = generate_html_body(form_data)
-        
-        # Create temp file
-        with tempfile.NamedTemporaryFile(
-            mode='w',
-            suffix='.html',
-            delete=False,
-            encoding='utf-8') as f:
-            f.write(html_body)
-            temp_file = f.name
-            
+                       
         # Display appointment to access WordEditor
         appt.Display()
         
         # Get inspector and Word document
         inspector = appt.GetInspector
-        word_doc = inspector.WordEditor
+        word_doc = None
         
-        if word_doc:
-            # Insert HTML file content
-            range_obj = word_doc.Content
-            range_obj.InsertFile(temp_file, ConfirmConversions=False, Link=False, Attachment=False)
-        else:
-            raise Exception("Failed to initialize Word editor for appointment body.")
+        try:
+            word_doc = inspector.WordEditor
+            if word_doc:
+                content_range = word_doc.Content
+                content_range.Delete()
+                build_appointment_content(word_doc, form_data)       
+            else:
+                raise Exception("Failed to initialize Word editor - document remained locked")
+        except:
+            pass
+        
+        # Force focus on the appointment window
+        focus_office_window(appt)
             
     except Exception as e:
         raise Exception(f"Failed to create meeting draft: {str(e)}")
         
     finally:
-        # Cleanup temp file
-        if temp_file and os.path.exists(temp_file):
-            try:
-                os.unlink(temp_file)
-            except:
-                pass
         # Note: Don't release appt object - we want it to remain open
+        pass
 
-def generate_html_body(form_data):
-    """Generate HTML body for the appointment."""
-    body = """<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-</head>
-<body>"""
+def build_appointment_content(word_doc, form_data):
+    """Build the appointment content using Word's native formatting capabilities."""
     
-    # Client info
-    body += f"""<p>
-Client:&nbsp;&nbsp;&nbsp;{form_data['client_title']} {form_data['client_name']}<br>
-Phone:&nbsp;&nbsp;{form_data['client_phone']}<br>
-Email:&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:{form_data['client_email']}">{form_data['client_email']}</a><br>
-Lang:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{form_data['client_language'].title()}<br>
-</p>"""
+    # Get the main content range to work with
+    doc_range = word_doc.Content
     
+    # Start building content section by section
+    # Client information section
+    client_info = (f"Client:   {form_data['client_title']} {form_data['client_name']}\n"
+                  f"Phone:  {form_data['client_phone']}\n"  
+                  f"Email:    {form_data['client_email']}\n"
+                  f"Lang:     {form_data['client_language'].title()}\n\n")
+    
+    doc_range.InsertAfter(client_info)
+    
+    # Make the email address a hyperlink (this is where Word's power shines)
+    # Find the email text we just inserted
+    email_range = word_doc.Content
+    email_range.Find.Text = form_data['client_email']
+    if email_range.Find.Execute():
+        # Convert to hyperlink
+        word_doc.Hyperlinks.Add(
+            Anchor=email_range, 
+            Address=f"mailto:{form_data['client_email']}"
+        )
+    
+    # Handle client type and pricing information
     if form_data['is_existing_client']:
-        body += '<p style="color: green;"><strong>Existing Client</strong></p>'
+        existing_text = "Existing Client\n\n"
+        doc_range.InsertAfter(existing_text)
+        
+        # Make "Existing Client" green and bold
+        existing_range = word_doc.Content
+        existing_range.Find.Text = "Existing Client"
+        if existing_range.Find.Execute():
+            existing_range.Font.Color = 0x00FF00  # Green in BGR format
+            existing_range.Font.Bold = True
     else:
-        # Pricing details
+        # Add pricing information with appropriate highlighting
         if form_data['is_ref_barreau']:
-            price_details = "Ref. Barreau ($60+tax)"
-            price_style = "text-decoration: underline;"
+            price_text = "Ref. Barreau ($60+tax)"
+            # needs to be underlined, not highlighted
         elif form_data['is_first_consultation']:
-            price_details = "First Consultation ($125+tax)"
-            price_style = "background-color: yellow;"
+            price_text = "First Consultation ($125+tax)" 
+            highlight_color = 7  # Yellow highlighting
         else:
-            price_details = "Follow-up ($350+tax)"
-            price_style = "background-color: #d3d3d3;"
+            price_text = "Follow-up ($350+tax)"
+            # highlight_color = 0xD3D3D3  # Light gray highlighting
+            # needs the integer literal for highlighting, similar to 7 = Yellow
             
-        case_details_html = get_case_details_html(form_data['case_type'], 
-                                                form_data['case_details'])
+        # Get case details
+        case_details = get_case_details_text(form_data['case_type'], form_data['case_details'])
+        pricing_text = f"{price_text}: {case_details}\n\n"
         
-        body += f'<p><span style="{price_style}">{price_details}</span>: {case_details_html}</p>'
+        doc_range.InsertAfter(pricing_text)
         
-        # Payment status
+        # Apply highlighting to the price portion
+        price_range = word_doc.Content
+        price_range.Find.Text = price_text
+        if price_range.Find.Execute():
+            price_range.HighlightColorIndex = highlight_color
+            
+        # Add payment status
         payment_check = "✔️" if form_data['is_payment_made'] else "❌"
-        body += f'<p><strong>Payment</strong>  {payment_check}<br>'
+        payment_text = f"Payment {payment_check}\n"
         if form_data['is_payment_made']:
-            body += form_data['payment_method']
-        body += '</p>'
+            payment_text += f"{form_data['payment_method']}\n"
+        payment_text += "\n"
         
-    # Notes
-    body += f'<p>Notes:<br><span style="font-style: italic">{form_data["notes"]}</span></p>'
-    body += '\n</body>\n</html>'
+        doc_range.InsertAfter(payment_text)
     
-    return body
+    # Add notes section
+    if form_data['notes']:
+        notes_text = f"Notes:\n{form_data['notes']}\n"
+        doc_range.InsertAfter(notes_text)
+        
+        # Make the notes italic
+        notes_range = word_doc.Content
+        notes_range.Find.Text = form_data['notes']
+        if notes_range.Find.Execute():
+            notes_range.Font.Italic = True
 
 def fetch_calendar_events(days_ahead=14):
     """Fetch calendar events from Outlook."""
@@ -315,6 +346,32 @@ def get_case_details_html(case_type, case_details):
         return case_names.get(case_type, "")
         
     return ""
+
+def get_case_details_text(case_type, case_details):
+    """Convert case details to plain text format suitable for Word insertion."""
+    if not case_type or not case_details:
+        return ""
+        
+    def get_detail(key):
+        return case_details.get(key, "")
+        
+    def conflict_check(done):
+        return "✔️" if done else "❌"
+    
+    case_type = case_type.lower()
+    
+    if case_type == "divorce":
+        conflict_done = case_details.get("conflictSearchDone", False)
+        return (f"Divorce / Family Law\n\n"
+                f"Spouse Name: {get_detail('spouseName')}\n"
+                f"Conflict Search Done? {conflict_check(conflict_done)}")
+                
+    elif case_type == "estate":
+        conflict_done = case_details.get("conflictSearchDone", False)
+        return (f"Successions / Estate Law\n\n"
+                f"Deceased Name: {get_detail('deceasedName')}\n"
+                f"Executor Name: {get_detail('executorName')}\n"
+                f"Conflict Search Done? {conflict_check(conflict_done)}")
 
 if __name__ == "__main__":
     schedule_appointment()
