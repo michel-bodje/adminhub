@@ -122,17 +122,28 @@ def word_hyperlink_email(doc, placeholder: str, email: str):
 
 
 # ----------------------------
-# Temp Cleanup (Postpone PDF)
+# Temp Cleanup
 # ----------------------------
 
 def call_cleaner_async(temp_doc_path: str):
-    """Launches cleaner script in background without blocking."""
-    import subprocess
-    alert_info("Launching tempdoc cleaner script...")
-    script_path = os.path.join(SRC_DIR, "cleanTempDoc.py")
-    subprocess.Popen(
-        [sys.executable, script_path, temp_doc_path],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=subprocess.CREATE_NO_WINDOW
-    )
+    """
+    Launches cleaner process in background without blocking.
+    
+    Now uses direct module import instead of subprocess to work
+    properly with PyInstaller bundled executables.
+    """
+    try:
+        # Import the cleanup function directly as a module
+        from cleanTempDoc import cleanup_temp_doc_async
+        
+        # Call it directly - no subprocess needed!
+        cleanup_temp_doc_async(temp_doc_path, timeout_minutes=30)
+        
+        log(f"Started background cleanup for temp document: {temp_doc_path}")
+        
+    except ImportError as e:
+        log(f"Could not import cleanup module: {e}")
+        alert_error("Cleanup functionality unavailable - temp files may need manual deletion")
+    except Exception as e:
+        log(f"Error starting cleanup: {e}")
+        alert_error(f"Could not start file cleanup: {e}")
