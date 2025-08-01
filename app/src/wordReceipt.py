@@ -1,10 +1,11 @@
-import shutil
-import pythoncom
+from office_utils import *
+from parse_json import *
 import win32com.client as COM
 from datetime import datetime
 from tkinter import Tk, filedialog
-from office_utils import *
-from parse_json import *
+import shutil
+import pythoncom
+import tempfile
 
 
 def process_word_receipt(data):
@@ -24,11 +25,19 @@ def process_word_receipt(data):
         if not os.path.exists(template_path):
             raise FileNotFoundError(f"Receipt template not found: {template_path}")
 
-        # Create temp copy of template
-        temp_doc_path = os.path.join(os.environ.get("TEMP", "/tmp"), f"Receipt_{os.urandom(4).hex()}.docx")
+        # Create temp file in a reliable location - FIXED
+        temp_dir = tempfile.gettempdir()
+        temp_doc_path = os.path.join(temp_dir, f"Receipt_{os.urandom(4).hex()}.docx")
+        
+        # Ensure temp directory exists
+        os.makedirs(temp_dir, exist_ok=True)
         shutil.copy(template_path, temp_doc_path)
+        
+        # Verify the temp file was created
+        if not os.path.exists(temp_doc_path):
+            raise FileNotFoundError(f"Failed to create temporary file: {temp_doc_path}")
 
-        # Formating
+        # Formatting
         formatted_date = format_date(datetime.today(), lang)
         formatted_amount = f"{deposit_amount:.2f}"
         lawyer_string = get_lawyer_string(lawyer_name, lawyer_id)
@@ -49,44 +58,121 @@ def process_word_receipt(data):
             "{date}": formatted_date
         }
         
-        # Init Word COM
+        # Init Word COM with better error handling
         pythoncom.CoInitialize()
-        word = COM.DispatchEx("Word.Application")
-        doc = word.Documents.Open(temp_doc_path)
+        try:
+            word = COM.DispatchEx("Word.Application")
+            word.Visible = False  # Keep hidden initially
+            doc = word.Documents.Open(temp_doc_path)
+        except Exception as word_error:
+            raise Exception(f"Failed to open Word document: {str(word_error)}")
 
-        for placeholder, replacement in replacements.items():
-            word_replace_text(doc, placeholder, replacement)
+        # Process replacements
+        try:
+            for placeholder, replacement in replacements.items():
+                word_replace_text(doc, placeholder, replacement)
+        except Exception as replace_error:
+            raise Exception(f"Failed to process document replacements: {str(replace_error)}")
 
-        # Show Word window and focus
+        # Show Word window after processing
         word.Visible = True
         focus_office_window(doc.ActiveWindow)
 
         # Print dialog (File > Print)
-        word.Dialogs(88).Show()  # 88 = wdDialogFilePrint
+        try:
+            word.Dialogs(88).Show()  # 88 = wdDialogFilePrint
+        except Exception as print_error:
+            print(f"Warning: Print dialog failed: {print_error}", file=sys.stderr)
 
-        # Save as PDF dialog
-        Tk().withdraw()
-        default_filename = f"{datetime.today():%Y-%m-%d}_{client_name.replace(' ', '-')}.pdf"
-        pdf_path = filedialog.asksaveasfilename(
-            defaultextension=".pdf",
-            filetypes=[("PDF files", "*.pdf")],
-            title="Save Receipt as PDF",
-            initialfile=default_filename
-        )
+        # Save as PDF dialog with better error handling
+        try:
+            root = Tk()
+            root.withdraw()
+            root.lift()  # Bring to front
+            root.attributes('-topmost', True)  # Keep on top
+            
+            default_filename = f"{datetime.today():%Y-%m-%d}_{client_name.replace(' ', '-')}.pdf"
+            
+            pdf_path = filedialog.asksaveasfilename(
+                defaultextension=".pdf",
+                filetypes=[("PDF files", "*.pdf")],
+                title="Save Receipt as PDF",
+                initialfile=default_filename
+            )
+            root.destroy()
+        except Exception as dialog_error:
+            raise Exception(f"Failed to show save dialog: {str(dialog_error)}")
 
         if pdf_path:
-            doc.ExportAsFixedFormat(pdf_path, 17)  # 17 = wdExportFormatPDF
-            print("PDF saved to:", pdf_path)
-            doc.Close(False)
-            word.Quit()
-            os.remove(temp_doc_path)
+            try:
+                # Validate and sanitize the PDF path (similar to contract)
+                pdf_path = os.path.normpath(pdf_path)
+                pdf_dir = os.path.dirname(pdf_path)
+                
+                # Check if directory exists, create if it doesn't
+                if not os.path.exists(pdf_dir):
+                    os.makedirs(pdf_dir, exist_ok=True)
+                
+                # Check if we can write to the directory
+                if not os.access(pdf_dir, os.W_OK):
+                    raise Exception(f"No write permission to directory: {pdf_dir}")
+                
+                # Sanitize filename
+                filename = os.path.basename(pdf_path)
+                invalid_chars = '<>:"/\\|?*'
+                for char in invalid_chars:
+                    if char in filename:
+                        filename = filename.replace(char, '_')
+                
+                pdf_path = os.path.join(pdf_dir, filename)
+                
+                print(f"Attempting to export PDF to: {pdf_path}", file=sys.stderr)
+                
+                doc.ExportAsFixedFormat(pdf_path, 17)  # 17 = wdExportFormatPDF
+                              
+            except Exception as export_error:
+                raise Exception(f"PDF export failed: {str(export_error)}")
+            finally:
+                # Always clean up Word
+                try:
+                    doc.Close(False)
+                    word.Quit()
+                
+                    return {
+                        "status": "success",
+                        "message": "Word receipt successfully created.",
+                        "pdf_path": pdf_path
+                    }
+                except:
+                    pass
+                # Clean up temp file
+                try:
+                    if os.path.exists(temp_doc_path):
+                        os.remove(temp_doc_path)
+                except:
+                    # If immediate cleanup fails, use the cleaner
+                    call_cleaner_async(temp_doc_path)
         else:
+            # User cancelled - clean up
+            try:
+                doc.Close(False)
+                word.Quit()
+            except:
+                pass
             call_cleaner_async(temp_doc_path)
 
+            return {
+                "status": "cancelled",
+                "message": "User cancelled receipt export to PDF."
+            }
+            
     except Exception as e:
         alert_error(f"Error: {e}")
-        raise
-
+        return {
+            "status": "error",
+            "error": str(e),
+            "message": f"Failed to create receipt: {str(e)}"
+        }
     finally:
         try:
             pythoncom.CoUninitialize()

@@ -128,6 +128,7 @@ def word_hyperlink_email(doc, placeholder: str, email: str):
 def call_cleaner_async(temp_doc_path: str):
     """Launches cleaner script in background without blocking."""
     import subprocess
+    alert_info("Launching tempdoc cleaner script...")
     script_path = os.path.join(SRC_DIR, "cleanTempDoc.py")
     subprocess.Popen(
         [sys.executable, script_path, temp_doc_path],

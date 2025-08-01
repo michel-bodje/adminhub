@@ -72,7 +72,6 @@ def process_email_contract(data):
         
     except Exception as e:
         error_msg = f"Error creating contract email: {str(e)}"
-        print(error_msg)
         alert_error(error_msg)
         raise
 
