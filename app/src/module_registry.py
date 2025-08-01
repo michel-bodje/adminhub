@@ -25,8 +25,8 @@ MODULE_REGISTRY = {
     "new_matter": process_new_matter,
     "close_matter": process_close_matter,
     "bill_matter": process_bill_matter,
-    #"wordContract": process_word_contract,
-    #"wordReceipt": process_word_receipt,
+    "wordContract": process_word_contract,
+    "wordReceipt": process_word_receipt,
     "time_entries": process_time_entries,
 }
 

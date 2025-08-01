@@ -131,17 +131,15 @@ def process_word_contract(data):
                 print(f"Attempting to export PDF to: {pdf_path}", file=sys.stderr)
                 
                 doc.ExportAsFixedFormat(pdf_path, 17)  # 17 = wdExportFormatPDF
-                print(json.dumps({"pdf_path": pdf_path}))
+                
+                return {
+                    "status": "success",
+                    "message": "Word contract successfully created.",
+                    "pdf_path": pdf_path
+                }
+
             except Exception as export_error:
-                # If export fails, try a fallback location
-                try:
-                    fallback_filename = f"Contract_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-                    fallback_path = os.path.join(os.path.expanduser("~/Desktop"), fallback_filename)
-                    print(f"Export failed, trying fallback location: {fallback_path}", file=sys.stderr)
-                    doc.ExportAsFixedFormat(fallback_path, 17)
-                    print(json.dumps({"pdf_path": fallback_path}))
-                except Exception as fallback_error:
-                    raise Exception(f"PDF export failed. Original error: {str(export_error)}. Fallback error: {str(fallback_error)}")
+                raise Exception(f"PDF export failed: {str(export_error)}")
             finally:
                 # Always clean up Word
                 try:
@@ -163,7 +161,11 @@ def process_word_contract(data):
             except:
                 pass
             call_cleaner_async(temp_doc_path)
-            print(json.dumps({"pdf_path": None}))
+
+            return {
+                "status": "Cancelled",
+                "message": "User cancelled contract export to PDF.",
+            }
             
     except Exception as e:
         print(json.dumps({"error": str(e)}), file=sys.stderr)
