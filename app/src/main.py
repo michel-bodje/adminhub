@@ -1,4 +1,5 @@
 from config import *
+from module_registry import run_module, MODULE_REGISTRY
 import json
 import subprocess
 import webview
@@ -57,12 +58,36 @@ class HubAPI:
             print(f"Error in file selection: {e}")
             return None    
     
-    def run(self, script_name, json_blob):
-        """ Runs a specified script with the provided JSON input. 
-        Returns parsed JSON if the script outputs JSON, otherwise returns text output.
+    def run(self, script_name, json_data):
+        """ 
+        Runs a specified module with the provided JSON input.
+        Now uses direct function calls instead of subprocess for speed.
         """
         log(f"run() called with script_name: {script_name}")
-    
+        
+        try:
+            # Parse the JSON blob once
+            data = json.loads(json_data)
+            
+            # Check if we have this module in our registry
+            if script_name in MODULE_REGISTRY:
+                # Use the fast module registry approach
+                return run_module(script_name, data)
+            else:
+                # Fall back to subprocess for any modules not yet converted
+                log(f"Module {script_name} not in registry, falling back to subprocess")
+                return self._run_subprocess(script_name, json_data)
+                
+        except json.JSONDecodeError as e:
+            return {"error": f"Invalid JSON: {str(e)}"}
+        except Exception as e:
+            return {"error": str(e)}
+
+    def _run_subprocess(self, script_name, json_data):
+        """
+        Legacy subprocess method for backward compatibility.
+        This is the old implementation, kept for modules not yet converted.
+        """
         try:
             path = os.path.join(SRC_DIR, script_name + ".py")
             if not os.path.exists(path):
@@ -70,7 +95,7 @@ class HubAPI:
             
             proc = subprocess.run(
                 [sys.executable, path],
-                input=json_blob.encode("utf-8"),
+                input=json_data.encode("utf-8"),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 check=True
@@ -119,7 +144,7 @@ def main():
         height=700,
         x = 875,
         y = 0)
-    webview.start(debug=False, gui='edgechromium')
+    webview.start(debug=True, gui='edgechromium')
 
 if __name__ == '__main__':
     main()

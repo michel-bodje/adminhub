@@ -1,12 +1,18 @@
-import win32com.client as COM
-from datetime import datetime, timedelta
 from office_utils import *
 from parse_json import *
+import win32com.client as COM
+from datetime import datetime, timedelta
 
-def schedule_appointment():
+def process_scheduler(data):
+    """
+    Process appointment scheduling with the provided data.
+    Args:
+        data (dict): The parsed JSON data containing form information
+    Returns:
+        dict: Result of the scheduling process
+    """
     try:
-        # Load data from stdin
-        data = read_json()
+        # Use passed data instead of reading from stdin
         form, case_details, lawyer = split_data(data)
         
         # Parse form data
@@ -53,14 +59,20 @@ def schedule_appointment():
         print(f"Scheduling appointment from {start_datetime_str} to {end_datetime_str}")
         
         # Fetch calendar events and validate the slot
-        events = fetch_calendar_events()
+        events = fetch_calendar_events(temp_datetime)
         if not is_valid_time_slot(temp_datetime, end_datetime, events, lawyer_data):
             raise Exception("The selected time slot conflicts with existing appointments.")
         
-        # 3. Create meeting draft
+        # Create meeting draft
         create_meeting_draft(form_data, lawyer_data, start_datetime_str, end_datetime_str)
         
-        print("Meeting draft created in Outlook.")
+        # Return success result
+        return {
+            "status": "success", 
+            "message": "Meeting draft created in Outlook.",
+            "appointment_time": start_datetime_str,
+            "client": form_data['client_name']
+        }
         
     except Exception as e:
         error_msg = f"Error scheduling appointment: {str(e)}"
@@ -226,36 +238,53 @@ def build_appointment_content(word_doc, form_data):
         if notes_range.Find.Execute():
             notes_range.Font.Italic = True
 
-def fetch_calendar_events(days_ahead=14):
-    """Fetch calendar events from Outlook."""
-    print("Fetching calendar events...")
+def fetch_calendar_events(appointment_datetime):
+    """
+    Fetch calendar events for the specific day of the appointment.
+    Returns only events that overlap with that day.
+    """
+    print(f"Fetching calendar events for {appointment_datetime.strftime('%Y-%m-%d')}...")
     events = []
-    
+
     try:
         outlook_app = COM.Dispatch("Outlook.Application")
         namespace = outlook_app.GetNamespace("MAPI")
         calendar = namespace.GetDefaultFolder(9)  # olFolderCalendar
         items = calendar.Items
-        
+
+        # Ensure recurring events are included and sorted properly
         items.IncludeRecurrences = True
         items.Sort("[Start]")
-        
-        now = datetime.now()
-        end_date = now + timedelta(days=days_ahead)
-        
-        filter_str = f"[Start] <= '{end_date.strftime('%m/%d/%Y %H:%M')}' AND [End] >= '{now.strftime('%m/%d/%Y %H:%M')}'"
-        restricted_items = items.Restrict(filter_str)
-        
-        for item in restricted_items:
+
+        # Create start and end of the day
+        day_start = appointment_datetime.replace(hour=0, minute=0, second=0, microsecond=0)
+        day_end = appointment_datetime.replace(hour=23, minute=59, second=59, microsecond=999999)
+
+        fmt = "%B %d, %Y %I:%M %p"
+        ds = day_start.strftime(fmt)
+        de = day_end.strftime(fmt)
+
+        # Overlap filter (start <= day_end AND end >= day_start)
+        filter_str = (
+            f"[Start] <= '{de}' AND "
+            f"[End]   >= '{ds}'"
+        )
+
+        restricted = items.Restrict(filter_str)
+
+        # Now parse the final list
+        for item in restricted:
             if item and not getattr(item, 'AllDayEvent', True):
                 try:
                     events.append(item)
-                except:
+                    print(f"Found appointment: {item.Subject} from {item.Start} to {item.End}")
+                except Exception as e:
+                    print(f"Warning: Could not process calendar item: {e}")
                     continue
-                    
-        print(f"Fetched {len(events)} calendar appointments.")
+
+        print(f"Found {len(events)} relevant appointments on {appointment_datetime.strftime('%Y-%m-%d')}")
         return events
-        
+
     except Exception as e:
         print(f"Error fetching calendar events: {e}")
         return []
@@ -290,11 +319,22 @@ def is_valid_time_slot(start_time, end_time, events, lawyer_data):
             # Check for overlap
             if not (end_time <= buffer_start or start_time >= buffer_end):
                 return False
+            
+            # TODO
                 
         except:
             continue
             
     return True
 
+# Backward compatibility
+def main():
+    data = read_json()
+    result = process_scheduler(data)
+    if result.get("error"):
+        print(f"Error: {result['error']}")
+    else:
+        print(result.get("message", "Appointment scheduled"))
+
 if __name__ == "__main__":
-    schedule_appointment()
+    main()

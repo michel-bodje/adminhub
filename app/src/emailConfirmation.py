@@ -3,9 +3,18 @@ from parse_json import *
 import win32com.client as COM
 from datetime import datetime
 
-def draft_confirmation():
+def process_email_confirmation(data):
+    """
+    Process email confirmation with the provided data.
+    
+    Args:
+        data (dict): The parsed JSON data containing form information
+        
+    Returns:
+        dict: Result of the email confirmation process
+    """
     try:
-        data = read_json()
+        # Use the passed data instead of reading from stdin
         form, _, lawyer = split_data(data)
 
         client_email = form["clientEmail"]
@@ -56,11 +65,30 @@ def draft_confirmation():
         mail.Display()
 
         focus_office_window(mail)
-        print("Confirmation email draft opened in Outlook.")
+        
+        # Return success result
+        return {
+            "status": "success",
+            "message": "Confirmation email draft opened in Outlook.",
+            "recipient": client_email,
+            "language": lang
+        }
 
     except Exception as e:
         alert_error(f"Error: {e}")
         raise
 
+# Backward compatibility
+def main():
+    try:
+        data = read_json()
+        result = process_email_confirmation(data)
+        if result.get("error"):
+            print(f"Error: {result['error']}")
+        else:
+            print(result.get("message", "Email confirmation processed"))
+    except Exception as e:
+        print(f"Error: {str(e)}")
+
 if __name__ == "__main__":
-    draft_confirmation()
+    main()

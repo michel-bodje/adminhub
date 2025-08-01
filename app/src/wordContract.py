@@ -10,9 +10,8 @@ import win32com.client as COM
 from office_utils import *
 from parse_json import *
 
-def create_contract():
+def process_word_contract(data):
     try:
-        data = read_json()
         form, _, _ = split_data(data)
 
         client_name = form["clientName"]
@@ -176,5 +175,17 @@ def create_contract():
         except:
             pass
 
+# Backward compatibility
+def main():
+    try:
+        data = read_json()
+        result = process_word_contract(data)
+        if result.get("error"):
+            print(f"Error: {result['error']}")
+        else:
+            print(result.get("message", "Word contract processed"))
+    except Exception as e:
+        print(f"Error: {str(e)}")
+
 if __name__ == "__main__":
-    create_contract()
+    main()

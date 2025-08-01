@@ -2,9 +2,8 @@ from office_utils import *
 from parse_json import *
 import win32com.client as COM
 
-def draft_reply():
+def process_email_reply(data):
     try:
-        data = read_json()
         form, _, lawyer = split_data(data)
 
         client_email = form["clientEmail"]
@@ -28,11 +27,30 @@ def draft_reply():
         mail.Display()
         
         focus_office_window(mail)
-        print("Reply email draft opened in Outlook.")
+        
+        # Return success result
+        return {
+            "status": "success",
+            "message": "Reply email draft opened in Outlook.",
+            "recipient": client_email,
+            "language": lang
+        }
 
     except Exception as e:
         alert_error(f"Error: {e}")
         raise
 
+# Backward compatibility
+def main():
+    try:
+        data = read_json()
+        result = process_email_reply(data)
+        if result.get("error"):
+            print(f"Error: {result['error']}")
+        else:
+            print(result.get("message", "Email reply processed"))
+    except Exception as e:
+        print(f"Error: {str(e)}")
+
 if __name__ == "__main__":
-    draft_reply()
+    main()

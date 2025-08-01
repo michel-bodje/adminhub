@@ -7,9 +7,8 @@ from office_utils import *
 from parse_json import *
 
 
-def open_receipt():
+def process_word_receipt(data):
     try:
-        data = read_json()
         form, _, lawyer = split_data(data)
 
         client_name = form.get("clientName", "")
@@ -94,6 +93,17 @@ def open_receipt():
         except:
             pass
 
+# Backward compatibility
+def main():
+    try:
+        data = read_json()
+        result = process_word_receipt(data)
+        if result.get("error"):
+            print(f"Error: {result['error']}")
+        else:
+            print(result.get("message", "Word receipt processed"))
+    except Exception as e:
+        print(f"Error: {str(e)}")
 
 if __name__ == "__main__":
-    open_receipt()
+    main()

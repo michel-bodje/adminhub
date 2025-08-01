@@ -3,10 +3,8 @@ import os
 from office_utils import *
 from parse_json import *
 
-def draft_contract():
+def process_email_contract(data):
     try:
-        # Load JSON data
-        data = read_json()
         form, _, lawyer = split_data(data)
 
         # Get PDF path from form data (passed from JavaScript)
@@ -64,7 +62,13 @@ def draft_contract():
         mail.Display()
         focus_office_window(mail)
         
-        print("Contract email created successfully")
+        # Return success result
+        return {
+            "status": "success",
+            "message": "Contract email draft opened in Outlook.",
+            "recipient": client_email,
+            "language": lang,
+        }
         
     except Exception as e:
         error_msg = f"Error creating contract email: {str(e)}"
@@ -72,5 +76,17 @@ def draft_contract():
         alert_error(error_msg)
         raise
 
+# Backward compatibility
+def main():
+    try:
+        data = read_json()
+        result = process_email_contract(data)
+        if result.get("error"):
+            print(f"Error: {result['error']}")
+        else:
+            print(result.get("message", "Email contract processed"))
+    except Exception as e:
+        print(f"Error: {str(e)}")
+
 if __name__ == "__main__":
-    draft_contract()
+    main()

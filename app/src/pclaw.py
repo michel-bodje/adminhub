@@ -23,7 +23,7 @@ def startup():
     app = connect_to_pclaw()
     app.set_focus()
     data = read_json()
-    sleep(2)  # Allow time for PCLaw to set focus
+    sleep(1)  # Allow time for PCLaw to set focus
     return app, data
 
 def get_dialog(parent_window, dialog_title):
@@ -503,7 +503,7 @@ def fill_main_tab(fields):
         tabs_needed = target_index - current_index
         for _ in range(tabs_needed):
             send_keys('{TAB}')
-            sleep(0.2)  # small delay between each tab
+            sleep(0.1)  # small delay between each tab
         copy(value)  # Copy the value to clipboard
         send_keys('^v')  # Paste the value
         sleep(0.1)  # small delay after typing each field
