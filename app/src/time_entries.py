@@ -4,6 +4,10 @@ from pclaw import *
 def process_time_entries(data):
     """ Main function to parse and record time entries from the time sheet. """
     try:
+        app = connect_to_pclaw()
+        app.set_focus()
+        sleep(1)
+
         path = data.get("filePath", "")
         if not path:
             alert_error("File path not provided in the JSON data.")
