@@ -27,12 +27,9 @@ def format_date(slot, lang):
     else:
         # French long format (e.g., mardi 20 juillet 2025)
         try:
-            locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+            locale.setlocale(locale.LC_TIME, 'fr_FR')
         except locale.Error:
-            try:
-                locale.setlocale(locale.LC_TIME, 'fr_FR')
-            except locale.Error:
-                print("Could not set locale to French. Date formatting may be incorrect.")
+            print("Could not set locale to French. Date formatting may be incorrect.")
         date_string = slot.strftime("%A %d %B %Y")
         locale.setlocale(locale.LC_TIME, '') # Reset to default locale
         return date_string

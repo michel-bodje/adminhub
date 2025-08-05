@@ -132,6 +132,10 @@ def process_word_contract(data):
                 
                 doc.ExportAsFixedFormat(pdf_path, 17)  # 17 = wdExportFormatPDF
                 
+                # Always clean up Word
+                doc.Close(False)
+                word.Quit()
+
                 return {
                     "status": "success",
                     "message": "Word contract successfully created.",
@@ -141,12 +145,6 @@ def process_word_contract(data):
             except Exception as export_error:
                 raise Exception(f"PDF export failed: {str(export_error)}")
             finally:
-                # Always clean up Word
-                try:
-                    doc.Close(False)
-                    word.Quit()
-                except:
-                    pass
                 # Clean up temp file
                 try:
                     if os.path.exists(temp_doc_path):
@@ -155,11 +153,6 @@ def process_word_contract(data):
                     pass
         else:
             # User cancelled - clean up
-            try:
-                doc.Close(False)
-                word.Quit()
-            except:
-                pass
             call_cleaner_async(temp_doc_path)
 
             return {
