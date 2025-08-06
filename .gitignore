@@ -2,3 +2,4 @@ app/build/
 app/dist/
 *.pyc
 *__pycache__/
+AdminHub.exe

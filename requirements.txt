@@ -1,23 +1,11 @@
 # Python requirements
 pandas
-
 pillow
 pytesseract
-
-pyclip
 pyperclip
-
 pyautogui
 pywinauto
 pywin32
-
 openpyxl
 pywebview
-
-python-docx
 language-tool-python
-
-
-# Windows requirements (manual installation required)
-# - Newtonsoft.Json.dll (included in app/bin/)
-# - Microsoft .NET Framework net48 (install NDP48-DevPack-ENU.exe from https://dotnet.microsoft.com/download/dotnet-framework/net48, needed for csharp compile)
