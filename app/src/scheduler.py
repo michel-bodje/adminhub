@@ -128,15 +128,13 @@ def create_meeting_draft(form_data, lawyer_data, start_time, end_time):
             if word_doc:
                 content_range = word_doc.Content
                 content_range.Delete()
-                build_appointment_content(word_doc, form_data)
-                focus_office_window(appt)       
+                build_appointment_content(word_doc, form_data)             
+                focus_office_window(appt)
             else:
                 raise Exception("Failed to initialize Word editor - document remained locked")
         except:
             pass
         
-
-            
     except Exception as e:
         raise Exception(f"Failed to create meeting draft: {str(e)}")
         
