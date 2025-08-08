@@ -503,10 +503,10 @@ def fill_main_tab(fields):
         tabs_needed = target_index - current_index
         for _ in range(tabs_needed):
             send_keys('{TAB}')
-            sleep(0.1)  # small delay between each tab
+            sleep(0.2)  # small delay between each tab
         copy(value)  # Copy the value to clipboard
         send_keys('^v')  # Paste the value
-        sleep(0.1)  # small delay after typing each field
+        sleep(0.2)  # small delay after typing each field
         current_index = target_index
 
 def fill_billing_tab(dlg):

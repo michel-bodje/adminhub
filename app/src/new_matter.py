@@ -15,6 +15,8 @@ def process_new_matter(data):
         # Define the specific fields for New Matter
         fields = load_consultation_fields(data)
 
+        sleep(1)
+
         fill_main_tab(fields)
 
         # Only fill billing tab if language is French
