@@ -1,7 +1,5 @@
-# module_registry.py
 from config import log
-
-# Import all your converted modules
+# Import all converted modules
 from emailConfirmation import process_email_confirmation
 from emailContract import process_email_contract
 from emailFollowup import process_email_followup

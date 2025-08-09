@@ -1,7 +1,9 @@
 from config import *
 import re
 import locale
-import win32com.client as COM
+from time import sleep
+import win32clipboard as clipboard
+from win32com import client as COM
 from pywinauto.application import Application
 from pywinauto.findwindows import find_windows
 
@@ -90,28 +92,109 @@ def click_teams_meeting_button():
     btn.invoke()  # same as pressing it
     print("[OK] Clicked Teams Meeting button")
 
-def get_teams_meeting_block():
-    """Return the 4-line Teams Meeting block from the appointment body."""
-    outlook = COM.Dispatch("Outlook.Application")
-    inspector = outlook.ActiveInspector()
-    if not inspector:
-        raise RuntimeError("No active inspector found")
-    appt = inspector.CurrentItem
-    body = appt.Body
-    # Regex to match the 4 lines
-    pattern = re.compile(
-        r"(Microsoft Teams.*?\n"                                     # First line
-        r"(?:Join the meeting now|Participer à la réunion maintenant).*?\n"  # Second line
-        r"(?:Meeting ID|ID de réunion)\s*:\s*.*?\n"                  # Third line
-        r"(?:Passcode|Code d’accès)\s*:\s*.*?)(?:\n|$)",             # Fourth line
-        re.IGNORECASE | re.DOTALL
-    )
-    match = pattern.search(body)
-    if match:
-        return match.group(1).strip()
-    else:
-        print("[WARN] Teams meeting block not found")
+def copy_teams_block(doc):
+    try:
+        find = doc.Content.Find
+        find.Text = "Microsoft Teams"
+        if not find.Execute():
+            print("[WARN] Teams block not found")
+            return None
+
+        found_para = find.Parent.Paragraphs(1)
+
+        # Find index by matching paragraph start position
+        start_para_index = None
+        for i in range(1, doc.Paragraphs.Count + 1):
+            para = doc.Paragraphs(i)
+            if para.Range.Start == found_para.Range.Start:
+                start_para_index = i
+                break
+
+        if start_para_index is None:
+            print("[ERROR] Could not find paragraph index")
+            return None
+
+        total_paras = doc.Paragraphs.Count
+        end_para_index = min(start_para_index + 3, total_paras)
+
+        start_para_range = doc.Paragraphs(start_para_index).Range
+        end_para_range = doc.Paragraphs(end_para_index).Range
+
+        block_rng = doc.Range(Start=start_para_range.Start, End=end_para_range.End)
+        block_rng.Copy()
+        sleep(0.5)
+        print("[OK] Teams block copied to clipboard")
+        
+    except Exception as e:
+        print(f"[ERROR] Failed to copy Teams block: {e}")
         return None
+
+def get_teams_block():
+    try:
+        # Read clipboard HTML format
+        html_bytes = get_clipboard_html()
+        if html_bytes:
+            html_str = html_bytes.decode('utf-8')
+            html_str = extract_html_fragment(html_str)
+            html_str = clean_html_fragment(html_str)
+            html_str = convert_p_to_br(html_str)
+
+            print("[OK] Teams block copied and HTML extracted from clipboard")
+            return html_str
+        else:
+            print("[WARN] Failed to get HTML from clipboard after copying Teams block")
+            return None
+    except Exception as e:
+        print(f"[ERROR] Failed to process Teams block: {e}")
+        return None
+
+def get_clipboard_html():
+    clipboard.OpenClipboard()
+    try:
+        CF_HTML = clipboard.RegisterClipboardFormat("HTML Format")
+        if clipboard.IsClipboardFormatAvailable(CF_HTML):
+            html = clipboard.GetClipboardData(CF_HTML)
+            return html
+        return None
+    finally:
+        clipboard.CloseClipboard()
+
+def extract_html_fragment(full_html: str) -> str:
+    start_marker = "<!--StartFragment-->"
+    end_marker = "<!--EndFragment-->"
+    
+    start_index = full_html.find(start_marker)
+    if start_index == -1:
+        return None  # start fragment not found
+    
+    start_index += len(start_marker)  # move past the marker
+    end_index = full_html.find(end_marker, start_index)
+    if end_index == -1:
+        return None  # end fragment not found
+    
+    fragment = full_html[start_index:end_index]
+    return fragment.strip()
+
+def clean_html_fragment(fragment: str) -> str:
+    # Split into lines
+    lines = fragment.splitlines()
+    # Remove empty or whitespace-only lines
+    lines = [line for line in lines if line.strip() != '']
+    cleaned = '\n'.join(lines)
+
+    # Add a newline before every opening <p> tag (if not already at start of line)
+    cleaned = re.sub(r'(?<!\n)(<p[^>]*>)', r'\n\1', cleaned)
+
+    # Strip leading/trailing whitespace from whole string
+    cleaned = cleaned.strip()
+    return cleaned
+
+def convert_p_to_br(fragment: str) -> str:
+    # Remove closing </p> tags, replace opening <p> with nothing or just add <br>
+    fragment = fragment.replace('</p>', '<br>')
+    # Remove opening <p> tags (optionally with attributes)
+    fragment = re.sub(r'<p[^>]*>', '', fragment)
+    return fragment.strip()
 
 
 # ----------------------------

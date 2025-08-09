@@ -1,6 +1,5 @@
 from office_utils import *
 from parse_json import *
-from time import sleep
 from datetime import datetime, timedelta
 
 def process_scheduler(data):
@@ -64,8 +63,7 @@ def process_scheduler(data):
             raise Exception("The selected time slot conflicts with existing appointments.")
         
         # Create meeting draft
-        teamsBlock = create_meeting_draft(form_data, lawyer_data, start_datetime_str, end_datetime_str)
-        alert_info("Teams Meeting block:\n" + teamsBlock)
+        create_meeting_draft(form_data, lawyer_data, start_datetime_str, end_datetime_str)
         
         # Return success result
         return {
@@ -73,7 +71,6 @@ def process_scheduler(data):
             "message": "Meeting draft created in Outlook.",
             "appointment_time": start_datetime_str,
             "client": form_data['client_name'],
-            "teamsMeeting": teamsBlock if form_data['location'].lower() == 'teams' else ""
         }
         
     except Exception as e:
@@ -135,13 +132,10 @@ def create_meeting_draft(form_data, lawyer_data, start_time, end_time):
                 if form_data['location'].lower() == 'teams':
                     try:
                         connect_to_meeting_window()
-                        sleep(1)
                         click_teams_meeting_button()
-                        sleep(1)
-                        teamsBlock = get_teams_meeting_block()
-                        return teamsBlock
+                        copy_teams_block(word_doc)
                     except Exception as e:
-                        print(f"[WARN] Failed to click Teams Meeting button: {e}")
+                        print(f"[WARN] Failed to get Teams Meeting block: {e}")
             else:
                 raise Exception("Failed to initialize Word editor - document remained locked")
         except:
@@ -164,7 +158,7 @@ def build_appointment_content(word_doc, form_data):
     # Client information section
     client_info = (f"Client:   {form_data['client_title']} {form_data['client_name']}\n"
                   f"Phone:  {form_data['client_phone']}\n"  
-                  f"Email:    {form_data['client_email']}\n"
+                  f"Email:   {form_data['client_email']}\n"
                   f"Lang:     {form_data['client_language'].title()}\n\n")
     
     doc_range.InsertAfter(client_info)
