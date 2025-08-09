@@ -1,11 +1,11 @@
+from config import *
+from pclaw import DH_fill_time_entry
+from typing import List
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
-from typing import List
 from dataclasses import dataclass
 from datetime import datetime, date, timedelta
 import language_tool_python
-from pclaw import DH_fill_time_entry
-from config import *
 
 @dataclass
 class TimeEntry:

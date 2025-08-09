@@ -1,5 +1,9 @@
-import locale
 from config import *
+import re
+import locale
+import win32com.client as COM
+from pywinauto.application import Application
+from pywinauto.findwindows import find_windows
 
 # ----------------------------
 # Various Utilities
@@ -58,6 +62,56 @@ def focus_office_window(item):
     except Exception as e:
         print(f"Failed to activate Inspector: {e}")
         return False
+
+
+# ----------------------------
+# Teams Meeting Block
+# ----------------------------
+
+def connect_to_meeting_window():
+    """Connect to an Outlook Meeting/Appointment window by title."""
+    hwnds = find_windows(title_re=r".*(- Meeting|- Appointment).*")
+    if not hwnds:
+        raise RuntimeError("No Meeting window found")
+    app = Application(backend="uia").connect(handle=hwnds[0])
+    win = app.window(handle=hwnds[0])
+    win.wait("visible enabled ready", timeout=10)
+    return win
+
+def click_teams_meeting_button():
+    """Find and click the Teams Meeting button on the ribbon."""
+    meeting_win = connect_to_meeting_window()
+    # Try to locate the button by visible label
+    btn = meeting_win.child_window(
+        title_re=r"(Teams Meeting|Réunion Teams)", 
+        control_type="Button"
+    )
+    btn.wait("visible enabled ready", timeout=5)
+    btn.invoke()  # same as pressing it
+    print("[OK] Clicked Teams Meeting button")
+
+def get_teams_meeting_block():
+    """Return the 4-line Teams Meeting block from the appointment body."""
+    outlook = COM.Dispatch("Outlook.Application")
+    inspector = outlook.ActiveInspector()
+    if not inspector:
+        raise RuntimeError("No active inspector found")
+    appt = inspector.CurrentItem
+    body = appt.Body
+    # Regex to match the 4 lines
+    pattern = re.compile(
+        r"(Microsoft Teams.*?\n"                                     # First line
+        r"(?:Join the meeting now|Participer à la réunion maintenant).*?\n"  # Second line
+        r"(?:Meeting ID|ID de réunion)\s*:\s*.*?\n"                  # Third line
+        r"(?:Passcode|Code d’accès)\s*:\s*.*?)(?:\n|$)",             # Fourth line
+        re.IGNORECASE | re.DOTALL
+    )
+    match = pattern.search(body)
+    if match:
+        return match.group(1).strip()
+    else:
+        print("[WARN] Teams meeting block not found")
+        return None
 
 
 # ----------------------------

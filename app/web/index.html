@@ -6,7 +6,7 @@
     <title>Amlex LawHub</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/pico.indigo.css">
+    <link rel="stylesheet" href="css/pico.blue.css">
     <link rel="stylesheet" href="css/main.css">
 
     <!-- JS -->
@@ -75,6 +75,13 @@
         <div id="schedule-page" class="page">
             <h1>Schedule Appointment</h1>
             <form>
+                <label for="schedule-client-title">Title:</label>
+                <select id="schedule-client-title" required>
+                    <option value="" disabled selected hidden>Select title</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                </select>
+
                 <label for="schedule-client-name">Client Name:</label>
                 <input type="text" id="schedule-client-name" required placeholder="ex: John Doe">
 
@@ -87,13 +94,6 @@
                 <label for="schedule-client-language">Preferred Language:</label>
                 <select id="schedule-client-language" required>
                     <!-- Options will be dynamically populated by JavaScript -->
-                </select>
-
-                <label for="schedule-client-title">Title:</label>
-                <select id="schedule-client-title" required>
-                    <option value="" disabled selected hidden>Select title</option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Mrs.">Mrs.</option>
                 </select>
                 
                 <label for="case-type">Type of Case:</label>

@@ -1,14 +1,10 @@
-import shutil
-import json
-import sys
-import os
-import tempfile
-from datetime import datetime
-from tkinter import Tk, filedialog
-import pythoncom
-import win32com.client as COM
 from office_utils import *
 from parse_json import *
+import shutil
+import tempfile
+import pythoncom
+from datetime import datetime
+from tkinter import Tk, filedialog
 
 def process_word_contract(data):
     try:

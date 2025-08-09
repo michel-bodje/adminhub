@@ -1,6 +1,6 @@
 from office_utils import *
 from parse_json import *
-import win32com.client as COM
+from time import sleep
 from datetime import datetime, timedelta
 
 def process_scheduler(data):
@@ -64,14 +64,16 @@ def process_scheduler(data):
             raise Exception("The selected time slot conflicts with existing appointments.")
         
         # Create meeting draft
-        create_meeting_draft(form_data, lawyer_data, start_datetime_str, end_datetime_str)
+        teamsBlock = create_meeting_draft(form_data, lawyer_data, start_datetime_str, end_datetime_str)
+        alert_info("Teams Meeting block:\n" + teamsBlock)
         
         # Return success result
         return {
             "status": "success", 
             "message": "Meeting draft created in Outlook.",
             "appointment_time": start_datetime_str,
-            "client": form_data['client_name']
+            "client": form_data['client_name'],
+            "teamsMeeting": teamsBlock if form_data['location'].lower() == 'teams' else ""
         }
         
     except Exception as e:
@@ -90,7 +92,7 @@ def create_meeting_draft(form_data, lawyer_data, start_time, end_time):
         namespace.Logon()
 
         olAppointmentItem = 1
-        olMeeting = 1
+        # olMeeting = 1
         
         appt = outlook.CreateItem(olAppointmentItem)
         
@@ -101,7 +103,7 @@ def create_meeting_draft(form_data, lawyer_data, start_time, end_time):
             appt.End = end_time
             appt.Location = form_data['location'].title()
             appt.RequiredAttendees = lawyer_data['email']
-            appt.MeetingStatus = olMeeting
+            # appt.MeetingStatus = olMeeting
             appt.Body = " "  # Required placeholder for WordEditor
         except Exception as e:
             raise Exception(f"Failed to set appointment properties: {str(e)}")
@@ -130,6 +132,16 @@ def create_meeting_draft(form_data, lawyer_data, start_time, end_time):
                 content_range.Delete()
                 build_appointment_content(word_doc, form_data)             
                 focus_office_window(appt)
+                if form_data['location'].lower() == 'teams':
+                    try:
+                        connect_to_meeting_window()
+                        sleep(1)
+                        click_teams_meeting_button()
+                        sleep(1)
+                        teamsBlock = get_teams_meeting_block()
+                        return teamsBlock
+                    except Exception as e:
+                        print(f"[WARN] Failed to click Teams Meeting button: {e}")
             else:
                 raise Exception("Failed to initialize Word editor - document remained locked")
         except:

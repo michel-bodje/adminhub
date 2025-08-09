@@ -51,7 +51,7 @@ async function getForm() {
 export async function scheduleAppointment() {
   try {
     const json_data = await getForm();
-    await window.pywebview.api.run("scheduler", json_data);
+    const result = await window.pywebview.api.run("scheduler", json_data);
     console.log("[AdminHub] Appointment scheduled successfully.");
 
     // Chain actions without re-submitting the form
@@ -59,7 +59,11 @@ export async function scheduleAppointment() {
     const alsoPclaw = document.getElementById("also-pclaw").checked;
 
     if (alsoEmail) {
-      await window.pywebview.api.run("emailConfirmation", json_data);
+      let formData = JSON.parse(json_data);
+      formData.form.teamsMeeting = result.teamsMeeting;
+      const emailJsonBlob = JSON.stringify(formData, null, 2);
+
+      await window.pywebview.api.run("emailConfirmation", emailJsonBlob);
       console.log("[AdminHub] Confirmation email prepared and submitted.");
     }
     if (alsoPclaw) {

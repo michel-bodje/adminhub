@@ -1,6 +1,5 @@
 from office_utils import *
 from parse_json import *
-import win32com.client as COM
 from datetime import datetime
 
 def process_email_confirmation(data):
@@ -24,6 +23,8 @@ def process_email_confirmation(data):
         is_first_consult = form.get("isFirstConsultation", False)
         appointment_date = form.get("appointmentDate", "")
         appointment_time = form.get("appointmentTime", "")
+        teamsMeeting = form.get("teamsMeeting", "")
+
         lawyer_name = lawyer.get("name", "")
         lawyer_id = lawyer.get("id", "")
 
@@ -48,10 +49,11 @@ def process_email_confirmation(data):
             total_rate = add_taxes(base_rate)
 
             html_body = (html_body
-                         .replace("{{date}}", formatted_date)
-                         .replace("{{time}}", formatted_time)
-                         .replace("{{rates}}", str(base_rate))
-                         .replace("{{totalRates}}", f"{total_rate:.2f}"))
+                        .replace("{{date}}", formatted_date)
+                        .replace("{{time}}", formatted_time)
+                        .replace("{{rates}}", str(base_rate))
+                        .replace("{{totalRates}}", f"{total_rate:.2f}")
+                        .replace("{{teamsMeeting}}", teamsMeeting))
 
         lawyer_string = get_lawyer_string(lawyer_name, lawyer_id)
         html_body = html_body.replace("{{lawyerName}}", lawyer_string)

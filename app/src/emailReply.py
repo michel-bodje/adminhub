@@ -1,6 +1,5 @@
 from office_utils import *
 from parse_json import *
-import win32com.client as COM
 
 def process_email_reply(data):
     try:

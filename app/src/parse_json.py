@@ -1,5 +1,5 @@
-import json
 from config import *
+import json
 
 def read_json(file_path=None):
     """Reads JSON data from a file or standard input."""

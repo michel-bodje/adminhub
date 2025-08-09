@@ -1,12 +1,10 @@
 from office_utils import *
 from parse_json import *
-import win32com.client as COM
+import shutil
+import tempfile
+import pythoncom
 from datetime import datetime
 from tkinter import Tk, filedialog
-import shutil
-import pythoncom
-import tempfile
-
 
 def process_word_receipt(data):
     try:

@@ -1,7 +1,5 @@
 from office_utils import *
 from parse_json import *
-import win32com.client as COM
-import os
 
 def process_email_followup(data):
     try:
