@@ -2,35 +2,35 @@
     "lawyers": [
         {
             "id": "MM",
-            "name": "Marie Madelin",
-            "email": "marie.madelin@amlex.ca",
+            "name": "Lawyer 1",
+            "email": "lawyer.1@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
-            "breakMinutes": 0,
+            "breakMinutes": 30,
             "maxDailyAppointments": 5,
             "specialties": ["estate", "mandates", "common"]
         },
         {
             "id": "DH",
-            "name": "Dorin Holban",
-            "email": "dorin.holban@amlex.ca",
-            "workingHours": {"start": "09:30", "end": "16:00"},
+            "name": "Lawyer 2",
+            "email": "lawyer.2@example.com",
+            "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
             "specialties": ["divorce", "defamations", "employment", "business", "common"]
         },
         {
             "id": "TG",
-            "name": "Tim Gagin",
-            "email": "tim.gagin@amlex.ca",
-            "workingHours": {"start": "10:30", "end": "16:00"},
+            "name": "Lawyer 3",
+            "email": "lawyer.3@example.com",
+            "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
             "specialties": ["estate", "real_estate", "defamations", "contract", "common"]
         },
         {
             "id": "YK",
-            "name": "Yasmine Kone",
-            "email": "yasmine.kone@amlex.ca",
+            "name": "Lawyer 4",
+            "email": "lawyer.4@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
@@ -38,8 +38,8 @@
         },
         {
             "id": "LC",
-            "name": "Lauriane Carrier",
-            "email": "lauriane.carrier@amlex.ca",
+            "name": "Lawyer 5",
+            "email": "lawyer.5@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
@@ -47,30 +47,12 @@
         },
         {
             "id": "AR",
-            "name": "Alexia Robert",
-            "email": "alexia.robert@amlex.ca",
-            "workingHours": {"start": "09:30", "end": "17:00"},
+            "name": "Lawyer 6",
+            "email": "lawyer.6@example.com",
+            "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
-            "maxDailyAppointments": 3,
+            "maxDailyAppointments": 5,
             "specialties": ["assermentation", "common"]
-        },
-        {
-            "id": "MG",
-            "name": "Marine Garnier",
-            "email": "marine.garnier@umontreal.ca",
-            "workingHours": {"start": "9:00", "end": "17:00"},
-            "breakMinutes": 30,
-            "maxDailyAppointments": 5,
-            "specialties": ["common"]
-        },
-        {
-            "id": "PM",
-            "name": "Patrick Mayer",
-            "email": "patrick.mayer@umontreal.ca",
-            "workingHours": {"start": "9:00", "end": "17:00"},
-            "breakMinutes": 30,
-            "maxDailyAppointments": 5,
-            "specialties": ["common"]
         }
     ]
 }
