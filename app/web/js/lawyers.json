@@ -3,7 +3,7 @@
         {
             "id": "MM",
             "name": "Lawyer 1",
-            "email": "lawyer.1@example.com",
+            "email": "lawyer1@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
@@ -12,7 +12,7 @@
         {
             "id": "DH",
             "name": "Lawyer 2",
-            "email": "lawyer.2@example.com",
+            "email": "lawyer2@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
@@ -21,7 +21,7 @@
         {
             "id": "TG",
             "name": "Lawyer 3",
-            "email": "lawyer.3@example.com",
+            "email": "lawyer3@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
@@ -30,7 +30,7 @@
         {
             "id": "YK",
             "name": "Lawyer 4",
-            "email": "lawyer.4@example.com",
+            "email": "lawyer4@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
@@ -39,7 +39,7 @@
         {
             "id": "LC",
             "name": "Lawyer 5",
-            "email": "lawyer.5@example.com",
+            "email": "lawyer5@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
@@ -48,7 +48,7 @@
         {
             "id": "AR",
             "name": "Lawyer 6",
-            "email": "lawyer.6@example.com",
+            "email": "lawyer6@example.com",
             "workingHours": {"start": "9:00", "end": "17:00"},
             "breakMinutes": 30,
             "maxDailyAppointments": 5,
