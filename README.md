@@ -1,2 +1,4 @@
 # Amlex Admin Hub
-Macro suite to automate common tasks in MS Office and PCLaw.
+Automation suite to for common administrative tasks in MS Office and PCLaw, designed for Allen Madelin Lawyers.
+
+Please read the [user manual](user-manual.md).
